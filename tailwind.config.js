@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.tsx'],
+  safelist: [
+    {
+      pattern: /^text-/
+    }
+  ],
   theme: {
     fontFamily: {
       'sans': ["'Ubuntu', sans-serif"],
