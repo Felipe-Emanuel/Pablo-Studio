@@ -11,7 +11,7 @@ module.exports = {
       'sans': ["'Ubuntu', sans-serif"],
     },
     fontSize: {
-      sx: '10px',
+      xs: '10px',
       sm: '14px',
       md: '16px',
       lg: '32px',
