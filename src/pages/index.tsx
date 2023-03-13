@@ -1,10 +1,9 @@
-import { Avatar } from "@util/Avatar";
-import Link from "next/link";
+import { Logo } from "@util/logo";
 
 export default function Home() {
   return (
     <div className="w-screen h-screen bg-dark">
-      <Avatar img="https://www.w3schools.com/howto/img_avatar.png" as={Link} href="/any" alt="avatarIcon" />
+      <Logo />
     </div>
   );
 }
