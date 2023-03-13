@@ -1,16 +1,12 @@
-import { HeartButton } from "@animations/heart/HeartButton";
-import { ArrowButton } from "@util/ArrowButton";
-import { Button } from "@util/Button";
-import { Title } from "@util/Title";
+import { HeaderInfo } from "@util/HeaderInfo";
+import { EyeVector } from "@vectores/Vectores";
 
 export default function Home() {
   return (
     <div className="w-screen h-screen bg-dark">
-      <Title size="2xl" title="Olá mundo!" />
-      <ArrowButton hover className="absolute right-0" />
-      <ArrowButton inverse hover/>
-      <Button text="Adicionar ao carrinho"/>
-      <HeartButton />
+      <HeaderInfo icon={<EyeVector />} qtd={20}/>
+      <HeaderInfo text="Estoque" qtd={1}/>
+      <HeaderInfo text="Felipe" date="13.03.2023"/>
     </div>
   );
 }
