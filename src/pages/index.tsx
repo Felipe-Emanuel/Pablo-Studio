@@ -1,5 +1,4 @@
-import { HeartButton } from "@animations/heart/HeartButton";
-import { SearchInput } from "@util/buttons/SearchButton";
+import { SearchInput } from "@util/inputs/SearchInput";
 
 export default function Home() {
   return (
