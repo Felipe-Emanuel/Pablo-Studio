@@ -1,4 +1,4 @@
-import { ArrowVector } from "../vectores/Vectores";
+import { ArrowVector } from "../../vectores/Vectores";
 
 interface ArrowButtonProps {
   inverse?: boolean;
