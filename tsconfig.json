@@ -19,6 +19,7 @@
       "@util/*": ["./src/components/util/*"],
       "@animations/*": ["./src/components/animations/*"],
       "@vectores/*": ["./src/components/vectores/*"],
+      "@menu/*": ["./src/components/layout/menu/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
