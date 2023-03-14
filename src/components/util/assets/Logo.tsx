@@ -1,7 +1,7 @@
 export function Logo() {
   return (
     <svg
-      className="w-10 h-10"
+      className="w-10 h-10 justify-center relative"
       viewBox="0 0 67 67"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

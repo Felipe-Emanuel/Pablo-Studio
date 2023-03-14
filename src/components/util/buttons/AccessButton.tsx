@@ -10,5 +10,9 @@ export function AccessButton() {
     )
   }
 
-  return !hasUser ? <LogOutButton /> : renderAcessButtons();
+  return (
+    <div className="w-fit h-7 flex items-center">
+      {hasUser ? <LogOutButton /> : renderAcessButtons()}
+    </div>
+  );
 }

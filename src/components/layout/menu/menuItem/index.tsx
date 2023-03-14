@@ -13,7 +13,7 @@ export function MenuItem({href, text}: MenuItemProps) {
   const checkPath = path === href ? 'text-white/75' : ''
 
   return (
-    <Link href={href} className="w-fit">
+    <Link href={href} className="w-fit h-fit">
       <Text bold text={text} className={`hover:text-white/75 transition-colors ${checkPath}`}/>
     </Link>
   )

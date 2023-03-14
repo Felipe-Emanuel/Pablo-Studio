@@ -21,8 +21,8 @@ export function SearchInput() {
   const checkVisible = isVisible ? "w-48 sm:w-72 xl:w-96" : "w-10";
 
   return (
-    <div className="relative w-full">
-      <form className="absolute right-0 flex">
+    <div className="relative w-96 flex items-center justify-end">
+      <form className="absolute flex -right-10">
         <input
           ref={inputRef}
           placeholder={isVisible ? "Buscar..." : ""}
@@ -32,7 +32,6 @@ export function SearchInput() {
           className={`
             text-white text-sm border border-tertiary bg-transparent
             transition-all duration-300 outline-none px-2 rounded-full
-
             ${checkVisible}`}
         />
         <button

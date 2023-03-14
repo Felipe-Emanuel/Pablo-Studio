@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export function CartButton() {
   return (
-    <Link href='/cart'>
+    <Link href='/cart' className="w-fit z-20">
       <CartVector />
     </Link>
   )

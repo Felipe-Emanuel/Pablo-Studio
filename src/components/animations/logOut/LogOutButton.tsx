@@ -26,7 +26,7 @@ export function LogOutButton() {
       onMouseLeave={() => setOut()}
       className="
         rounded-full transition-opacity
-        relative w-10 h-10 flex justify-center items-center hover:opacity-75"
+        relative -left-3 w-10 h-10 flex items-center hover:opacity-75"
     >
       {View}
     </button>
