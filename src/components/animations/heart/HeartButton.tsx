@@ -22,12 +22,16 @@ export function HeartButton() {
 
   return (
     <button
-      onClick={() => {
-        setHeart();
-      }}
-      className="relative w-14 h-14 flex justify-center items-center"
+      className="
+      relative w-14 h-14 flex justify-center
+      items-center pointer-events-none"
     >
-      <span className="absolute text-tertiary">
+      <span
+        onClick={() => {
+          setHeart();
+        }}
+        className="absolute text-tertiary pointer-events-auto"
+      >
         <HeartVector />
       </span>
       {View}
