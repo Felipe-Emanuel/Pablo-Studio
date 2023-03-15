@@ -6,9 +6,10 @@ interface AvatarProps {
   alt: string;
   href?: string;
   as?: typeof Link;
+  className?: string
 }
 
-export function Avatar({ img, alt, as, href }: AvatarProps) {
+export function Avatar({ img, alt, as, href, className }: AvatarProps) {
   const Comp = as ?? "div";
 
   function renderAvatar() {
@@ -18,8 +19,8 @@ export function Avatar({ img, alt, as, href }: AvatarProps) {
       <Comp
         href={href!}
         className={`
-          flex justify-center items-center w-10 h-10 z-40
-          rounded-full p-0.5 border border-secondary ${checkComp}`}
+          flex justify-center items-center min-w-max w-10 h-10 z-40
+          rounded-full p-0.5 border border-secondary ${checkComp} ${className}`}
       >
         <Image
           quality={100}

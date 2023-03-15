@@ -3,17 +3,17 @@ import { HeaderInfo } from "@util/texts/HeaderInfo";
 import { Text } from "@util/texts/Text";
 import { Title } from "@util/texts/Title";
 import Link from "next/link";
-import { ReactNode } from "react";
 
 interface CardDescComent {
   title: string;
   text: string;
   titleSize?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | undefined;
   textSize?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | undefined;
-  avatar?: ReactNode;
+  avatar?: boolean;
   user?: string;
   alt?: string;
   img?: string;
+  date?: string
 }
 
 export function CardDescComent({
@@ -25,6 +25,7 @@ export function CardDescComent({
   user,
   alt,
   img,
+  date
 }: CardDescComent) {
   return (
     <div className="flex flex-col gap-2">
@@ -32,14 +33,14 @@ export function CardDescComent({
         <div>
           <div className="flex items-center">
             <Avatar as={Link} href={user} alt={alt!} img={img!} />
-            <Title bold size={titleSize} title={title} className="w-fit pl-4" />
-            <HeaderInfo date="23.06.1998" />
+            <Title bold size={titleSize} title={title} className="w-fit pl-4 truncate" />
+            <HeaderInfo date={date} />
           </div>
           <Text
             light
             size={textSize}
             text={`"${text}"`}
-            className="max-w-md pl-[4.5rem]"
+            className="max-w-md pl-[3.5rem]"
           />
         </div>
       ) : (
