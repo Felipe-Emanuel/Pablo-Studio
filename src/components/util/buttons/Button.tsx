@@ -3,9 +3,10 @@ import { CartAnimation } from "@animations/cart/CartAnimation";
 type ButtonProps = {
   text: string;
   cart?: boolean;
+  isHovered?: boolean;
 };
 
-export function Button({ text, cart }: ButtonProps) {
+export function Button({ text, cart, isHovered }: ButtonProps) {
   return (
     <button
       className="
@@ -13,7 +14,7 @@ export function Button({ text, cart }: ButtonProps) {
       transition-colors rounded w-full py-4
       text-white hover:text-white/75 hover:bg-secondary/75 bg-secondary"
     >
-      {cart && <CartAnimation />}
+      {cart && <CartAnimation hovered={isHovered}/>}
       {text}
     </button>
   );

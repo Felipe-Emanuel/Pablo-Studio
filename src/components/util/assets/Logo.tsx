@@ -1,7 +1,11 @@
-export function Logo() {
+interface LogoProps {
+  className?: string
+}
+
+export function Logo({className}: LogoProps) {
   return (
     <svg
-      className="w-10 h-10 justify-center relative"
+      className={`w-10 h-10 justify-center relative ${className}`}
       viewBox="0 0 67 67"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
