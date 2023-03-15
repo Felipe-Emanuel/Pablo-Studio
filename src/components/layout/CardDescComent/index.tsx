@@ -10,10 +10,11 @@ interface CardDescComent {
   titleSize?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | undefined;
   textSize?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | undefined;
   avatar?: boolean;
+  productDescription?: boolean;
   user?: string;
   alt?: string;
   img?: string;
-  date?: string
+  date?: string;
 }
 
 export function CardDescComent({
@@ -25,30 +26,38 @@ export function CardDescComent({
   user,
   alt,
   img,
-  date
+  date,
+  productDescription,
 }: CardDescComent) {
+  const isProductDescription = productDescription ? "gap-2" : "gap-8";
+
   return (
-    <div className="flex flex-col gap-2">
+    <>
       {avatar ? (
-        <div>
+        <>
           <div className="flex items-center">
             <Avatar as={Link} href={user} alt={alt!} img={img!} />
-            <Title bold size={titleSize} title={title} className="w-fit pl-4 truncate" />
+            <Title
+              bold
+              size={titleSize}
+              title={title}
+              className="w-fit pl-4 truncate"
+            />
             <HeaderInfo date={date} />
           </div>
           <Text
             light
             size={textSize}
             text={`"${text}"`}
-            className="max-w-md pl-[3.5rem]"
+            className="max-w-md pt-2 pl-[3.5rem]"
           />
-        </div>
+        </>
       ) : (
-        <>
+        <div className={`flex flex-col ${isProductDescription}`}>
           <Title bold size={titleSize} title={title} className="w-full" />
           <Text light size={textSize} text={text} className="max-w-md" />
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 }
