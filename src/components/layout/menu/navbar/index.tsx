@@ -15,7 +15,7 @@ export function NavBar() {
   return (
     <div
       style={style}
-      className="relative justify-between items-center w-full h-16 hidden min-[935px]:flex"
+      className="relative z-50 justify-between items-center w-full h-16 hidden min-[935px]:flex"
     >
       <Navigation />
       <Link

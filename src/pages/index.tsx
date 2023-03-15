@@ -1,10 +1,10 @@
-import { Card } from "@layout/card";
-import img from '../../public/a.png'
+import { Banner } from "@layout/banner/Banner";
+import img1 from "../../public/banner-home.jpg";
 
 export default function Home() {
   return (
     <div className="w-screen h-screen flex flex-col gap-4 bg-dark">
-      <Card alt="a" img={img} />
+      <Banner alt="b" img={img1} />
     </div>
   );
 }

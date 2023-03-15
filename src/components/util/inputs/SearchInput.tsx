@@ -21,7 +21,7 @@ export function SearchInput() {
   const checkVisible = isVisible ? "w-48 sm:w-72 xl:w-96" : "w-10";
 
   return (
-    <div className="relative w-96 flex items-center justify-end">
+    <div className="relative w-96 flex items-center justify-end z-10">
       <form className="absolute flex -right-10">
         <input
           ref={inputRef}

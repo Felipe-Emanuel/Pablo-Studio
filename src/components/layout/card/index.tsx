@@ -1,19 +1,22 @@
 import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 interface CardProps {
   img: StaticImageData;
   alt: string;
+  href: string;
 }
 
-export function Card({ img, alt }: CardProps) {
+export function Card({ img, alt, href }: CardProps) {
   const [isOverlay, setIsOverlay] = useState(true);
 
   const setOverlay = () => setIsOverlay((isOverlay) => !isOverlay);
   const checkOverlay = isOverlay ? "bg-dark/50" : "bg-transparent";
 
   return (
-    <div
+    <Link
+      href={href}
       onMouseEnter={setOverlay}
       onMouseLeave={setOverlay}
       className="
@@ -33,6 +36,6 @@ export function Card({ img, alt }: CardProps) {
         quality={100}
         className={`w-full h-full rounded-3xl`}
       />
-    </div>
+    </Link>
   );
 }
