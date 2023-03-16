@@ -1,4 +1,4 @@
-import { CardDescComent } from "@layout/CardDescComent";
+import { CardDescComent } from "../CardDescComent";
 
 interface CardDescriptionProps {
   cardName: string;
