@@ -4,7 +4,13 @@ module.exports = {
   safelist: [
     {
       pattern: /^text-/
-    }
+    },
+    {
+      pattern: /^translate-/
+    },
+    {
+      pattern: /^bg-/
+    },
   ],
   theme: {
     fontFamily: {
