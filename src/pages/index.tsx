@@ -1,10 +1,8 @@
 import { Banner } from "@layout/banner/Banner";
 import { ProductSlider } from "@layout/slider/productSlider";
-import { ThumbSlider } from "@layout/slider/thumbSlider";
-import { NavBar } from "@menu/navbar";
-import { Navigation } from "@menu/navegation";
 import { ArrowButton } from "@util/buttons/ArrowButton";
 import Link from "next/link";
+import { Container } from "src/components/containers/Container";
 import a from "../../public/banner-home.jpg";
 
 export default function Home() {
@@ -47,13 +45,12 @@ export default function Home() {
   ];
 
   return (
-    <div className="w-screen h-screen flex flex-col gap-4 bg-dark overflow-hidden">
-      <NavBar />
+    <Container >
       <Link href="/actionfigures" className="z-10 absolute right-0 top-48">
         <ArrowButton />
       </Link>
       <Banner alt="a" img={a} />
       <ProductSlider data={b} />
-    </div>
+    </Container>
   );
 }

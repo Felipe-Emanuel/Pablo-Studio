@@ -49,4 +49,6 @@
 
 .swiper-button-next {
   color: #fff !important;
+  position: absolute !important;
+  right: 3rem !important;
 }

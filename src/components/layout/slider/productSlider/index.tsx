@@ -72,7 +72,7 @@ export function ProductSlider({ data = [] }: ProductSliderProps) {
     <div
       onMouseEnter={isNavigation}
       onMouseLeave={isNavigation}
-      className="relative top-52 flex flex-col md:flex-row w-screen items-center gap-4"
+      className="relative top-72 flex flex-col md:flex-row w-screen items-center gap-4"
     >
       <motion.div
         className="w-screen md:w-[50%] flex items-center justify-center"
