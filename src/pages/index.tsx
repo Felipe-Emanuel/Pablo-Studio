@@ -1,19 +1,59 @@
+import { Banner } from "@layout/banner/Banner";
+import { ProductSlider } from "@layout/slider/productSlider";
 import { ThumbSlider } from "@layout/slider/thumbSlider";
+import { NavBar } from "@menu/navbar";
+import { Navigation } from "@menu/navegation";
+import { ArrowButton } from "@util/buttons/ArrowButton";
+import Link from "next/link";
+import a from "../../public/banner-home.jpg";
 
 export default function Home() {
-
-  const images = [
-    "https://picsum.photos/seed/1/800/600",
-    "https://picsum.photos/seed/2/800/600",
-    "https://picsum.photos/seed/3/800/600",
-    "https://picsum.photos/seed/4/800/600",
-    "https://picsum.photos/seed/5/800/600",
+  const b = [
+    {
+      name: "projeto 1",
+      image: "https://picsum.photos/seed/1/800/600",
+      link: "/produto",
+      alt: "a",
+      description: "alguma descrição muita boa 1 kkkk",
+    },
+    {
+      name: "projeto 2",
+      image: "https://picsum.photos/seed/2/800/600",
+      link: "/produto",
+      alt: "a",
+      description: "alguma descrição muita boa 2 kkkk",
+    },
+    {
+      name: "projeto 3",
+      image: "https://picsum.photos/seed/3/800/600",
+      link: "/produto",
+      alt: "a",
+      description: "alguma descrição muita boa 3 kkkk",
+    },
+    {
+      name: "projeto 4",
+      image: "https://picsum.photos/seed/4/800/600",
+      link: "/produto",
+      alt: "a",
+      description: "alguma descrição muita boa 4 kkkk",
+    },
+    {
+      name: "projeto 5",
+      image: "https://picsum.photos/seed/5/800/600",
+      link: "/produto",
+      alt: "a",
+      description: "alguma descrição muita boa 5 kkkk",
+    },
   ];
 
-
   return (
-    <div className="w-screen h-screen flex flex-col gap-4 bg-dark">
-      <ThumbSlider  images={images} />
+    <div className="w-screen h-screen flex flex-col gap-4 bg-dark overflow-hidden">
+      <NavBar />
+      <Link href="/actionfigures" className="z-10 absolute right-0 top-48">
+        <ArrowButton />
+      </Link>
+      <Banner alt="a" img={a} />
+      <ProductSlider data={b} />
     </div>
   );
 }

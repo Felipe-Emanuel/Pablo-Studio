@@ -19,7 +19,6 @@
   }
 }
 
-
 .carousel-indicators .carousel-indicator {
   box-sizing: content-box;
   flex: 0 1 auto;
@@ -41,4 +40,13 @@
 
 .carousel-indicators .carousel-indicator.active {
   opacity: 1;
+}
+
+.swiper-button-prev {
+  color: #fff !important;
+
+}
+
+.swiper-button-next {
+  color: #fff !important;
 }

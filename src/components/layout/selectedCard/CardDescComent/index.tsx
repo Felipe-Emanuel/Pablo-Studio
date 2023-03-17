@@ -54,7 +54,7 @@ export function CardDescComent({
         </>
       ) : (
         <div className={`flex flex-col ${isProductDescription}`}>
-          <Title bold size={titleSize} title={title} className="w-full" />
+          <Title bold size={titleSize} title={title} className="w-full max-w-md leading-none" />
           <Text light size={textSize} text={text} className="max-w-md" />
         </div>
       )}
