@@ -2,7 +2,7 @@ import { useState, useRef, MutableRefObject, useEffect } from "react";
 import { SwiperComponent, SwiperProps, SwiperSlide } from "../swiper";
 import { motion } from "framer-motion";
 import { Card } from "@layout/card";
-import { CardDescription } from "@layout/selectedCard/cardDescription";
+import { CardDescription } from "@layout/cardDescription";
 import { useWindow } from "@hooks/useWindow";
 
 type Data = {

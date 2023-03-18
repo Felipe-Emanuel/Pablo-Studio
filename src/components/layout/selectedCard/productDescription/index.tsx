@@ -1,12 +1,10 @@
-import { CardDescComent } from "@layout/selectedCard/CardDescComent";
+import { CardDescComent } from "@layout/CardDescComent";
 
 interface ProductDescriptionProps {
-  productName: string;
   description: string;
 }
 
 export function ProductDescription({
-  productName,
   description,
 }: ProductDescriptionProps) {
   return (
@@ -15,7 +13,7 @@ export function ProductDescription({
         productDescription
         titleSize="md"
         textSize="sm"
-        title={productName}
+        title="Descrição do produto"
         text={description}
       />
     </div>

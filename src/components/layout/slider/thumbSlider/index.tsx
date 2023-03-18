@@ -28,7 +28,7 @@ export function ThumbSlider({ images }: CarouselProps) {
   : "border-transparent"
 
   return (
-    <div className="relative">
+    <div className="relative h-fit z-10">
       <div className="flex justify-center items-center">
         <div className="
           relative h-80 w-full sm:w-[36rem] md:h-96
@@ -38,7 +38,7 @@ export function ThumbSlider({ images }: CarouselProps) {
             src={images[currentImage]}
             fill
             alt="carousel image"
-            className="border border-secondary rounded-lg"
+            className="border border-secondary sm:rounded-lg"
           />
           <button
             className="

@@ -21,9 +21,10 @@
       "@vectores/*": ["./src/components/vectores/*"],
       "@menu/*": ["./src/components/layout/menu/*"],
       "@layout/*": ["./src/components/layout/*"],
+      "@container/*": ["./src/components/containers/*"],
       "@hooks/*": ["./src/data/hooks/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/[products]"],
   "exclude": ["node_modules"]
 }
