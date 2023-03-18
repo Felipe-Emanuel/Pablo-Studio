@@ -10,7 +10,7 @@ export function CardDescription({
   description,
 }: CardDescriptionProps) {
   return (
-    <div className="max-h-72 overflow-hidden z-20">
+    <div className="h-full md:max-h-72 overflow-hidden z-20">
       <CardDescComent
         titleSize="xl"
         textSize="md"

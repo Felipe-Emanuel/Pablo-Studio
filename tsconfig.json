@@ -21,6 +21,7 @@
       "@vectores/*": ["./src/components/vectores/*"],
       "@menu/*": ["./src/components/layout/menu/*"],
       "@layout/*": ["./src/components/layout/*"],
+      "@hooks/*": ["./src/data/hooks/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

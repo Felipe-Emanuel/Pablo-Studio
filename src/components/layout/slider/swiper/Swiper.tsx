@@ -13,9 +13,18 @@ type ISwiperComponentProps = {
   children: ReactNode;
 };
 
-export default function SwiperComponent({ children, settings, thumbs }: ISwiperComponentProps) {
+export default function SwiperComponent({
+  children,
+  settings,
+  thumbs,
+}: ISwiperComponentProps) {
   return (
-    <Swiper modules={[Navigation, Pagination, A11y, Thumbs]} thumbs={thumbs} {...settings} >
+    <Swiper
+      modules={[Navigation, Pagination, A11y, Thumbs]}
+      thumbs={thumbs}
+      {...settings}
+      className="w-screen"
+    >
       {children}
     </Swiper>
   );
