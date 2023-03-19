@@ -45,7 +45,7 @@ export default function Home() {
   ];
 
   return (
-    <Container >
+    <Container pageTitle="Pablo Studio 3D">
       <Link href="/actionfigures" className="z-10 absolute right-5 top-10 md:top-48">
         <ArrowButton />
       </Link>

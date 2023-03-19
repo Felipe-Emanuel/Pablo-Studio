@@ -21,7 +21,7 @@ export function ThumbSlider({ images }: CarouselProps) {
   };
 
   const checkWidth =
-    width < 300 ? "-bottom-10" : width < 530 ? "-bottom-16" : "-bottom-20";
+    width < 300 ? "-bottom-10" : width < 530 ? "-bottom-4" : "-bottom-20";
 
   const checkCurrentThumb = (index: number) => index === currentImage
   ? "border-secondary"
@@ -59,7 +59,7 @@ export function ThumbSlider({ images }: CarouselProps) {
           </button>
         </div>
       </div>
-      <div className={`absolute ${checkWidth} sm:-bottom-24 left-0 w-full`}>
+      <div className={`relative -bottom-4 left-0 w-full`}>
         <div className="flex justify-center">
           <div className="flex">
             {images.map((image, index) => (

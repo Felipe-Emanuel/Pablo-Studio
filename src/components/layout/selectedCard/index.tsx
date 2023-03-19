@@ -3,6 +3,7 @@ import { useWindow } from "@hooks/useWindow";
 import { ProductDescription } from "@layout/selectedCard/productDescription";
 import { ThumbSlider } from "@layout/slider/thumbSlider";
 import { Title } from "@util/texts/Title";
+import { PabloVector } from "@vectores/Vectores";
 import { CardInfo } from "./cardInfo";
 import { PriceCard } from "./priceCard";
 import { Stock } from "./stock";
@@ -32,7 +33,9 @@ export function SelectedCard({
   return (
     <Flex>
       <div
-        className={`relative -left-10 ${checkWidth} w-screen md:w-fit m-auto sm:h-[30rem] md:-left-0`}
+        className={`
+          relative -left-10 w-screen md:w-fit m-auto
+          sm:h-[30rem] xl:h-full md:-left-0 ${checkWidth}`}
       >
         <ThumbSlider images={images} />
       </div>
@@ -62,6 +65,10 @@ export function SelectedCard({
           <ProductDescription description={productDescription} />
         </div>
       </article>
+        <div>
+          <PabloVector className="hidden lg:flex xl:hidden lg:top-[63rem] lg:-right-0" />
+        </div>
+      <PabloVector className="hidden xl:flex" />
     </Flex>
   );
 }

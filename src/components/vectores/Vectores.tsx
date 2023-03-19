@@ -18,9 +18,13 @@ export function MenuVector() {
   );
 }
 
-export function PabloVector() {
+type PabloVectorType = {
+  className?: string
+}
+
+export function PabloVector({className}: PabloVectorType) {
   return (
-    <svg width="285" height="94" viewBox="0 0 285 94" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-72 h-24">
+    <svg width="285" height="94" viewBox="0 0 285 94" fill="none" xmlns="http://www.w3.org/2000/svg" className={`bg-dark pointer-events-none w-52 h-52 absolute top-[32rem] z-10 right-10 ${className}`}>
         <path d="M57 37C57.3325 41.3642 62.0257 62.4872 57 65" stroke="white" strokeLinecap="round"/>
         <path d="M1 29C17.3924 21.4729 78.4668 -18.4347 90.7778 13.2223C102.26 42.7488 70.5713 47 49 47" stroke="white" strokeLinecap="round"/>
         <path d="M87.0001 55.0001C87.8545 54.8652 107.786 51.5984 97.5556 51.1112C94.2286 50.9528 65.1124 50.5213 75.3334 52.1112C83.7862 53.4261 93.5265 55.5724 102.111 55.0001C105.599 54.7676 111.217 48.2628 114.111 46.3334C117.519 44.0616 117 48.463 117 50.6667C117 52.7207 119.966 46.2497 121.778 45.4445C123.598 44.6356 123 50.8037 123 51.6667C123 52.0278 124.597 50.7422 125.889 51.1112C127.647 51.6136 126.379 53.5966 127.444 54.5556C129.132 56.0744 132.417 53.8907 133 57.0001C133.555 59.9606 139.196 57.0001 142 57.0001C146.907 57.0001 143.357 47.9644 147 51.0001C151.108 54.4235 156.594 52.0625 161 55.0001" stroke="white" strokeLinecap="round"/>
@@ -34,10 +38,12 @@ export function PabloVector() {
 
 type ArrowVectorType = {
   className: string
+  onClick?: () => void;
 }
-export function ArrowVector({className}: ArrowVectorType) {
+
+export function ArrowVector({className, onClick}: ArrowVectorType) {
   return (
-    <svg className={className} width="38" height="100" viewBox="0 0 38 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg onClick={onClick} className={className} width="38" height="100" viewBox="0 0 38 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M8.52018 4C9.44643 13.2625 18.2356 24.441 22.0807 32.9626C24.9832 39.3953 28.1355 46.5706 32.9626 51.8804C37.0846 56.4146 27.7719 63.9256 25.0942 66.9477C16.939 76.1514 10.7605 85.7695 4 95.9103" stroke="white" strokeWidth="7.53363" strokeLinecap="round"/>
     </svg>
   );

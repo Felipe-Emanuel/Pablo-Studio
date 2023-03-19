@@ -1,5 +1,7 @@
-import Image, { StaticImageData } from "next/image";
+import { ArrowVector } from "@vectores/Vectores";
+import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 type ICardProps = {
   img: string;
@@ -9,6 +11,7 @@ type ICardProps = {
 };
 
 export function Card({ img, alt, href, className }: ICardProps) {
+
 
   return (
     <Link
