@@ -4,6 +4,7 @@ import { useWindow } from "@hooks/useWindow";
 import { CardDescComent } from "@layout/CardDescComent";
 import { ArrowButton } from "@util/buttons/ArrowButton";
 import { Text } from "@util/texts/Text";
+import { PablosSignature } from "@vectores/Vectores";
 
 type Data = {
   id: number;
@@ -34,7 +35,7 @@ export function Comments({ data }: CommentsProps) {
   }, [width, data.length]);
 
   const next = () => {
-    setDirection("next")
+    setDirection("next");
     const nextIndex = index + 1;
     setIndex(nextIndex);
     if (nextIndex === data.length - 1) {
@@ -46,7 +47,7 @@ export function Comments({ data }: CommentsProps) {
   };
 
   const previus = () => {
-    setDirection("previous")
+    setDirection("previous");
     if (index > 0) {
       const prevIndex = index - 1;
       setIndex(prevIndex);
@@ -61,7 +62,8 @@ export function Comments({ data }: CommentsProps) {
 
   const checkNextDisabled = disabled.next === true ? "hidden" : "flex";
   const checkPreviousDisabled = disabled.previous === true ? "hidden" : "flex";
-  const checkWidth = (value: string) => width < 500 ? `-${value}-10` : `${value}-0`;
+  const checkWidth = (value: string) =>
+    width < 500 ? `-${value}-10` : `${value}-0`;
 
   // USER MOCKED
   const user = "Felipe";
@@ -73,13 +75,17 @@ export function Comments({ data }: CommentsProps) {
           <>
             <ArrowButton
               hover
-              className={`absolute ${checkWidth('right')} w-6 h-6 ${checkNextDisabled}`}
+              className={`z-20 absolute ${checkWidth(
+                "right"
+              )} w-6 h-6 ${checkNextDisabled}`}
               onClick={next}
             />
             <ArrowButton
               hover
               inverse
-              className={`rotate-180 absolute ${checkWidth('left')} w-6 h-6 ${checkPreviousDisabled}`}
+              className={`z-20 rotate-180 absolute ${checkWidth(
+                "left"
+              )} w-6 h-6 ${checkPreviousDisabled}`}
               onClick={previus}
             />
           </>
@@ -89,51 +95,57 @@ export function Comments({ data }: CommentsProps) {
   }
 
   const textVariants = {
-    hidden: { display: 'none', x: 25 },
-    visible: { display: 'flex', x: 0 },
+    hidden: { display: "none", x: 25 },
+    visible: { display: "flex", x: 0 },
   };
 
   return (
-    <div
-      onMouseEnter={() => width > 500 && setIsArrowHidden(true)}
-      onMouseLeave={() => width > 500 && setIsArrowHidden(false)}
-      className="
-        min-h-[5rem] flex flex-col m-auto w-full
+    <>
+      <PablosSignature />
+      <div
+        onMouseEnter={() => width > 500 && setIsArrowHidden(true)}
+        onMouseLeave={() => width > 500 && setIsArrowHidden(false)}
+        className="
+        h-full flex flex-col m-auto w-full
         justify-center items-center overflow-hidden"
-    >
-      <motion.div
-        variants={textVariants}
-        transition={{ duration: 0.3 }}
-        className="w-full sm:w-fit flex"
       >
-        <AnimatePresence>
-          {data.length > 0 ? (
-            <motion.div
-              initial={{ opacity: 0, x: direction === "next" ? "100%" : "-100%" }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ display: "none", x: -100  }}
-              transition={{ duration: 0.5 }}
-              key={data[index].id}
-              className="z-20 "
-            >
-              <CardDescComent
-                avatar
-                date={data[index].date}
-                user="/profile"
-                alt={data[index].alt}
-                titleSize="md"
-                textSize="sm"
-                img={data[index].img}
-                title={data[index].userName}
-                text={data[index].comment}
-              />
-            </motion.div>
-          ) : (
-            <Text text={`Seja o primeiro a fazer um comentário, ${user}`} />
-          )}
-        </AnimatePresence>
-      </motion.div>
-      {isArrowHidden && renderArrowButtons()}
-    </div>
+        <motion.div
+          variants={textVariants}
+          transition={{ duration: 0.3 }}
+          className="w-full sm:w-fit flex"
+        >
+          <AnimatePresence>
+            {data.length > 0 ? (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  x: direction === "next" ? "100%" : "-100%",
+                }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ display: "none", x: -100 }}
+                transition={{ duration: 0.5 }}
+                key={data[index].id}
+                className="z-20 "
+              >
+                <CardDescComent
+                  avatar
+                  date={data[index].date}
+                  user="/profile"
+                  alt={data[index].alt}
+                  titleSize="md"
+                  textSize="sm"
+                  img={data[index].img}
+                  title={data[index].userName}
+                  text={data[index].comment}
+                />
+              </motion.div>
+            ) : (
+              <Text text={`Seja o primeiro a fazer um comentário, ${user}`} />
+            )}
+          </AnimatePresence>
+        </motion.div>
+        {isArrowHidden && renderArrowButtons()}
+      </div>
+    </>
   );
 }

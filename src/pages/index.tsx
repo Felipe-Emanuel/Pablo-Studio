@@ -46,7 +46,7 @@ export default function Home() {
 
   return (
     <Container pageTitle="Pablo Studio 3D">
-      <Link href="/actionfigures" className="z-10 absolute right-5 top-10 md:top-48">
+      <Link href="/actionfigures" className="z-10 absolute right-14 top-48">
         <ArrowButton />
       </Link>
       <Banner alt="a" img={a} />

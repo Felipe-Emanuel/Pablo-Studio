@@ -54,7 +54,7 @@ export default function Product() {
   ];
 
   return (
-    <Container pageTitle="Pablo Studio 3D | Nome do Produto">
+    <Container style pageTitle="Pablo Studio 3D | Nome do Produto">
       <SelectedCard
         images={images}
         productName="Nome do Produto"
@@ -63,7 +63,6 @@ export default function Product() {
         productPrice="125,00"
         productQtd={15}
       />
-      <hr className="relative border xl:pt-8 border-transparent border-b-white my-auto" />
       <Section>
         <Comments data={comments} />
       </Section>

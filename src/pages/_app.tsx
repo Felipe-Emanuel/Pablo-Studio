@@ -1,4 +1,6 @@
 import '../styles/globals.css'
+import '../styles/scrollBar.css'
+import '../styles/swiper.css'
 import type { AppProps } from 'next/app'
 import { NavBar } from '@menu/navbar'
 import Link from 'next/link'

@@ -15,6 +15,7 @@ export function ArrowButton({ inverse, className, hover, onClick }: ArrowButtonP
       <ArrowVector
         onClick={onClick}
         className={`
+        absolute
         transition-opacity w-10 h-10 cursor-pointer
         ${isHover} ${isInverse} ${className}`}
       />
