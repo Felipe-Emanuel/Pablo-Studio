@@ -30,7 +30,7 @@ export function Hamburguer({ isClose, onClick }: HamburguerProps) {
       aria-label="Menu Mobile"
       className={`transition-all duration-300 cursor-pointer hover:opacity-75
       absolute w-10 z-50 flex justify-center items-center
-      left-8
+      left-8 top-1
       ${checkRotate}`}
     >
       {View}

@@ -5,26 +5,47 @@ import { Avatar } from "@util/assets/Avatar";
 import { AccessButton } from "@util/buttons/AccessButton";
 import { CartButton } from "@util/buttons/CartButton";
 import { SearchInput } from "@util/inputs/SearchInput";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Logo } from "@util/assets/Logo";
+import { useWindow } from "@hooks/useWindow";
 
 export function NavBar() {
-const { openMenu, isMenuOpen } = useMobileMenu()
+  const { width } = useWindow();
+  const { openMenu, isMenuOpen } = useMobileMenu();
+  const [isSearch, setIsSearch] = useState(false);
+
+  const setIsSearchOpen = () => width <= 560 && setIsSearch((isSearch) => !isSearch);
+
+  useEffect(() => {
+    width <= 935 && setIsSearch(false);
+  }, [width]);
 
   const style = {
-    background:
-      "linear-gradient(180deg, #000 0%, rgba(170, 170, 170, 0) 100%)",
+    background: "linear-gradient(180deg, #000 0%, rgba(170, 170, 170, 0) 100%)",
   };
 
-  const dropDownMenu = isMenuOpen ? 'h-screen overflow-hidden' : 'h-16 overflow-y-auto overflow-x-hidden'
+  const dropDownMenu = isMenuOpen
+    ? "h-screen overflow-hidden backdrop-blur-[3px]"
+    : "h-16 overflow-y-auto overflow-x-hidden backdrop-blur-none";
 
   return (
     <>
+      {!isSearch && width >= 935 && (
+        <Link
+          href="/"
+          className="
+           pt-2.5 flex items-center justify-center w-fit
+          flex-1 absolute left-1/2 transform -translate-x-1/2 z-50"
+        >
+          <Logo />
+        </Link>
+      )}
       <div
         style={style}
-        className="absolute z-50 justify-between items-center w-full h-16 hidden min-[935px]:flex"
+        className="absolute z-40 justify-between items-center w-full h-16 hidden min-[935px]:flex pr-10"
       >
         <Navigation />
-
         <div className="relative flex gap-4 items-center justify-end">
           <SearchInput />
           <Avatar
@@ -40,8 +61,23 @@ const { openMenu, isMenuOpen } = useMobileMenu()
       <div
         style={style}
         className={`absolute flex z-50 transition-all duration-500 ease-in-out
-          w-full ${dropDownMenu} min-[935px]:hidden`}>
-        <MenuMobile isClosed={isMenuOpen} openMenu={openMenu}/>
+          w-full ${dropDownMenu} min-[935px]:hidden`}
+      >
+        {!isSearch && width <= 935 && (
+          <Link
+            href="/"
+            className="
+            pt-2.5 flex items-center justify-center w-fit
+            flex-1 absolute left-1/2 transform -translate-x-1/2 z-50"
+          >
+            <Logo />
+          </Link>
+        )}
+        <MenuMobile
+          isClosed={isMenuOpen}
+          openMenu={openMenu}
+          isSearch={setIsSearchOpen}
+        />
       </div>
     </>
   );

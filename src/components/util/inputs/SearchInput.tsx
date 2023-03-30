@@ -1,7 +1,13 @@
+import { useWindow } from "@hooks/useWindow";
 import { SearchVector } from "@vectores/Vectores";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
-export function SearchInput() {
+interface SearchInputProps {
+  onClick?: () => void;
+}
+
+export function SearchInput({onClick}: SearchInputProps) {
+  const { width } = useWindow()
   const [isVisible, setIsVisible] = useState(false);
   const [value, setValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -9,6 +15,10 @@ export function SearchInput() {
   useEffect(() => {
     isVisible ? inputRef.current?.focus() : false;
   }, [isVisible]);
+
+  useEffect(() => {
+    width <= 935 && (setIsVisible(false), inputRef.current?.blur())
+  }, [width])
 
   const openSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -18,10 +28,12 @@ export function SearchInput() {
     inputRef.current?.blur();
   };
 
-  const checkVisible = isVisible ? "w-48 sm:w-72 xl:w-96" : "w-10";
+
+  const checkVisible = isVisible ? `w-44 sm:w-64 xl:w-96` : "w-10";
+
 
   return (
-    <div className="relative w-96 flex items-center justify-end z-10">
+    <div onClick={onClick ? () => onClick!() : undefined} className="relative w-96 flex items-center justify-end z-10">
       <form className="absolute flex -right-10">
         <input
           ref={inputRef}

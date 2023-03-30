@@ -3,6 +3,7 @@ interface LogoProps {
 }
 
 export function Logo({className}: LogoProps) {
+
   return (
     <svg
       className={`w-10 h-10 justify-center relative ${className}`}
