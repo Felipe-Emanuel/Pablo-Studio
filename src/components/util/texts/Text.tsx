@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import { ReactNode } from "react";
 
 interface TextProps {
@@ -11,7 +12,7 @@ interface TextProps {
   medium?: boolean;
 }
 
-export function Text({ text, as, className, size, bold, medium, light }: TextProps) {
+export function Text({ text, as, className, size, bold, medium, light}: TextProps) {
   const Comp = as ?? "p";
   const textSize = size ?? "sm";
   const isLight = light ? "font-light" : "";
