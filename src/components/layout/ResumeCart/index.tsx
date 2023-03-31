@@ -28,6 +28,7 @@ export function ResumeCart({
   return (
     <div
       className="
+      bg-placeholder p-3 rounded-md
       w-full h-fit flex flex-col gap-8 sm:flex-row justify-between items-center"
     >
       <div className="w-full sm:max-w-[340px] h-fit flex flex-col gap-8">
