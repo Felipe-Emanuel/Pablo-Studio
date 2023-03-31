@@ -1,17 +1,25 @@
+import { useState } from "react";
 import { Container } from "@container/Container";
-import { PaymentState } from "@util/assets/PaymentState";
-import { CartVector, CheckVector, EyeVector, PaymentVector, UserVector } from "@vectores/Vectores";
+import { ProgressRing } from "@layout/ProgressRing";
 
 export default function Cart() {
+  const [a, b] = useState(20);
+
   return (
     <Container pageTitle="Pablo Studios 3D | Carrinho">
-      <div className="flex gap-20 flex-wrap">
-        <PaymentState icon={<CartVector />} text="Carrinho" isActive isLast={false} />
-        <PaymentState icon={<UserVector />} text="Identificação" isActive={false} isLast={false} />
-        <PaymentState icon={<PaymentVector />} text="Pagamento" isActive={false} isLast={false} />
-        <PaymentState icon={<EyeVector />} text="Confirmação" isActive={false} isLast={false} />
-        <PaymentState icon={<CheckVector />} text="Conclusão" isActive={false} isLast />
+      <div className="relative flex items-center top-10 w-[75vw]">
+        <div className="flex justify-center items-center w-fit h-10  transition-all duration-300">
+          <ProgressRing value={a} max={100} color="#23CAD4" />
+        </div>
       </div>
+
+      <button
+        onClick={() => b(a + 20)}
+        className="text-primary z-50"
+        disabled={a === 100 ? true : false}
+      >
+        Continuar
+      </button>
     </Container>
-  )
+  );
 }
