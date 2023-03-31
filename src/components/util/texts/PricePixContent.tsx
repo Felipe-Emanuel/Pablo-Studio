@@ -12,17 +12,17 @@ export function PricePixContent({ totalOnCredit, totalWithPix }: PricePixContent
   return (
     <div
       className={`
-      bg-green-green-400 rounded-md text-green-green-600 p-2
-      flex justify-between items-center`}
+      bg-green-400 rounded-md text-green-600 p-2
+      flex justify-between items-center text-sm sm:text-md`}
     >
       <p>
         Poupe{" "}
-        <span className="font-bold text-green-green-900">
+        <span className="font-bold text-green-900">
           {formatPrice(moneyToBeSaved)}
         </span>{" "}
-        com o <span className="font-bold text-green-green-900">Pix:</span>{" "}
+        com o <span className="font-bold text-green-900">Pix:</span>{" "}
       </p>
-      <span className="font-bold text-green-green-900">
+      <span className="font-bold text-green-900">
         {formatPrice(totalWithPix)}
       </span>
     </div>

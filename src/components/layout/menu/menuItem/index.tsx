@@ -16,7 +16,7 @@ export function MenuItem({href, text, className, onClick}: MenuItemProps) {
   const checkPath = path === href ? 'text-white/75 cursor-default' : ''
 
   return (
-    <Link onClick={() => onClick!()} href={href} className="w-fit h-fit">
+    <Link onClick={onClick && (() => onClick())}href={href} className="w-fit h-fit">
       <Text bold text={text} className={`hover:text-white/75 transition-colors ${checkPath} ${className}`}/>
     </Link>
   )
