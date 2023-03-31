@@ -13,9 +13,9 @@ interface TextProps {
 
 export function Text({ text, as, className, bold, medium, light }: TextProps) {
   const Comp = as ?? "p";
-  const isLight = light ? "font-light" : "font-normal";
-  const isBold = bold ? "font-bold" : "font-normal";
-  const isMedium = medium ? "font-bold" : "font-normal";
+  const isLight = light ? "font-light" : "";
+  const isBold = bold ? "font-bold" : "";
+  const isMedium = medium ? "font-bold" : "";
 
   const classes = clsx(
     "transition-all",

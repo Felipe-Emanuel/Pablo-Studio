@@ -17,7 +17,7 @@ export function PriceCard({ price }: PriceCardProps) {
     <div
       onMouseEnter={checkHovered}
       onMouseLeave={checkHovered}
-      className="flex flex-col justify-center gap-4 max-w-[30rem] h-24"
+      className="flex flex-col justify-center pt-4 gap-4 max-w-[30rem] h-24"
     >
       <div className="flex items-center">
         <Logo className="w-16 h-full" href="/about" />
