@@ -1,14 +1,13 @@
 import Image from "next/image";
+import clsx from "clsx";
 import { useState } from "react";
 import { ArrowVector } from "@vectores/Vectores";
-import { useWindow } from "src/data/hooks/useWindow";
 
 type CarouselProps = {
   images: string[];
 };
 
 export function ThumbSlider({ images }: CarouselProps) {
-  const { width } = useWindow();
 
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -20,21 +19,23 @@ export function ThumbSlider({ images }: CarouselProps) {
     setCurrentImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  const checkWidth =
-    width < 300 ? "-bottom-10" : width < 530 ? "-bottom-4" : "-bottom-20";
+  const checkCurrentThumb = (index: number) =>
+    index === currentImage ? "border-secondary" : "border-transparent";
 
-  const checkCurrentThumb = (index: number) => index === currentImage
-  ? "border-secondary"
-  : "border-transparent"
+  const classes = clsx("relative", "h-80", "w-full", "md:h-96", {
+    "sm:w-[36rem]": true,
+    "sm:h-[25rem]": true,
+    "md:w-[37rem]": true,
+    "lg:h-[30rem]": true,
+    "lg:w-[43rem]": true,
+  });
 
   return (
     <div className="relative h-fit z-10">
       <div className="flex justify-center items-center">
-        <div className="
-          relative h-80 w-full sm:w-[36rem] md:h-96
-          sm:h-[25rem] md:w-[37rem] lg:h-[30rem] lg:w-[43rem]"
-        >
+        <div className={classes}>
           <Image
+            priority
             src={images[currentImage]}
             fill
             alt="carousel image"

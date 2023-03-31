@@ -4,7 +4,7 @@ export default function Actionfigures() {
 
 
   return (
-    <Container>
+    <Container pageTitle="Pablo Studio 3d | Action Figures">
       <h1 className="py-16 text-white">
       Action Figure
       </h1>

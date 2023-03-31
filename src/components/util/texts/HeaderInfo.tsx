@@ -1,4 +1,3 @@
-import { useWindow } from "@hooks/useWindow";
 import { ReactNode } from "react";
 import { Text } from "./Text";
 
@@ -10,9 +9,6 @@ interface HeaderInfoProps {
 }
 
 export function HeaderInfo({ text, icon, qtd, date }: HeaderInfoProps) {
-  const { width } = useWindow()
-
-  const checkSizePerWidth = width < 500 ? 'xs' : 'sm';
 
   return (
     <div className="flex items-center gap-4">
@@ -21,7 +17,7 @@ export function HeaderInfo({ text, icon, qtd, date }: HeaderInfoProps) {
       {qtd ? (
         <Text light className="opacity-75" text={qtd} />
       ) : (
-        <Text light as="span" size={checkSizePerWidth} className="opacity-75" text={date} />
+        <Text light as="span" className="opacity-75 text-xs sm:text-sm" text={date} />
       )}
     </div>
   );

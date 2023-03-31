@@ -11,12 +11,7 @@ export function CardDescription({
 }: CardDescriptionProps) {
   return (
     <div className="h-full md:max-h-72 overflow-hidden z-20">
-      <CardDescComent
-        titleSize="xl"
-        textSize="md"
-        title={cardName}
-        text={description}
-      />
+      <CardDescComent TitleSize="text-xl" title={cardName} text={description} />
     </div>
   );
 }

@@ -11,8 +11,6 @@ export function ProductDescription({
     <div className="max-h-72 overflow-hidden">
       <CardDescComent
         productDescription
-        titleSize="md"
-        textSize="sm"
         title="Descrição do produto"
         text={description}
       />

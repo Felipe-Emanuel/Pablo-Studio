@@ -8,7 +8,7 @@ interface CardInfoProps {
 
 export function CardInfo({ views }: CardInfoProps) {
   return (
-    <div className="flex items-center w-fit">
+    <div className="relative -left-4 flex items-center w-fit">
       <HeartButton />
       <HeaderInfo icon={<EyeVector />} qtd={views} />
     </div>

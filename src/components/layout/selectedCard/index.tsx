@@ -1,9 +1,7 @@
 import { Flex } from "@container/Flex";
-import { useWindow } from "@hooks/useWindow";
 import { ProductDescription } from "@layout/selectedCard/productDescription";
 import { ThumbSlider } from "@layout/slider/thumbSlider";
 import { Title } from "@util/texts/Title";
-import { PablosSignature } from "@vectores/Vectores";
 import { CardInfo } from "./cardInfo";
 import { PriceCard } from "./priceCard";
 import { Stock } from "./stock";
@@ -25,25 +23,20 @@ export function SelectedCard({
   productPrice,
   productQtd,
 }: SelectedCardProps) {
-  const { width } = useWindow();
 
-  const checkWidth = width < 540 ? "h-96" : "h-[25rem]";
-  const checkWidthTitleSize = width < 540 ? "lg" : "xl";
 
   return (
     <Flex>
       <div
         className={`
-          relative -left-10 w-screen md:w-fit m-auto
-          sm:h-[30rem] xl:h-full md:-left-0 ${checkWidth}`}
+          relative -left-10 w-screen md:w-fit m-auto xl:h-full md:-left-0 h-fit sm:h-[30rem]`}
       >
         <ThumbSlider images={images} />
       </div>
       <Title
         bold
-        size={checkWidthTitleSize}
         title={productName}
-        className="lg:hidden truncate sm:text-center pt-4 sm:pt-8 w-full"
+        className="lg:hidden truncate sm:text-center pt-4 sm:pt-8 w-full text-xl sm:text-2xl "
       />
       <article
         className="
@@ -53,9 +46,8 @@ export function SelectedCard({
         <div className="flex flex-col md:w-1/2 lg:w-full z-10">
           <Title
             bold
-            size={checkWidthTitleSize}
             title={productName}
-            className="hidden lg:block truncate md:pt-8 xl:pt-0 w-full"
+            className="hidden lg:block truncate md:pt-8 xl:pt-0 w-full text-xl sm:text-2xl "
           />
           <CardInfo views={productViews} />
           <PriceCard price={productPrice} />

@@ -1,8 +1,8 @@
-import { Container } from "src/components/containers/Container";
+import { Container } from "@container/Container";
 
 export default function About() {
   return (
-    <Container>
+    <Container pageTitle="Pablo Studio 3d | Sobre Pablo">
       <h1>
         Sobre
       </h1>

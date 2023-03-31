@@ -7,18 +7,21 @@ import { CartButton } from "@util/buttons/CartButton";
 import { SearchInput } from "@util/inputs/SearchInput";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Logo } from "@util/assets/Logo";
 import { useWindow } from "@hooks/useWindow";
+import { Logo } from "@util/assets/Logo";
 
 export function NavBar() {
   const { width } = useWindow();
   const { openMenu, isMenuOpen } = useMobileMenu();
   const [isSearch, setIsSearch] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const setIsSearchOpen = () => width <= 560 && setIsSearch((isSearch) => !isSearch);
+  const setIsSearchOpen = () =>
+    width <= 560 && setIsSearch((isSearch) => !isSearch);
 
   useEffect(() => {
     width <= 935 && setIsSearch(false);
+    width <= 935 ? setIsMobile(true) : setIsMobile(false);
   }, [width]);
 
   const style = {
@@ -29,18 +32,17 @@ export function NavBar() {
     ? "h-screen overflow-hidden backdrop-blur-[3px]"
     : "h-16 overflow-y-auto overflow-x-hidden backdrop-blur-none";
 
+    function renderLogo () {
+      return (
+        <>
+          <Logo isMobile={isMobile} isSearch={isSearch} isNavBar href="/" />
+        </>
+      )
+    }
+
   return (
     <>
-      {!isSearch && width >= 935 && (
-        <Link
-          href="/"
-          className="
-           pt-2.5 flex items-center justify-center w-fit
-          flex-1 absolute left-1/2 transform -translate-x-1/2 z-50"
-        >
-          <Logo />
-        </Link>
-      )}
+      {renderLogo()}
       <div
         style={style}
         className="absolute z-40 justify-between items-center w-full h-16 hidden min-[935px]:flex pr-10"
@@ -63,16 +65,7 @@ export function NavBar() {
         className={`absolute flex z-50 transition-all duration-500 ease-in-out
           w-full ${dropDownMenu} min-[935px]:hidden`}
       >
-        {!isSearch && width <= 935 && (
-          <Link
-            href="/"
-            className="
-            pt-2.5 flex items-center justify-center w-fit
-            flex-1 absolute left-1/2 transform -translate-x-1/2 z-50"
-          >
-            <Logo />
-          </Link>
-        )}
+        {renderLogo()}
         <MenuMobile
           isClosed={isMenuOpen}
           openMenu={openMenu}

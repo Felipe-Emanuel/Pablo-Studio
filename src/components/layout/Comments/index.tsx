@@ -130,10 +130,8 @@ export function Comments({ data }: CommentsProps) {
                 <CardDescComent
                   avatar
                   date={data[index].date}
-                  user="/profile"
+                  user={`/profile/${data[index].userName}`}
                   alt={data[index].alt}
-                  titleSize="md"
-                  textSize="sm"
                   img={data[index].img}
                   title={data[index].userName}
                   text={data[index].comment}

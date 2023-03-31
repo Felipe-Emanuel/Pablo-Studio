@@ -17,12 +17,10 @@ export function PriceCard({ price }: PriceCardProps) {
     <div
       onMouseEnter={checkHovered}
       onMouseLeave={checkHovered}
-      className="flex flex-col gap-4 max-w-[30rem] h-20"
+      className="flex flex-col justify-center gap-4 max-w-[30rem] h-24"
     >
-      <div className="flex items-center gap-4">
-        <Link href="/about">
-          <Logo className="w-16 h-16" />
-        </Link>
+      <div className="flex items-center">
+        <Logo className="w-16 h-full" href="/about" />
         <Price price={price} />
       </div>
       <Button text="Adicionar ao carrinho" cart isHovered={isHover} />
