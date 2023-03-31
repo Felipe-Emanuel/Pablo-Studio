@@ -12,7 +12,7 @@ export function HeaderInfo({ text, icon, qtd, date }: HeaderInfoProps) {
 
   return (
     <div className="flex items-center gap-4">
-      {text ? <Text text={text} /> : <Text as="span" text={icon} />}
+      {text ? <Text text={text} /> : <Text as="span" text={icon} className="w-6 h-6" />}
       <Text light className="opacity-75" text="|" />
       {qtd ? (
         <Text light className="opacity-75" text={qtd} />
