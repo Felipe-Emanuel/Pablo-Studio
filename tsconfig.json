@@ -23,6 +23,7 @@
       "@layout/*": ["./src/components/layout/*"],
       "@container/*": ["./src/components/containers/*"],
       "@hooks/*": ["./src/data/hooks/*"],
+      "@functions/*": ["./src/functions/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/[products]"],

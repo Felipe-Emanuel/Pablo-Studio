@@ -21,7 +21,7 @@ export function PriceCard({ price }: PriceCardProps) {
     >
       <div className="flex items-center">
         <Logo className="w-16 h-full" href="/about" />
-        <Price price={price} />
+        <Price price={price} className="text-md sm:text-lg"/>
       </div>
       <Button text="Adicionar ao carrinho" cart isHovered={isHover} />
     </div>

@@ -31,7 +31,14 @@ module.exports = {
       dark: '#121214',
       primary: '#6A5ACD',
       secondary: '#23CAD4',
-      tertiary: '#F86A04'
+      tertiary: '#F86A04',
+
+      green: {
+        'green-900': '#164E18',
+        'green-600': '#427043',
+        'green-400': '#C6EDC8'
+      }
+
     },
     extend: {},
   },
