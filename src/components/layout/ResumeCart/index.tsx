@@ -5,15 +5,21 @@ import { PricePixContent } from "@util/texts/PricePixContent";
 import { useRouter } from "next/router";
 
 interface ResumeCartProps {
+  disabled: boolean;
   discount: number;
   totalProductsValue: number;
   freight: number;
+  changeProgressRingValue: () => void;
+  changePaymentState: () => void;
 }
 
 export function ResumeCart({
+  disabled,
   discount,
   totalProductsValue,
   freight,
+  changeProgressRingValue,
+  changePaymentState
 }: ResumeCartProps) {
   const { formatPrice } = normalize();
   const totalOnCredit = totalProductsValue + freight;
@@ -52,7 +58,10 @@ export function ResumeCart({
         className="
         flex flex-col gap-4 justify-between py-6 w-full sm:max-w-md"
       >
-        <Button text="Continuar pagamento" className="w-full" />
+        <Button
+          disabled={disabled}
+          onClick={() => {changeProgressRingValue(), changePaymentState()}}
+          text="Continuar pagamento" className="w-full" />
         <Button
           onClick={() => handleClick("/")}
           text="Continuar comprando"

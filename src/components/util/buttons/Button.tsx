@@ -6,6 +6,7 @@ type ButtonProps = {
   cart?: boolean;
   isHovered?: boolean;
   isTertiary?: boolean;
+  disabled?: boolean;
   href?: string
   onClick?: (href: string) => void;
 };
@@ -16,6 +17,7 @@ export function Button({
   cart,
   isHovered,
   isTertiary,
+  disabled,
   href,
   onClick
 }: ButtonProps) {
@@ -25,12 +27,14 @@ export function Button({
 
   return (
     <button
+      disabled={disabled}
       onClick={onClick && (() => onClick(href!))}
       className={`
       text-sm md:text-md
       flex items-center justify-center gap-4
       transition-colors rounded w-full py-4
       text-white hover:text-white/75 hover:bg-secondary/75 bg-secondary
+      disabled:bg-secondary/75 disabled:text-white/75
       ${tertiary}
       ${className}`}
     >
