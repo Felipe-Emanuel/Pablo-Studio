@@ -1,4 +1,5 @@
 import { normalize } from "@functions/normalized";
+import { useCartContext } from "@hooks/useCartContext";
 
 interface PricePixContentProps {
   totalWithPix: number;
@@ -7,7 +8,7 @@ interface PricePixContentProps {
 
 export function PricePixContent({ totalOnCredit, totalWithPix }: PricePixContentProps) {
   const { formatPrice } = normalize();
-  const moneyToBeSaved = totalOnCredit - totalWithPix;
+  const { moneyToBeSaved } = useCartContext()
 
   return (
     <div

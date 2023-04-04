@@ -23,6 +23,7 @@
       "@layout/*": ["./src/components/layout/*"],
       "@container/*": ["./src/components/containers/*"],
       "@hooks/*": ["./src/data/hooks/*"],
+      "@contexts/*": ["./src/data/contexts/*"],
       "@functions/*": ["./src/functions/*"],
     }
   },

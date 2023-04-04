@@ -1,10 +1,8 @@
 import { useWindow } from "@hooks/useWindow";
 import { ProgressRing } from "@layout/ProgressRing";
 import { PaymentState } from "@util/assets/PaymentState";
-import { useState } from "react";
-import { useEffect } from "react";
 
-type paymentStatesType = {
+export type paymentStatesType = {
   icon: JSX.Element;
   isActive: boolean;
   isLast: boolean;

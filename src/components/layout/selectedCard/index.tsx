@@ -6,7 +6,8 @@ import { CardInfo } from "./cardInfo";
 import { PriceCard } from "./priceCard";
 import { Stock } from "./stock";
 
-interface SelectedCardProps {
+export interface SelectedCardProps {
+  id: number;
   images: string[];
   productName: string;
   productDescription: string;
@@ -22,8 +23,17 @@ export function SelectedCard({
   productViews,
   productPrice,
   productQtd,
+  id
 }: SelectedCardProps) {
-
+  const product = {
+    id,
+    images,
+    productName,
+    productDescription,
+    productViews,
+    productPrice,
+    productQtd,
+  };
 
   return (
     <Flex>
@@ -50,7 +60,7 @@ export function SelectedCard({
             className="hidden lg:block truncate md:pt-8 xl:pt-0 w-full text-xl sm:text-2xl "
           />
           <CardInfo views={productViews} />
-          <PriceCard price={productPrice} />
+          <PriceCard price={productPrice} product={product} />
         </div>
         <div className="flex flex-col gap-4 pt-16 sm:pt-4 lg:pt-16 md:w-1/2 lg:w-full z-0">
           <Stock qtd={productQtd} />

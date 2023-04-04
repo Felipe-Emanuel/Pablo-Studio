@@ -1,4 +1,5 @@
 import { normalize } from "@functions/normalized";
+import { useCartContext } from "@hooks/useCartContext";
 import { Button } from "@util/buttons/Button";
 import { Price } from "@util/texts/Price";
 import { PricePixContent } from "@util/texts/PricePixContent";
@@ -9,21 +10,15 @@ interface ResumeCartProps {
   discount: number;
   totalProductsValue: number;
   freight: number;
-  changeProgressRingValue: () => void;
-  changePaymentState: () => void;
 }
 
 export function ResumeCart({
   disabled,
-  discount,
   totalProductsValue,
   freight,
-  changeProgressRingValue,
-  changePaymentState
 }: ResumeCartProps) {
-  const { formatPrice } = normalize();
-  const totalOnCredit = totalProductsValue + freight;
-  const totalWithPix = totalOnCredit - totalProductsValue * discount;
+  const { changeProgressRingValue, changePaymentState } = useCartContext()
+  const { totalOnCredit, totalWithPix } = useCartContext();
 
   const router = useRouter();
 
@@ -41,13 +36,13 @@ export function ResumeCart({
         <div>
           <Price
             text="Valor dos produtos"
-            price={formatPrice(totalProductsValue)}
+            price={totalProductsValue}
           />
           <hr className="border border-white" />
         </div>
         <div>
-          <Price text="Frete" price={formatPrice(freight)} />
-          <Price text="Total à prazo" price={formatPrice(totalOnCredit)} />
+          <Price text="Frete" price={freight} />
+          <Price text="Total à prazo" price={totalOnCredit} />
           <PricePixContent
             totalWithPix={totalWithPix}
             totalOnCredit={totalOnCredit}
