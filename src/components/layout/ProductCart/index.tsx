@@ -1,17 +1,21 @@
 import { useCartContext } from "@hooks/useCartContext";
 import { ProductCartImage } from "./ProductCartImage";
-import { ProductCartInfo } from "./ProductCartInfo.tsx";
+import { ProductCartInfo } from "./ProductCartInfo";
+import { ProductCartDetails } from "./ProductCartDetails/ProductCartDetails";
+import { SelectedCardProps } from "@layout/selectedCard";
 
 interface ProductCartProps {
   image: string;
   productName: string;
   productDescription: string;
+  product: SelectedCardProps
 }
 
 export function ProductCart({
   image,
   productName,
   productDescription,
+  product
 }: ProductCartProps) {
   const { moneyToBeSaved, totalOnCredit } = useCartContext();
 
@@ -26,7 +30,9 @@ export function ProductCart({
           totalOnCredit={totalOnCredit}
         />
       </div>
-      <div></div>
+      <div>
+        <ProductCartDetails product={product} />
+      </div>
     </div>
   );
 }

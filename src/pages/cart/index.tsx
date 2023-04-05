@@ -27,9 +27,9 @@ export default function Cart() {
       <Section>
         {state.cart.length > 0 &&
           state.cart.map((cart, i) => {
-            console.log(cart);
             return (
               <ProductCart
+                product={cart}
                 key={i}
                 image={cart.images[0]}
                 productName={cart.productName}

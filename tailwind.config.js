@@ -33,6 +33,7 @@ module.exports = {
       secondary: '#23CAD4',
       tertiary: '#F86A04',
       placeholder: '#1D1B1B',
+      danger: '#C03131',
 
       green: {
         '900': '#164E18',

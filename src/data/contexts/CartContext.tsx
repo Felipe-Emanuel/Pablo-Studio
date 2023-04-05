@@ -17,10 +17,6 @@ type CartType = {
   cart: SelectedCardProps[];
 };
 
-type PaymentStatesType = {
-  paymentStates: paymentStatesType[];
-};
-
 type CartContextType = {
   state: CartType;
   discount: number;

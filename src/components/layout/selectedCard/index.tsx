@@ -7,11 +7,11 @@ import { PriceCard } from "./priceCard";
 import { Stock } from "./stock";
 
 export interface SelectedCardProps {
-  id: number;
+  id: number[];
   images: string[];
   productName: string;
   productDescription: string;
-  productPrice: string;
+  productPrice: string | number;
   productViews: number;
   productQtd: number;
 }

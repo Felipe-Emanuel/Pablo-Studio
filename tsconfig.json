@@ -27,6 +27,6 @@
       "@functions/*": ["./src/functions/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/[products]"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/[products]", "src/components/layout/ProductCart/ProductCartInfo"],
   "exclude": ["node_modules"]
 }

@@ -2,12 +2,11 @@ import { useState } from "react";
 import { Logo } from "@util/assets/Logo";
 import { Button } from "@util/buttons/Button";
 import { Price } from "@util/texts/Price";
-import Link from "next/link";
 import { useCartContext } from "@hooks/useCartContext";
 import { SelectedCardProps } from "..";
 
 interface PriceCardProps {
-  price: string;
+  price: string | number;
   product: SelectedCardProps;
 }
 
