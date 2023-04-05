@@ -20,7 +20,7 @@ export function ProductCart({
   const { moneyToBeSaved, totalOnCredit } = useCartContext();
 
   return (
-    <div className="p-3 rounded-md bg-placeholder flex w-full h-fit justify-between items-center">
+    <div className="p-3 rounded-md mb-4 bg-placeholder flex w-full h-fit justify-between items-center">
       <div className="flex gap-3">
         <ProductCartImage src={image} alt={productName} />
         <ProductCartInfo

@@ -1,11 +1,20 @@
 import { normalize } from "@functions/normalized";
 import { useCartContext } from "@hooks/useCartContext";
 import { SelectedCardProps } from "@layout/selectedCard";
-import { Price } from "@util/texts/Price";
 import { Text } from "@util/texts/Text";
 import { TrashVector } from "@vectores/Vectores";
-import { useState } from "react";
 import { LeftArrowIcon, RightArrowIcon } from "src/icons";
+
+export type PayloadDetailsType = {
+  count: number;
+  id: string | string[] | undefined;
+  images: [];
+  productName: string;
+  productDescription: string;
+  productPrice: string;
+  productViews: number;
+  productQtd: number;
+};
 
 interface ProductCartDetailsProps {
   product: SelectedCardProps;
@@ -13,16 +22,26 @@ interface ProductCartDetailsProps {
 
 export function ProductCartDetails({ product }: ProductCartDetailsProps) {
   const { formatPrice } = normalize();
-  const { totalWithPix, removeFromCart } = useCartContext();
-  const [qtd, setQtd] = useState(0);
+  const { state, totalWithPix, removeFromCart, addToCount, removeToCount } =
+    useCartContext();
 
-  const addQtd = () => setQtd((qtd) => qtd + 1);
-  const removeQtd = () => setQtd((qtd) => qtd - 1);
+  const i = state.cart.findIndex((item) => item.id === product.id);
 
-  const checkQtd =
-    qtd <= 0
-      ? "opacity-50 pointer-events-none"
-      : "opacity-100 pointer-events-auto";
+  const counts = state.cart.map((item) => item.count);
+
+  const payloadDetails: PayloadDetailsType = {
+    count: counts[i],
+    id: product.id,
+    images: [],
+    productName: "",
+    productDescription: "",
+    productPrice: "",
+    productViews: 0,
+    productQtd: 0,
+  };
+
+  const checkHover =
+    counts[i] <= 1 ? "hover:text-danger" : " hover:text-secondary";
 
   return (
     <div className="flex flex-col justify-between w-fit h-full py-8 gap-3">
@@ -36,18 +55,18 @@ export function ProductCartDetails({ product }: ProductCartDetailsProps) {
         <Text text="Quantidade" light />
         <div className="relative w-full items-center justify-center">
           <LeftArrowIcon
-            onClick={removeQtd}
+            onClick={() => removeToCount(payloadDetails)}
             className={`
               absolute transition-all cursor-pointer left-0
-              w-5 h-7 text-white hover:text-secondary ${checkQtd}`}
+              w-5 h-7 text-white ${checkHover}`}
           />
           <RightArrowIcon
-            onClick={addQtd}
+            onClick={() => addToCount(payloadDetails)}
             className={`
               absolute transition-all cursor-pointer right-0
               w-5 h-7 text-white hover:text-secondary`}
           />
-          <Text text={qtd} className="text-center" />
+          <Text text={counts[i]} className="text-center" />
         </div>
         <button
           onClick={() => removeFromCart(product)}

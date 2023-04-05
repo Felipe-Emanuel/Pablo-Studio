@@ -7,7 +7,8 @@ import { PriceCard } from "./priceCard";
 import { Stock } from "./stock";
 
 export interface SelectedCardProps {
-  id: number[];
+  count: number;
+  id: string | string[] | undefined;
   images: string[];
   productName: string;
   productDescription: string;
@@ -17,15 +18,18 @@ export interface SelectedCardProps {
 }
 
 export function SelectedCard({
+  count,
+  id,
   images,
   productName,
   productDescription,
   productViews,
   productPrice,
   productQtd,
-  id
 }: SelectedCardProps) {
+
   const product = {
+    count,
     id,
     images,
     productName,

@@ -5,9 +5,14 @@ import Link from "next/link";
 import { Container } from "src/components/containers/Container";
 import a from "../../public/banner-home.jpg";
 
+//PRODUCT MOCKED
+let id = 0;
+
 export default function Home() {
   const b = [
     {
+      id: id++,
+      count: 0,
       name: "projeto 1",
       image: "https://picsum.photos/seed/1/800/600",
       link: "/products/1",
@@ -15,6 +20,8 @@ export default function Home() {
       description: "alguma descrição muita boa 1 kkkk",
     },
     {
+      id: id++,
+      count: 0,
       name: "projeto 2",
       image: "https://picsum.photos/seed/2/800/600",
       link: "/products/2",
@@ -22,6 +29,8 @@ export default function Home() {
       description: "alguma descrição muita boa 2 kkkk",
     },
     {
+      id: id++,
+      count: 0,
       name: "projeto 3",
       image: "https://picsum.photos/seed/3/800/600",
       link: "/products/3",
@@ -29,6 +38,8 @@ export default function Home() {
       description: "alguma descrição muita boa 3 kkkk",
     },
     {
+      id: id++,
+      count: 0,
       name: "projeto 4",
       image: "https://picsum.photos/seed/4/800/600",
       link: "/products/4",
@@ -36,6 +47,8 @@ export default function Home() {
       description: "alguma descrição muita boa 4 kkkk",
     },
     {
+      id: id++,
+      count: 0,
       name: "projeto 5",
       image: "https://picsum.photos/seed/5/800/600",
       link: "/products/5",
