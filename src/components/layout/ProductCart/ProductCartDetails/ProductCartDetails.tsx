@@ -48,7 +48,7 @@ export function ProductCartDetails({ product }: ProductCartDetailsProps) {
           <Text text={counts[i]} className="text-center" />
         </div>
         <button
-          onClick={() => removeFromCart(product)}
+            onClick={() =>  removeFromCart(product)}
           className="flex gap-1.5 items-center justify-center transition-all hover:opacity-75"
         >
           <TrashVector />

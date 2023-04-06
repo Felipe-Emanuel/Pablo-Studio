@@ -92,7 +92,7 @@ const cartReducer = (state: CartType, action: CartActionType) =>
     "Remove-from-cart": () => {
       const removedItem = state.cart.find((item: DataType) => item.id === action.payload.id);
       const updatedCart = state.cart.filter((item: DataType) => item.id !== action.payload.id);
-      const total = removedItem ? state.total - removedItem.productPrice * removedItem.count : state.total;
+      const total = removedItem ? state.total - removedItem.productPrice : state.total;
       return {
         ...state,
         cart: updatedCart,
