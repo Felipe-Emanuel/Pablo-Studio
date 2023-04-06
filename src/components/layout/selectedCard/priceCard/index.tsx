@@ -3,11 +3,12 @@ import { Logo } from "@util/assets/Logo";
 import { Button } from "@util/buttons/Button";
 import { Price } from "@util/texts/Price";
 import { useCartContext } from "@hooks/useCartContext";
-import { SelectedCardProps } from "..";
+import { DataType } from "@layout/slider/productSlider";
+import { useRouter } from "next/router";
 
 interface PriceCardProps {
   price: string | number;
-  product: SelectedCardProps;
+  product: DataType[];
 }
 
 export function PriceCard({ price, product }: PriceCardProps) {
@@ -15,6 +16,12 @@ export function PriceCard({ price, product }: PriceCardProps) {
   const [isHover, setIsHover] = useState(false);
 
   const checkHovered = () => setIsHover((isHover) => !isHover);
+
+  const router = useRouter()
+  const id = router.query.id
+
+  const toLocalStorage = (card: DataType) =>
+  localStorage.setItem("Product", JSON.stringify(card))
 
   return (
     <div
@@ -27,7 +34,10 @@ export function PriceCard({ price, product }: PriceCardProps) {
         <Price price={price} className="text-md sm:text-lg" />
       </div>
       <Button
-        onClick={() => addToCart(product)}
+        onClick={() => {
+          toLocalStorage(product[+id!]),
+          addToCart(product[+id!])
+        }}
         text="Adicionar ao carrinho"
         cart
         isHovered={isHover}

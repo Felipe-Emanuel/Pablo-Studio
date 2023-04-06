@@ -1,30 +1,30 @@
-import { normalize } from "@functions/normalized";
 import { useCartContext } from "@hooks/useCartContext";
+import { DataType } from "@layout/slider/productSlider";
 import { Button } from "@util/buttons/Button";
 import { Price } from "@util/texts/Price";
 import { PricePixContent } from "@util/texts/PricePixContent";
 import { useRouter } from "next/router";
 
+
 interface ResumeCartProps {
   disabled: boolean;
   discount: number;
-  totalProductsValue: number;
-  freight: number;
 }
 
 export function ResumeCart({
   disabled,
-  totalProductsValue,
-  freight,
 }: ResumeCartProps) {
   const { changeProgressRingValue, changePaymentState } = useCartContext()
-  const { totalOnCredit, totalWithPix } = useCartContext();
+  const { state, freight, discount } = useCartContext();
 
   const router = useRouter();
-
   const handleClick = (href: string) => {
     router.push(href);
   };
+
+  const totalWithPix = state.total + freight
+  const totalOnCredit = state.total + freight + (state.total * discount)
+
 
   return (
     <div
@@ -36,7 +36,7 @@ export function ResumeCart({
         <div>
           <Price
             text="Valor dos produtos"
-            price={totalProductsValue}
+            price={state.total}
           />
           <hr className="border border-white" />
         </div>
@@ -45,7 +45,6 @@ export function ResumeCart({
           <Price text="Total à prazo" price={totalOnCredit} />
           <PricePixContent
             totalWithPix={totalWithPix}
-            totalOnCredit={totalOnCredit}
           />
         </div>
       </div>

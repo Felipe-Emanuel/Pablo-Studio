@@ -5,72 +5,58 @@ import { Title } from "@util/texts/Title";
 import { CardInfo } from "./cardInfo";
 import { PriceCard } from "./priceCard";
 import { Stock } from "./stock";
+import { DataType } from "@layout/slider/productSlider";
+import { useRouter } from "next/router";
 
-export interface SelectedCardProps {
-  count: number;
-  id: string | string[] | undefined;
-  images: string[];
-  productName: string;
-  productDescription: string;
-  productPrice: string | number;
-  productViews: number;
-  productQtd: number;
+interface SelectedCardProps {
+  product: DataType[];
 }
 
-export function SelectedCard({
-  count,
-  id,
-  images,
-  productName,
-  productDescription,
-  productViews,
-  productPrice,
-  productQtd,
-}: SelectedCardProps) {
-
-  const product = {
-    count,
-    id,
-    images,
-    productName,
-    productDescription,
-    productViews,
-    productPrice,
-    productQtd,
-  };
+export function SelectedCard({ product }: SelectedCardProps) {
+  const router = useRouter();
+  const productId = router.query.id;
 
   return (
-    <Flex>
-      <div
-        className={`
-          relative -left-10 w-screen md:w-fit m-auto xl:h-full md:-left-0 h-fit sm:h-[30rem]`}
-      >
-        <ThumbSlider images={images} />
-      </div>
-      <Title
-        bold
-        title={productName}
-        className="lg:hidden truncate sm:text-center pt-4 sm:pt-8 w-full text-xl sm:text-2xl "
-      />
-      <article
-        className="
-        flex w-full md:w-fit flex-col gap-4 lg:py-24 xl:py-0
-        md:flex-row m-auto md:gap-10 lg:flex-col lg:gap-4"
-      >
-        <div className="flex flex-col md:w-1/2 lg:w-full z-10">
+    <>
+      {productId && (
+        <Flex>
+          <div
+            className={`
+            relative -left-10 w-screen md:w-fit m-auto xl:h-full md:-left-0 h-fit sm:h-[30rem]`}
+          >
+            <ThumbSlider images={product[+productId!].images} />
+          </div>
           <Title
             bold
-            title={productName}
-            className="hidden lg:block truncate md:pt-8 xl:pt-0 w-full text-xl sm:text-2xl "
+            title={product[+productId!].productName}
+            className="lg:hidden truncate sm:text-center pt-4 sm:pt-8 w-full text-xl sm:text-2xl "
           />
-          <CardInfo views={productViews} />
-          <PriceCard price={productPrice} product={product} />
-        </div>
-        <div className="flex flex-col gap-4 pt-16 sm:pt-4 lg:pt-16 md:w-1/2 lg:w-full z-0">
-          <Stock qtd={productQtd} />
-          <ProductDescription description={productDescription} />
-        </div>
-      </article>
-    </Flex>
+          <article
+            className="
+              flex w-full md:w-fit flex-col gap-4 lg:py-24 xl:py-0
+              md:flex-row m-auto md:gap-10 lg:flex-col lg:gap-4"
+            >
+            <div className="flex flex-col md:w-1/2 lg:w-full z-10">
+              <Title
+                bold
+                title={product[+productId!].productName}
+                className="hidden lg:block truncate md:pt-8 xl:pt-0 w-full text-xl sm:text-2xl "
+              />
+              <CardInfo views={product[+productId!].productViews} />
+              <PriceCard
+                price={product[+productId!].productPrice}
+                product={product}
+              />
+            </div>
+            <div className="flex flex-col gap-4 pt-16 sm:pt-4 lg:pt-16 md:w-1/2 lg:w-full z-0">
+              <Stock qtd={product[+productId!].productQtd} />
+              <ProductDescription
+                description={product[+productId!].productDescription}
+              />
+            </div>
+          </article>
+        </Flex>
+      )}
+    </>
   );
 }

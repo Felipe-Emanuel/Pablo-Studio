@@ -1,30 +1,32 @@
-import { useCartContext } from "@hooks/useCartContext";
 import { Price } from "@util/texts/Price";
 import { Text } from "@util/texts/Text";
 import { Title } from "@util/texts/Title";
 
 interface ProductCartInfoProps {
   productName: string;
+  productId: number;
   productDescription: string;
-  moneyToBeSaved: number;
   totalOnCredit: number;
+  moneyToBeSaved: number;
 }
 
 export function ProductCartInfo({
   productName,
+  productId,
   productDescription,
   totalOnCredit,
+  moneyToBeSaved
 }: ProductCartInfoProps) {
-  const { moneyToBeSaved } = useCartContext()
 
   return (
     <div className="w-full max-w-2xl justify-between flex flex-col h-full py-8 gap-3">
       <Title light title={productName} />
+      <Title light title={`${productId}`} />
       <Text bold text={productDescription} />
       <div>
         <span className="flex">
           <Price
-            text="Pague com pix e economize até 15%:"
+            text="Pague com pix e economize até:"
             price={moneyToBeSaved}
           />
         </span>

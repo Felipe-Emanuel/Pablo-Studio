@@ -1,5 +1,5 @@
 import { paymentStatesType } from "@layout/PaymentLine";
-import { SelectedCardProps } from "@layout/selectedCard";
+import { DataType } from "@layout/slider/productSlider";
 import {
   CartVector,
   CheckVector,
@@ -7,34 +7,33 @@ import {
   PaymentVector,
   UserVector,
 } from "@vectores/Vectores";
-import { useRouter } from "next/router";
-import { createContext, useReducer, ReactNode, useState } from "react";
+import { createContext, useReducer, ReactNode, useState, Dispatch } from "react";
 
 type CartActionType =
-  | { type: "Add-to-cart"; payload: SelectedCardProps }
-  | { type: "Remove-from-cart"; payload: SelectedCardProps }
-  | { type: "Add-to-count"; payload: SelectedCardProps }
-  | { type: "Remove-to-count"; payload: SelectedCardProps };
+  | { type: "Add-to-cart"; payload: DataType }
+  | { type: "Remove-from-cart"; payload: DataType }
+  | { type: "Add-to-count"; payload: DataType }
+  | { type: "Remove-to-count"; payload: DataType }
+  | { type: "Clear-cart"; payload: DataType }
+  | { type: "Checkout"; payload: DataType };
 
 type CartType = {
-  cart: SelectedCardProps[];
+  total: number;
+  cart: DataType[];
 };
 
 type CartContextType = {
   state: CartType;
   popUp: boolean;
   discount: number;
-  totalProductsValue: number;
   freight: number;
-  totalOnCredit: number;
-  totalWithPix: number;
-  moneyToBeSaved: number;
   progressValue: number;
   paymentStates: paymentStatesType[];
-  addToCart: (product: SelectedCardProps) => void;
-  removeFromCart: (product: SelectedCardProps) => void;
-  addToCount: (product: SelectedCardProps) => void;
-  removeToCount: (product: SelectedCardProps) => void;
+  dispatch: Dispatch<CartActionType>;
+  addToCart: (product: DataType) => void;
+  removeFromCart: (product: DataType) => void;
+  addToCount: (product: DataType) => void;
+  removeToCount: (product: DataType) => void;
   togglePopUp: (value: boolean) => void;
   changePaymentState: () => void;
   changeProgressRingValue: () => void;
@@ -44,75 +43,139 @@ interface cartProviderProps {
   children: ReactNode;
 }
 
-const initialState: CartType = { cart: [] };
+const initialState: CartType = { cart: [], total: 0 };
+const discount = 0.10;
+const freight = 10;
 
 const cartReducer = (state: CartType, action: CartActionType) =>
   ({
     "Add-to-cart": () => {
       const existingItem = state.cart.find(
-        (item: SelectedCardProps) => item.id === action.payload.id
+        (item: DataType) => item.id === action.payload.id
       );
+
       if (existingItem) {
-        const updatedCart = state.cart.map((item: SelectedCardProps) =>
-          item.id === existingItem.id
-            ? { ...item, count: item.count + 1 }
-            : item
+        const updatedCart = state.cart.map((item: DataType) => {
+          return item.id === existingItem.id
+            ? {
+                ...item,
+                count: item.count + 1,
+                productPrice: item.initialPrice * (item.count + 1),
+              }
+            : item;
+        });
+
+        const total = updatedCart.reduce(
+          (acc: number, item: DataType) => acc + item.productPrice,
+          0
+        );
+
+        return {
+          ...state,
+          cart: updatedCart,
+          total: total,
+        };
+      } else {
+        const newItem = { ...action.payload, count: 1, initialPrice: action.payload.productPrice, productPrice: action.payload.productPrice };
+        const updatedCart = [...state.cart, newItem];
+        const total = updatedCart.reduce(
+          (acc: number, item: DataType) => acc + item.productPrice,
+          0
         );
         return {
           ...state,
           cart: updatedCart,
-        };
-      } else {
-        const newItem = { ...action.payload, count: 1 };
-        return {
-          ...state,
-          cart: [...state.cart, newItem],
+          total: total,
         };
       }
     },
-    "Remove-from-cart": () => ({
-      ...state,
-      cart: state.cart.filter(
-        (item: SelectedCardProps) => item.id !== action.payload.id
-      ),
-    }),
-    "Add-to-count": () => ({
-      ...state,
-      cart: state.cart.map((item: SelectedCardProps) =>
+    "Remove-from-cart": () => {
+      const removedItem = state.cart.find((item: DataType) => item.id === action.payload.id);
+      const updatedCart = state.cart.filter((item: DataType) => item.id !== action.payload.id);
+      const total = removedItem ? state.total - removedItem.productPrice * removedItem.count : state.total;
+      return {
+        ...state,
+        cart: updatedCart,
+        total: total,
+      };
+    },
+    "Add-to-count": () => {
+      const updatedCart = state.cart.map((item: DataType) =>
         item.id === action.payload.id
-          ? { ...item, count: item.count + 1 }
+          ? { ...item, count: item.count + 1, initialPrice: item.initialPrice, productPrice: item.initialPrice * (item.count + 1) }
           : item
-      ),
-    }),
-    "Remove-to-count": () => ({
-      ...state,
-      cart: state.cart.map((item: SelectedCardProps) =>
+      );
+      const total = updatedCart.reduce(
+        (acc: number, item: DataType) => acc + item.productPrice,
+        0
+      );
+      return {
+        ...state,
+        cart: updatedCart,
+        total: total,
+      };
+    },
+    "Remove-to-count": () => {
+      const updatedCart = state.cart.map((item: DataType) =>
         item.count === 1
           ? item
           : item.id === action.payload.id
-          ? { ...item, count: item.count - 1 }
+          ? { ...item, count: item.count - 1, initialPrice: item.initialPrice, productPrice: item.initialPrice * (item.count - 1) }
           : item
-      ),
+      );
+      const total = updatedCart.reduce(
+        (acc: number, item: DataType) => acc + item.productPrice,
+        0
+      );
+      return {
+        ...state,
+        cart: updatedCart,
+        total: total,
+      };
+    },
+    "Clear-cart": () => ({
+      ...state,
+      cart: [],
+      total: 0,
     }),
+    "Checkout": () => {
+      const totalWithoutDiscount = state.total + freight;
+      const total = totalWithoutDiscount - totalWithoutDiscount * discount;
+      return {
+        ...state,
+        cart: [],
+        total: 0,
+        totalWithDiscount: total,
+      };
+    },
   }[action.type]?.() || state);
 
-  const states = [
-    { icon: <CartVector />, isActive: true, isLast: false, text: "Carrinho" },
-    { icon: <UserVector />, isActive: false, isLast: false, text: "Identificação" },
-    { icon: <PaymentVector />, isActive: false, isLast: false, text: "Pagamento" },
-    { icon: <EyeVector />, isActive: false, isLast: false, text: "Confirmação" },
-    { icon: <CheckVector />, isActive: false, isLast: true, text: "Conclusão" }
-  ]
+
+
+const states = [
+  { icon: <CartVector />, isActive: true, isLast: false, text: "Carrinho" },
+  {
+    icon: <UserVector />,
+    isActive: false,
+    isLast: false,
+    text: "Identificação",
+  },
+  {
+    icon: <PaymentVector />,
+    isActive: false,
+    isLast: false,
+    text: "Pagamento",
+  },
+  { icon: <EyeVector />, isActive: false, isLast: false, text: "Confirmação" },
+  { icon: <CheckVector />, isActive: false, isLast: true, text: "Conclusão" },
+];
 
 export const CartContext = createContext<CartContextType>({
   state: initialState,
   popUp: false,
-  discount: 0,
-  totalProductsValue: 0,
-  freight: 0,
-  totalOnCredit: 0,
-  totalWithPix: 0,
-  moneyToBeSaved: 0,
+  discount,
+  freight,
+  dispatch: () => {},
   addToCount: () => {},
   removeToCount: () => {},
   addToCart: () => {},
@@ -128,17 +191,7 @@ export function CartProvider({ children }: cartProviderProps) {
   const [state, dispatch] = useReducer(cartReducer, initialState);
   const [progressValue, setProgressValue] = useState(20);
   const [popUp, setPopUp] = useState(false);
-  const [paymentStates, setPaymentStates] =
-    useState<paymentStatesType[]>(states);
-
-  const counter = state.cart.map((cart) => cart.count);
-
-  const discount = 0.15;
-  const totalProductsValue = 750;
-  const freight = 34.75;
-  const totalOnCredit = totalProductsValue + freight;
-  const totalWithPix = totalOnCredit - totalProductsValue * discount;
-  const moneyToBeSaved = totalOnCredit - totalWithPix;
+  const [paymentStates, setPaymentStates] = useState<paymentStatesType[]>(states);
 
   const changePaymentState = () => {
     const activeIndex = paymentStates.findIndex((state) => state.isActive);
@@ -158,25 +211,26 @@ export function CartProvider({ children }: cartProviderProps) {
     setProgressValue(progressValue + 20);
   };
 
-  const addToCart = (product: SelectedCardProps) => {
+  const addToCart = (product: DataType) => {
     dispatch({ type: "Add-to-cart", payload: product });
   };
 
-  const removeFromCart = (product: SelectedCardProps) => {
+  const removeFromCart = (product: DataType) => {
     dispatch({ type: "Remove-from-cart", payload: product });
     togglePopUp(false);
   };
 
-  const addToCount = (product: SelectedCardProps) => {
+  const addToCount = (product: DataType) => {
     dispatch({ type: "Add-to-count", payload: product });
   };
 
-  const removeToCount = (product: SelectedCardProps) => {
+  const removeToCount = (product: DataType) => {
     dispatch({ type: "Remove-to-count", payload: product });
 
     if (product.count === 1) {
       togglePopUp(true);
     }
+
   };
 
   return (
@@ -187,11 +241,8 @@ export function CartProvider({ children }: cartProviderProps) {
         progressValue,
         paymentStates,
         discount,
-        totalProductsValue,
         freight,
-        totalOnCredit,
-        moneyToBeSaved,
-        totalWithPix,
+        dispatch,
         togglePopUp,
         addToCount,
         removeToCount,

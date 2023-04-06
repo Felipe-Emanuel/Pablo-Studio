@@ -3,84 +3,17 @@ import { Comments } from "@layout/Comments";
 import { SelectedCard } from "@layout/selectedCard";
 import { useRouter } from "next/router";
 import { Container } from "src/components/containers/Container";
-
-//PRODUCT MOCKED
-let id = 0
-
-const product = {
-    id: id++,
-    count: 0,
-    images: [
-      "https://picsum.photos/seed/1/800/600",
-      "https://picsum.photos/seed/2/800/600",
-      "https://picsum.photos/seed/3/800/600",
-      "https://picsum.photos/seed/4/800/600",
-      "https://picsum.photos/seed/5/800/600",
-    ],
-    productName: "Nome do Produto",
-    productDescription: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.",
-    productViews: 10,
-    productPrice: 10,
-    productQtd: 15,
-    comments: [
-      {
-        id: id++,
-        img: "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp",
-        alt: "a",
-        date: "23.06.2023",
-        userName: "Felipe",
-        comment:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.",
-      },
-      {
-        id: id++,
-        img: "https://aui.atlassian.com/aui/7.9/docs/images/avatar-96.png",
-        alt: "a",
-        date: "02.02.2023",
-        userName: "Paulo",
-        comment:
-          "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'.",
-      },
-      {
-        id: id++,
-        img: "https://artcorgi.com/wp-content/uploads/2014/09/bored.png",
-        alt: "a",
-        date: "10.12.2023",
-        userName: "Pablo",
-        comment:
-          "by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, 'Lorem ipsum dolor sit amet..', comes from a line in section 1.10.32.",
-      },
-      {
-        id: id++,
-        img: "https://artcorgi.com/wp-content/uploads/2014/09/confused1.png",
-        alt: "a",
-        date: "31.07.2022",
-        userName: "Ana",
-        comment:
-          "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae.",
-      },
-    ]
-  }
-
+import { productMocked } from "src/mock";
 
 export default function Product() {
-  const router = useRouter()
-  const productId = router.query.id
+  const router = useRouter();
+  const productId = router.query.id;
 
   return (
     <Container style pageTitle="Pablo Studio 3D | Nome do Produto">
-      <SelectedCard
-        count={product.count}
-        id={productId}
-        images={product.images}
-        productName={product.productName}
-        productDescription={product.productDescription}
-        productViews={product.productViews}
-        productPrice={product.productPrice}
-        productQtd={product.productQtd}
-      />
+      <SelectedCard product={productMocked} />
       <Section>
-        <Comments data={product.comments} />
+        {productId && <Comments data={productMocked[+productId!].comments} />}
       </Section>
     </Container>
   );

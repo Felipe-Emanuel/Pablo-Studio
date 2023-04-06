@@ -5,16 +5,32 @@ import { Card } from "@layout/card";
 import { CardDescription } from "@layout/cardDescription";
 import { useWindow } from "@hooks/useWindow";
 
-type Data = {
-  name: string;
-  alt: string;
+export type DataType = {
+  id: number;
+  count: number;
+  productPrice: number;
+  productViews: number;
+  productQtd: number;
+  productName: string;
+  images: string[];
   link: string;
-  image: string;
-  description: string;
+  alt: string;
+  productDescription: string;
+  cardDescription: string;
+  initialPrice: number;
+  initialTotal: number;
+  comments: {
+    id: number;
+    img: string;
+    alt: string;
+    date: string;
+    userName: string;
+    comment: string;
+  }[];
 };
 
 type ProductSliderProps = {
-  data: Data[];
+  data: DataType[];
 };
 
 export function ProductSlider({ data = [] }: ProductSliderProps) {
@@ -62,8 +78,8 @@ export function ProductSlider({ data = [] }: ProductSliderProps) {
 
   function renderProjectName(i: number) {
     setCardInfo({
-      name: data[i].name,
-      description: data[i].description,
+      name: data[i].productName,
+      description: data[i].cardDescription,
     });
   }
 
@@ -101,7 +117,7 @@ export function ProductSlider({ data = [] }: ProductSliderProps) {
       </motion.div>
       <SwiperComponent settings={settings}>
         {data.length > 0 &&
-          data.map((card: Data, i: number) => {
+          data.map((card: DataType, i: number) => {
             return (
               <SwiperSlide
                 key={i}
@@ -111,7 +127,7 @@ export function ProductSlider({ data = [] }: ProductSliderProps) {
                 }}
                 onMouseOut={() => renderProjectName(i)}
               >
-                <Card alt={card.alt} href={card.link} img={card.image} />
+                <Card alt={card.alt} href={card.link} img={card.images[0]} />
               </SwiperSlide>
             );
           })}

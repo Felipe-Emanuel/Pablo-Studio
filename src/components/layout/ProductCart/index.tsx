@@ -2,13 +2,13 @@ import { useCartContext } from "@hooks/useCartContext";
 import { ProductCartImage } from "./ProductCartImage";
 import { ProductCartInfo } from "./ProductCartInfo";
 import { ProductCartDetails } from "./ProductCartDetails/ProductCartDetails";
-import { SelectedCardProps } from "@layout/selectedCard";
+import { DataType } from "@layout/slider/productSlider";
 
 interface ProductCartProps {
   image: string;
   productName: string;
   productDescription: string;
-  product: SelectedCardProps
+  product: DataType
 }
 
 export function ProductCart({
@@ -17,13 +17,18 @@ export function ProductCart({
   productDescription,
   product
 }: ProductCartProps) {
-  const { moneyToBeSaved, totalOnCredit } = useCartContext();
+  const { state, freight, discount } = useCartContext();
+
+  const total = state.cart.reduce((acc, curr) => acc + curr.productPrice, 0);
+  const totalOnCredit = total + freight;
+  const moneyToBeSaved = total * discount;
 
   return (
     <div className="p-3 rounded-md mb-4 bg-placeholder flex w-full h-fit justify-between items-center">
       <div className="flex gap-3">
         <ProductCartImage src={image} alt={productName} />
         <ProductCartInfo
+          productId={product.id}
           productName={productName}
           productDescription={productDescription}
           moneyToBeSaved={moneyToBeSaved}
@@ -31,7 +36,9 @@ export function ProductCart({
         />
       </div>
       <div>
-        <ProductCartDetails product={product} />
+        <ProductCartDetails
+          product={product}
+        />
       </div>
     </div>
   );

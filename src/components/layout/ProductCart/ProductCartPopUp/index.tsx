@@ -1,8 +1,8 @@
 import { useCartContext } from "@hooks/useCartContext";
-import { SelectedCardProps } from "@layout/selectedCard";
+import { DataType } from "@layout/slider/productSlider";
 
 interface ProductCartPopUpProps {
-  product: SelectedCardProps;
+  product: DataType;
 }
 
 export function ProductCartPopUp({ product }: ProductCartPopUpProps) {
