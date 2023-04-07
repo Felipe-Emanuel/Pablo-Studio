@@ -11,13 +11,15 @@ interface ProductCartDetailsProps {
 
 export function ProductCartDetails({ product }: ProductCartDetailsProps) {
   const { formatPrice } = normalize();
-  const { state, removeFromCart, addToCount, removeToCount } =
+  const { state, discount, removeFromCart, addToCount, removeToCount } =
     useCartContext();
 
   const i = state.cart.findIndex((item) => item.id === product.id);
 
   const counts = state.cart.map((item) => item.count);
-  const productPrice = state.cart.map((item) => item.productPrice)
+  const productPrice = state.cart.map(
+    (item) => item.productPrice - item.productPrice * discount
+  );
 
   const checkHover =
     counts[i] <= 1 ? "hover:text-danger" : " hover:text-secondary";
@@ -48,7 +50,7 @@ export function ProductCartDetails({ product }: ProductCartDetailsProps) {
           <Text text={counts[i]} className="text-center" />
         </div>
         <button
-            onClick={() =>  removeFromCart(product)}
+          onClick={() => removeFromCart(product)}
           className="flex gap-1.5 items-center justify-center transition-all hover:opacity-75"
         >
           <TrashVector />

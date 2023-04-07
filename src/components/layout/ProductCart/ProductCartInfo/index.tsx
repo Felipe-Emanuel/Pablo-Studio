@@ -4,7 +4,7 @@ import { Title } from "@util/texts/Title";
 
 interface ProductCartInfoProps {
   productName: string;
-  productId: number;
+  productPrice: number;
   productDescription: string;
   totalOnCredit: number;
   moneyToBeSaved: number;
@@ -12,7 +12,7 @@ interface ProductCartInfoProps {
 
 export function ProductCartInfo({
   productName,
-  productId,
+  productPrice,
   productDescription,
   totalOnCredit,
   moneyToBeSaved
@@ -21,7 +21,7 @@ export function ProductCartInfo({
   return (
     <div className="w-full max-w-2xl justify-between flex flex-col h-full py-8 gap-3">
       <Title light title={productName} />
-      <Title light title={`${productId}`} />
+      <Price price={productPrice} />
       <Text bold text={productDescription} />
       <div>
         <span className="flex">
