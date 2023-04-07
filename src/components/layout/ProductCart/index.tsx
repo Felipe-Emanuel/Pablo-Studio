@@ -21,12 +21,8 @@ export function ProductCart({
 
   const index = state.cart.findIndex((c) => c.id === product.id);
   const productPrice = state.cart[index].productPrice;
-
   const totalOnCredit = productPrice + freight + productPrice * discount;
-
   const moneyToBeSaved = productPrice * discount;
-
-  console.log(index);
 
   return (
     <div className="p-3 rounded-md mb-4 bg-placeholder flex w-full h-fit justify-between items-center">
