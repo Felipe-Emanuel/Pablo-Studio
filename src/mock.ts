@@ -10,7 +10,7 @@ export const productMocked = [
     productQtd: 10,
     initialPrice: 0,
     initialTotal: 0,
-    productName: "projeto 1",
+    productName: "Primeiro Produto",
     images: [
       "https://picsum.photos/seed/1/800/600",
       "https://picsum.photos/seed/2/800/600",
@@ -69,7 +69,7 @@ export const productMocked = [
     productQtd: 10,
     initialPrice: 0,
     initialTotal: 0,
-    productName: "projeto 2",
+    productName: "Segundo Produto",
     images: [
       "https://picsum.photos/seed/2/800/600",
       "https://picsum.photos/seed/1/800/600",
@@ -128,7 +128,7 @@ export const productMocked = [
     productQtd: 10,
     initialPrice: 0,
     initialTotal: 0,
-    productName: "projeto 3",
+    productName: "Terceiro Produto",
     images: [
       "https://picsum.photos/seed/3/800/600",
       "https://picsum.photos/seed/2/800/600",
@@ -187,7 +187,7 @@ export const productMocked = [
     productQtd: 10,
     initialPrice: 0,
     initialTotal: 0,
-    productName: "projeto 4",
+    productName: "Quarto Produto",
     images: [
       "https://picsum.photos/seed/4/800/600",
       "https://picsum.photos/seed/3/800/600",
@@ -246,7 +246,7 @@ export const productMocked = [
     productQtd: 10,
     initialPrice: 0,
     initialTotal: 0,
-    productName: "projeto 5",
+    productName: "Quinto Produto",
     images: [
       "https://picsum.photos/seed/5/800/600",
       "https://picsum.photos/seed/3/800/600",
