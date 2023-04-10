@@ -36,9 +36,7 @@ export function CardDescComent({
       {avatar ? (
         <>
           <div className="flex items-center">
-            <div className="w-10 h-10">
-              <Avatar as={Link} href={user} alt={alt!} img={img!} />
-            </div>
+            <Avatar as={Link} href={user} alt={alt!} img={img!} />
             <Title bold title={title} className="w-fit pl-4 truncate text-md" />
             <HeaderInfo date={date} />
           </div>
