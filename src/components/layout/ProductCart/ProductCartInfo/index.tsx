@@ -44,7 +44,7 @@ export function ProductCartInfo({
   }
 
   const checkWidth =
-    +windowSize || width <= 300 ? "w-40" : "w-56 md:w-96 lg:w-full xl:w-fit";
+    +windowSize <= 300 && width <= 300 ? "w-40" : "w-56 md:w-96 lg:w-full xl:w-fit";
 
   return (
     <div
