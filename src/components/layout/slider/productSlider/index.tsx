@@ -93,7 +93,7 @@ export function ProductSlider({ data = [] }: ProductSliderProps) {
       onMouseEnter={isNavigation}
       onMouseLeave={isNavigation}
       className="
-        relative top-28 md:top-72 md:w-screen
+        relative top-[28vh] md:top-72 md:w-screen
         flex-col md:flex md:flex-row items-center gap-4"
     >
       <motion.div

@@ -19,8 +19,8 @@ export function Avatar({ img, alt, as, href, className }: AvatarProps) {
       <Comp
         href={href!}
         className={`
-          flex justify-center items-center min-w-max w-10 h-10 z-40
-          rounded-full p-0.5 border border-secondary ${checkComp} ${className}`}
+          flex justify-center items-center min-w-max w-10 h-11 z-40
+          rounded-full border p-0.5 border-secondary ${checkComp} ${className}`}
       >
         <Image
           quality={100}
@@ -30,7 +30,7 @@ export function Avatar({ img, alt, as, href, className }: AvatarProps) {
           height={100}
           src={img}
           alt={alt}
-          className="w-9 h-9 rounded-full"
+          className="w-10 h-10 rounded-full p-0.5"
         />
       </Comp>
     );

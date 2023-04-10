@@ -7,7 +7,6 @@ import a from "../../public/banner-home.jpg";
 import { productMocked } from "src/mock";
 
 export default function Home() {
-
   return (
     <Container pageTitle="Pablo Studio 3D">
       <Link href="/actionfigures" className="z-10 absolute right-14 top-48">
