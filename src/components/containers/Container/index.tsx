@@ -1,5 +1,6 @@
 import { useCartContext } from "@hooks/useCartContext";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { ReactNode } from "react";
 interface ContainerProps {
   children: ReactNode;
@@ -16,6 +17,10 @@ export function Container({ children, pageTitle, style }: ContainerProps) {
   };
   const isPopUp = popUp ? "overflow-hidden" : "overflow-y-auto";
 
+  const router = useRouter()
+
+  const padding = router.asPath === '/cart' || router.asPath === '/' ? "p-1 sm:p-10" : "p-10"
+
   return (
     <>
       <Head>
@@ -23,7 +28,7 @@ export function Container({ children, pageTitle, style }: ContainerProps) {
       </Head>
       <main
         style={style ? effect : {}}
-        className={`relative pt-16 lg:pt-24 p-10 w-screen h-screen
+        className={`relative pt-16 lg:pt-24 ${padding} w-screen h-screen
           flex flex-col gap-4 bg-dark overflow-x-hidden
           ${isPopUp} `}
       >

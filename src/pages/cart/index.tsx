@@ -9,13 +9,8 @@ import { useEffect } from "react";
 import { DataType } from "@layout/slider/productSlider";
 
 export default function Cart() {
-  const {
-    progressValue,
-    paymentStates,
-    state,
-    discount,
-    togglePopUp,
-  } = useCartContext();
+  const { progressValue, paymentStates, state, discount, togglePopUp } =
+    useCartContext();
 
   useEffect(() => {
     return () => {
@@ -23,27 +18,26 @@ export default function Cart() {
     };
   }, []);
 
-
   return (
     <Container pageTitle="Pablo Studios 3D | Carrinho">
       <PaymentLine value={progressValue} paymentStates={paymentStates} />
-      <ResumeCart
-        disabled={progressValue === 100}
-        discount={discount}
-      />
+      <ResumeCart disabled={progressValue === 100} discount={discount} />
       {state.cart.length > 0 &&
-        state.cart.map((cart: DataType) => <ProductCartPopUp key={cart.id} product={cart} />)}
+        state.cart.map((cart: DataType) => (
+          <ProductCartPopUp key={cart.id} product={cart} />
+        ))}
       <Section>
         {state.cart.length > 0 &&
           state.cart.map((cart: DataType) => {
             return (
-              <ProductCart
-                key={cart.id}
-                product={cart}
-                image={cart.images[0]}
-                productName={cart.productName}
-                productDescription={cart.productDescription}
-              />
+              <div key={cart.id} className="relative">
+                <ProductCart
+                  product={cart}
+                  image={cart.images[0]}
+                  productName={cart.productName}
+                  productDescription={cart.productDescription}
+                />
+              </div>
             );
           })}
       </Section>

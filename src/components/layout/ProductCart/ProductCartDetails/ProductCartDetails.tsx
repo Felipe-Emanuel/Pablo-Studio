@@ -22,11 +22,11 @@ export function ProductCartDetails({ product }: ProductCartDetailsProps) {
   );
 
   const checkHover =
-    counts[i] <= 1 ? "hover:text-danger" : " hover:text-secondary";
+    counts[i] <= 1 ? "hover:text-danger" : "hover:text-secondary";
 
   return (
-    <div className="flex flex-col justify-between w-fit h-full py-8 gap-3">
-      <span className="flex flex-col items-end">
+    <div className="hidden md:flex flex-col justify-between w-fit h-full md:py-4 lg:py-8 gap-3 relative -right-4">
+      <span className="flex flex-col items-end relative right-6">
         <Text light text="Preço à vista no PIX" className="text-end" />
         <p className="font-bold text-secondary text-end">
           {formatPrice(productPrice[i])}
@@ -38,13 +38,13 @@ export function ProductCartDetails({ product }: ProductCartDetailsProps) {
           <LeftArrowIcon
             onClick={() => removeToCount(product)}
             className={`
-              absolute transition-all cursor-pointer left-0
+              absolute transition-all cursor-pointer left-4
               w-5 h-7 text-white ${checkHover}`}
           />
           <RightArrowIcon
             onClick={() => addToCount(product)}
             className={`
-              absolute transition-all cursor-pointer right-0
+              absolute transition-all cursor-pointer right-4
               w-5 h-7 text-white hover:text-secondary`}
           />
           <Text text={counts[i]} className="text-center" />
