@@ -1,5 +1,4 @@
 import { normalize } from "@functions/normalized";
-import { useWindow } from "@hooks/useWindow";
 import { Price } from "@util/texts/Price";
 import { Text } from "@util/texts/Text";
 import { Title } from "@util/texts/Title";
@@ -27,7 +26,6 @@ export function ProductCartInfo({
   totalOnCredit,
   moneyToBeSaved,
 }: ProductCartInfoProps) {
-  const { windowSize, width } = useWindow();
   const { formatPrice } = normalize();
 
   function RenderDetails({ text, price }: RenderDetailsProps) {
@@ -43,9 +41,6 @@ export function ProductCartInfo({
     );
   }
 
-  const checkWidth =
-    +windowSize <= 300 && width <= 300 ? "w-40" : "w-56 md:w-96 lg:w-full xl:w-fit";
-
   return (
     <div
       className="
@@ -60,7 +55,7 @@ export function ProductCartInfo({
         />
         <Price price={productPrice} className="" />
       </div>
-      <Link href={productLink} className={`${checkWidth}`}>
+      <Link href={productLink} className={`w-40 md:w-96 lg:w-full xl:w-fit`}>
         <Text
           bold
           text={productDescription}
