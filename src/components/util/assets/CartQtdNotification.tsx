@@ -1,15 +1,20 @@
-import { useCartContext } from "@hooks/useCartContext";
+// import { localStorageProduct } from "@functions/Cookies";
+import { useEffect } from "react";
 
 interface CartQtdNotificationProps {
   className?: string;
 }
 
 export function CartQtdNotification({ className }: CartQtdNotificationProps) {
-  const { state } = useCartContext();
+  // const { cookieCart, getCartFromCookie } = localStorageProduct();
+
+  useEffect(() => {
+    // getCartFromCookie();
+  }, []);
 
   return (
     <>
-      {state.cart.length > 0 && (
+      {/* {cookieCart.length > 0 && (
         <span
           className={`
               w-4 h-4 rounded-full bg-tertiary pointer-events-none
@@ -19,10 +24,10 @@ export function CartQtdNotification({ className }: CartQtdNotificationProps) {
             `}
         >
           <span className="flex justify-center relative ">
-            {state.cart.length}
+            {cookieCart.length}
           </span>
         </span>
-      )}
+      )} */}
     </>
   );
 }

@@ -1,27 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Logo } from "@util/assets/Logo";
 import { Button } from "@util/buttons/Button";
 import { Price } from "@util/texts/Price";
 import { useCartContext } from "@hooks/useCartContext";
-import { DataType } from "@layout/slider/productSlider";
-import { useRouter } from "next/router";
+import { Product } from "@models/Product";
+import { addUser } from "@database/clientData";
+import { parseCookies } from "nookies";
 
 interface PriceCardProps {
   price: string | number;
-  product: DataType[];
+  product: Product;
 }
 
-export function PriceCard({ price, product }: PriceCardProps) {
+export function PriceCard({ price, product}: PriceCardProps) {
   const { addToCart } = useCartContext();
   const [isHover, setIsHover] = useState(false);
+  const [guestId, setGuestId] = useState('');
 
   const checkHovered = () => setIsHover((isHover) => !isHover);
 
-  const router = useRouter()
-  const id = router.query.id
+  useEffect(() => {
+    const cookies = parseCookies()
+    setGuestId(cookies._guest)
+  }, [])
 
-  const toLocalStorage = (card: DataType) =>
-  localStorage.setItem("Product", JSON.stringify(card))
+  const handleClick = () => {
+    addToCart(product, guestId)
+    addUser()
+  }
 
   return (
     <div
@@ -34,10 +40,8 @@ export function PriceCard({ price, product }: PriceCardProps) {
         <Price price={price} className="text-md sm:text-lg" />
       </div>
       <Button
-        onClick={() => {
-          toLocalStorage(product[+id!]),
-          addToCart(product[+id!])
-        }}
+        onClick={handleClick}
+        isPrimary
         text="Adicionar ao carrinho"
         cart
         isHovered={isHover}

@@ -3,11 +3,12 @@ import { useCartContext } from "@hooks/useCartContext";
 
 interface PricePixContentProps {
   totalWithPix: number;
+  total: number
 }
 
-export function PricePixContent({ totalWithPix }: PricePixContentProps) {
+export function PricePixContent({ totalWithPix, total }: PricePixContentProps) {
   const { formatPrice } = normalize();
-  const { state, discount } = useCartContext()
+  const { discount } = useCartContext()
 
   return (
     <div
@@ -18,7 +19,7 @@ export function PricePixContent({ totalWithPix }: PricePixContentProps) {
       <p>
         Poupe{" "}
         <span className="font-bold text-green-900">
-          {formatPrice(state.total * discount)}
+          {formatPrice(total * discount)}
         </span>{" "}
         com o <span className="font-bold text-green-900">Pix:</span>{" "}
       </p>

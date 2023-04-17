@@ -2,14 +2,17 @@ import { useCartContext } from "@hooks/useCartContext";
 import { ProductCartImage } from "./ProductCartImage";
 import { ProductCartInfo } from "./ProductCartInfo";
 import { ProductCartDetails } from "./ProductCartDetails/ProductCartDetails";
-import { DataType } from "@layout/slider/productSlider";
 import { MobileProductCartDetails } from "./MobileProductCartDetails/MobileProductCartDetails";
+import { useEffect, useState } from "react";
+import { DocumentData } from "firebase/firestore";
 
 interface ProductCartProps {
   image: string;
   productName: string;
   productDescription: string;
-  product: DataType;
+  product: DocumentData;
+  cookieUser: string;
+  freight: number;
 }
 
 export function ProductCart({
@@ -17,17 +20,26 @@ export function ProductCart({
   productName,
   productDescription,
   product,
+  cookieUser,
+  freight
 }: ProductCartProps) {
-  const { state, freight, discount } = useCartContext();
+  const { discount } = useCartContext();
+  const [isVisible, setIsVisible] = useState(false);
+  const productPrice = product.productPrice;
 
-  const index = state.cart.findIndex((c) => c.id === product.id);
-  const productPrice = state.cart[index].productPrice;
   const totalOnCredit = productPrice + freight + productPrice * discount;
   const moneyToBeSaved = productPrice * discount;
+
+  const changeRotate = () => setIsVisible((isVisible) => !isVisible);
+
+  useEffect(() => {
+    setIsVisible(false);
+  }, []);
 
   return (
     <>
       <div
+        onClick={changeRotate}
         className="
         p-3 rounded-md mb-4 bg-placeholder flex
         w-full h-fit justify-between items-center overflow-hidden"
@@ -40,7 +52,7 @@ export function ProductCart({
           />
           <ProductCartInfo
             productLink={product.link}
-            productPrice={state.cart[index].initialPrice}
+            productPrice={product.initialPrice}
             productName={productName}
             productDescription={productDescription}
             moneyToBeSaved={moneyToBeSaved}
@@ -48,10 +60,15 @@ export function ProductCart({
           />
         </div>
         <div className="md:ml-8">
-          <ProductCartDetails product={product} />
+          <ProductCartDetails cookieUser={cookieUser} product={product} />
         </div>
       </div>
-      <MobileProductCartDetails product={product} />
+      <MobileProductCartDetails
+        cookieUser={cookieUser}
+        onClick={changeRotate}
+        isVisible={isVisible}
+        product={product}
+      />
     </>
   );
 }

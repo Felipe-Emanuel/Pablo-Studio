@@ -1,7 +1,8 @@
 export function normalize() {
 
   function formatPrice(price: number | string) {
-    return price.toLocaleString("pt-BR", {
+    const numericPrice = typeof price === 'string' ? parseFloat(price.replace(',', '.')) : price;
+    return numericPrice?.toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
     })

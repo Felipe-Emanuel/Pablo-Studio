@@ -5,36 +5,31 @@ import { Title } from "@util/texts/Title";
 import { CardInfo } from "./cardInfo";
 import { PriceCard } from "./priceCard";
 import { Stock } from "./stock";
-import { DataType } from "@layout/slider/productSlider";
-import { useRouter } from "next/router";
-
 import { Pagination } from "./pagination";
+import { Product } from "@models/Product";
 
 interface SelectedCardProps {
-  product: DataType[];
+  id: number;
+  product: Product;
+  products: Product[];
 }
 
-export function SelectedCard({ product }: SelectedCardProps) {
-  const router = useRouter();
-  const id = router.query.id || 0;
-  const selectedCard = product.filter(
-    (selectedCard) => selectedCard.id === +id!
-  );
+export function SelectedCard({ id, product, products}: SelectedCardProps) {
 
   return (
     <>
-      {selectedCard && (
+      {(
         <>
           <Flex>
             <div
               className={`
                 relative -left-10 w-screen md:w-fit m-auto xl:h-full md:-left-0 h-fit sm:h-[30rem]`}
             >
-              <ThumbSlider images={product[+id].images} />
+              <ThumbSlider images={product.images} />
             </div>
             <Title
               bold
-              title={product[+id].productName}
+              title={product.productName}
               className="lg:hidden truncate sm:text-center pt-4 sm:pt-8 w-full text-xl sm:text-2xl "
             />
             <article
@@ -45,24 +40,24 @@ export function SelectedCard({ product }: SelectedCardProps) {
               <div className="flex flex-col md:w-1/2 lg:w-full z-10">
                 <Title
                   bold
-                  title={product[+id].productName}
+                  title={product.productName}
                   className="hidden lg:flex md:pt-8 xl:pt-0 max-w-lg text-xl sm:text-2xl "
                 />
-                <CardInfo views={product[+id].productViews} />
+                <CardInfo views={product.productViews} />
                 <PriceCard
-                  price={product[+id].productPrice}
+                  price={product.initialPrice}
                   product={product}
                 />
               </div>
               <div className="flex flex-col gap-4 pt-16 sm:pt-4 lg:pt-16 md:w-1/2 lg:w-full z-0">
-                <Stock qtd={product[+id].productQtd} />
+                <Stock qtd={product.productQtd} />
                 <ProductDescription
-                  description={product[+id].productDescription}
+                  description={product.productDescription}
                 />
               </div>
             </article>
           </Flex>
-          <Pagination id={+id} product={product} selectedCard={selectedCard} />
+          <Pagination id={id} products={products} selectedCard={product}/>
         </>
       )}
     </>

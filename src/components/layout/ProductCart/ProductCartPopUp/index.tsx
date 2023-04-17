@@ -1,15 +1,13 @@
+
 import { useCartContext } from "@hooks/useCartContext";
-import { DataType } from "@layout/slider/productSlider";
+import { DocumentData } from "firebase/firestore";
 
 interface ProductCartPopUpProps {
-  product: DataType;
+  product: DocumentData;
 }
 
 export function ProductCartPopUp({ product }: ProductCartPopUpProps) {
-  const { state, popUp, removeFromCart, togglePopUp } = useCartContext();
-
-  const i = state.cart.findIndex((item) => item.id === product.id);
-  const productName = state.cart.map((item) => item.productName);
+  const { popUp, productName, removeFromCart, togglePopUp } = useCartContext();
 
   const checkPopUp = popUp ? "opacity-100 visible" : " opacity-0 invisible";
 
@@ -36,8 +34,8 @@ export function ProductCartPopUp({ product }: ProductCartPopUpProps) {
           <div className="py-8">
             <span>
               Realmente deseja remover{" "}
-              <span className="font-bold">{productName[i]}</span> de seu
-              carrinho?{" "}
+                <span className="font-bold">{productName}</span>{" "}
+              de seu carrinho?{" "}
             </span>
           </div>
           <div className="pb-8 w-full flex justify-evenly text-white">
@@ -48,7 +46,7 @@ export function ProductCartPopUp({ product }: ProductCartPopUpProps) {
               Remover
             </button>
             <button
-              className="bg-secondary py-2 px-4 transition-all  rounded-md hover:bg-secondary/75"
+              className="bg-secondary py-2 px-4 transition-all rounded-md hover:bg-secondary/75"
               onClick={() => togglePopUp(false)}
             >
               Cancelar

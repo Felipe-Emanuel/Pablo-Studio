@@ -4,36 +4,13 @@ import { motion } from "framer-motion";
 import { Card } from "@layout/card";
 import { CardDescription } from "@layout/cardDescription";
 import { useWindow } from "@hooks/useWindow";
-
-export type DataType = {
-  id: number;
-  count: number;
-  productPrice: number;
-  productViews: number;
-  productQtd: number;
-  productName: string;
-  images: string[];
-  link: string;
-  alt: string;
-  productDescription: string;
-  cardDescription: string;
-  initialPrice: number;
-  initialTotal: number;
-  comments: {
-    id: number;
-    img: string;
-    alt: string;
-    date: string;
-    userName: string;
-    comment: string;
-  }[];
-};
+import { Product } from "@models/Product";
 
 type ProductSliderProps = {
-  data: DataType[];
+  data: Product[];
 };
 
-export function ProductSlider({ data = [] }: ProductSliderProps) {
+export function ProductSlider({ data }: ProductSliderProps) {
   //MOCK
   const staticHomeTitle = "Desenhos Realistas feitos por mim";
   const staticHomeDescription =
@@ -58,8 +35,6 @@ export function ProductSlider({ data = [] }: ProductSliderProps) {
   };
 
   useEffect(() => {
-    clearTimeout(timing.current);
-
     timing.current = setTimeout(() => {
       setTime((t) => t - 1);
     }, 1000);
@@ -70,6 +45,8 @@ export function ProductSlider({ data = [] }: ProductSliderProps) {
         description:
           "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words.",
       });
+
+    time <= 0 && clearTimeout(timing.current);
 
     return () => {
       clearTimeout(timing.current);
@@ -117,7 +94,7 @@ export function ProductSlider({ data = [] }: ProductSliderProps) {
       </motion.div>
       <SwiperComponent settings={settings}>
         {data.length > 0 &&
-          data.map((card: DataType, i: number) => {
+          data.map((card, i: number) => {
             return (
               <SwiperSlide
                 key={i}

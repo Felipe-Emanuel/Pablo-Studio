@@ -1,35 +1,33 @@
 import { useCartContext } from "@hooks/useCartContext";
-import { DataType } from "@layout/slider/productSlider";
+import { Product } from "@models/Product";
+import { DropDown } from "@util/assets/Dropdown";
 import { ArrowButton } from "@util/buttons/ArrowButton";
-import { useState, useEffect } from "react";
+import { DocumentData } from "firebase/firestore";
 
 interface MobileProductCartDetailsProps {
-  product: DataType;
+  product: DocumentData;
+  isVisible: boolean
+  cookieUser: string
+  onClick: () => void;
 }
 
 interface renderButtonsCountsProps {
   text: string;
   className?: string;
-  onClick: (product: DataType) => void;
+  onClick: (product: DocumentData) => void;
 }
 
 export function MobileProductCartDetails({
   product,
+  isVisible,
+  cookieUser,
+  onClick,
 }: MobileProductCartDetailsProps) {
-  const { state, removeFromCart, addToCount, removeToCount } = useCartContext();
-  const [isVisible, setIsVisible] = useState(false);
 
-  const i = state.cart.findIndex((item) => item.id === product.id);
-  const counts = state.cart.map((item) => item.count);
+  const { removeFromCart, addToCount, removeToCount } = useCartContext();
 
-  const changeRotate = () => setIsVisible((isVisible) => !isVisible);
   const checkRotate = isVisible ? "-rotate-90" : "rotate-90";
-  const checkVisibility = isVisible ? "h-5" : "h-1";
   const checkVisibilityToHiddenElements = isVisible ? "flex" : "hidden";
-
-  useEffect(() => {
-    setIsVisible(false);
-  }, []);
 
   function RenderButtonsCount({
     text,
@@ -43,20 +41,17 @@ export function MobileProductCartDetails({
     );
   }
 
+  const checkVisibility = isVisible ? "h-5" : "h-1";
+
   return (
     <>
       <ArrowButton
         className={`flex md:hidden right-0 absolute top-2 h-4 ${checkRotate}`}
-        onClick={changeRotate}
+        onClick={onClick}
       />
-      <div
-        onClick={changeRotate}
-        className={`
-        flex md:hidden items-center gap-4 relative rounded-b-md -top-5
-        text-xs md:text-md transition-all ${checkVisibility}
-        w-full bg-tertiary left-0 overflow-hidden text-white
-        `}
-      >
+      <DropDown
+        onClick={onClick}
+        className={`flex md:hidden items-center relative -top-5 ${checkVisibility}`}>
         <div
           onClick={(e) => {
             e.stopPropagation();
@@ -67,22 +62,28 @@ export function MobileProductCartDetails({
             <RenderButtonsCount
               text="Excluir"
               className="font-bold"
-              onClick={() => removeFromCart(product)}
+              onClick={() => {
+                removeFromCart(product);
+              }}
             />
           </div>
           <div className="flex gap-4">
             <RenderButtonsCount
               text="Remover"
-              onClick={() => removeToCount(product)}
+              onClick={() => {
+                removeToCount(product, cookieUser);
+              }}
             />
           </div>
-          <span className="text-center">{counts[i]}</span>
+          <span className="text-center">{product.count}</span>
           <RenderButtonsCount
             text="Adicionar"
-            onClick={() => addToCount(product)}
+            onClick={() => {
+              addToCount(product, cookieUser);
+            }}
           />
         </div>
-      </div>
+      </DropDown>
     </>
   );
 }

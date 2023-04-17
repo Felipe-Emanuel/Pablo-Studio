@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { ArrowButton } from "@util/buttons/ArrowButton";
 import { useWindow } from "@hooks/useWindow";
-import { DataType } from "@layout/slider/productSlider";
 import { useRouter } from "next/router";
+import { Product } from "@models/Product";
 
 interface PaginationProps {
   id: number;
-  product: DataType[];
-  selectedCard: DataType[];
+  products: Product[];
+  selectedCard: Product;
 }
 
-export function Pagination({ id, product, selectedCard }: PaginationProps) {
+export function Pagination({ id, products, selectedCard }: PaginationProps) {
   const { width, windowSize } = useWindow();
   const router = useRouter();
   const [prevWidth, setPrevWidth] = useState(windowSize.width);
@@ -30,19 +30,9 @@ export function Pagination({ id, product, selectedCard }: PaginationProps) {
     setPrevWidth(width);
   }, [width, prevWidth]);
 
-  const showNextAndPreviousProductName = () => {
-    id > 0 && id < product.length
-      ? setPreviousProductTitle(product[id - 1].productName)
-      : setPreviousProductTitle("");
-
-    id >= 0 && id < product.length - 1
-      ? setNextProductTitle(product[id + 1].productName)
-      : setNextProductTitle("");
-  };
-
   const nextProduct = async () => {
     const nextProductId = id + 1;
-    if (nextProductId < product.length) {
+    if (nextProductId < products.length) {
       await router.push(`/products/${nextProductId}`);
     }
   };
@@ -55,10 +45,20 @@ export function Pagination({ id, product, selectedCard }: PaginationProps) {
   };
 
   useEffect(() => {
-    if (id && product.some((p) => p.id === +id)) {
-      showNextAndPreviousProductName();
-    }
-  }, [selectedCard, id, product]);
+    id > 0 && id < products.length
+      ? setPreviousProductTitle(products[id - 1].productName)
+      : setPreviousProductTitle("");
+
+    id >= 0 && id < products.length - 1
+      ? setNextProductTitle(products[id + 1].productName)
+      : setNextProductTitle("");
+  }, [
+    selectedCard,
+    id,
+    products,
+    isNextProductNameShowed,
+    isPreviousProductNameShowed,
+  ]);
 
   const paginationButtonClasses =
     "disabled:opacity-25 disabled:pointer-events-none w-full";
@@ -120,7 +120,7 @@ export function Pagination({ id, product, selectedCard }: PaginationProps) {
         className={`${paginationDivClasses} right-10`}
       >
         <button
-          disabled={id === +product?.length - 1}
+          disabled={id === +products?.length - 1}
           onClick={nextProduct}
           className={`${paginationButtonClasses}`}
         >

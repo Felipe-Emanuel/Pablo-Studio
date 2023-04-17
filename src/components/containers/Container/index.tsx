@@ -2,14 +2,39 @@ import { useCartContext } from "@hooks/useCartContext";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
+import {  useEffect } from "react";
+import { v4 as uuidv4 } from 'uuid'
+import { parseCookies, setCookie } from "nookies";
+
 interface ContainerProps {
   children: ReactNode;
   pageTitle: string;
   style?: boolean;
 }
 
+
+
 export function Container({ children, pageTitle, style }: ContainerProps) {
   const { popUp } = useCartContext();
+
+  useEffect(() => {
+    const cookies = parseCookies()
+
+    const verifyGuestCookie = () => {
+      const guestId = uuidv4()
+      if(cookies._guest) {
+        return;
+      }
+
+      setCookie({}, '_guest', guestId, {
+        maxAge: 86400 * 7,
+        path: '/'
+      })
+
+    };
+
+    verifyGuestCookie()
+  }, []);
 
   const effect = {
     background:

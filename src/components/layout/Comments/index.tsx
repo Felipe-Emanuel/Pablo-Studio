@@ -5,20 +5,14 @@ import { CardDescComent } from "@layout/CardDescComent";
 import { ArrowButton } from "@util/buttons/ArrowButton";
 import { Text } from "@util/texts/Text";
 import { PablosSignature } from "@vectores/Vectores";
+import { ProductComment } from "@models/Product";
 
-type Data = {
-  id: number;
-  img: string;
-  alt: string;
-  date: string;
-  userName: string;
-  comment: string;
-};
 interface CommentsProps {
-  data: Data[];
+  data: ProductComment[];
+  id: number;
 }
 
-export function Comments({ data }: CommentsProps) {
+export function Comments({ data, id }: CommentsProps) {
   const { width } = useWindow();
   const [isArrowHidden, setIsArrowHidden] = useState(false);
   const [disabled, setDisabled] = useState({
@@ -34,11 +28,22 @@ export function Comments({ data }: CommentsProps) {
       : setIsArrowHidden(false);
   }, [width, data.length]);
 
+  useEffect(() => {
+
+    data.length > 1
+    ? setDisabled((prev) => ({ ...prev, next: false }))
+    : setDisabled((prev) => ({ ...prev, next: true }));
+
+    setIndex(0);
+
+    setDisabled((prev) => ({ ...prev, previous: true }))
+  }, [id]);
+
   const next = () => {
     setDirection("next");
     const nextIndex = index + 1;
     setIndex(nextIndex);
-    if (nextIndex === data.length - 1) {
+    if (nextIndex === data.length - 1 || data.length === 1) {
       setDisabled((prev) => ({ ...prev, next: true }));
     }
     if (nextIndex > 0 && disabled.previous) {
@@ -124,17 +129,17 @@ export function Comments({ data }: CommentsProps) {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ display: "none", x: -100 }}
                 transition={{ duration: 0.5 }}
-                key={data[index].id}
+                key={data[index]?.id}
                 className="z-20 "
               >
                 <CardDescComent
                   avatar
-                  date={data[index].date}
-                  user={`/profile/${data[index].userName}`}
-                  alt={data[index].alt}
-                  img={data[index].img}
-                  title={data[index].userName}
-                  text={data[index].comment}
+                  date={data[index]?.date}
+                  user={`/profile/${data[index]?.userName}`}
+                  alt={data[index]?.alt}
+                  img={data[index]?.img}
+                  title={data[index]?.userName}
+                  text={data[index]?.comment}
                 />
               </motion.div>
             ) : (
