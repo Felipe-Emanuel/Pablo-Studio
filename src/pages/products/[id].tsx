@@ -18,9 +18,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const req = await api.get("api/cart?mock=true");
     const data = req.data;
 
-    const paths = data.map((product: Product) => ({
+    const paths = Array.isArray(data) ? data.map((product: Product) => ({
       params: { products: "products", id: product.id.toString() },
-    }));
+    })) : [];
 
     return {
       paths,
@@ -29,12 +29,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
   } catch (err) {
     console.log("Erro ao recuperar produtos da API <Home> /linha 30/", err)
     return {
-      paths: '/',
+      paths: [],
       fallback: true
     }
   }
 
 };
+
 
 export const getStaticProps: GetStaticProps<ProductProps> = async ({ params }) => {
   const { id } = params || {};
@@ -53,6 +54,10 @@ export const getStaticProps: GetStaticProps<ProductProps> = async ({ params }) =
     const req = await api.get(`api/cart/?mock=true`);
     const data = req.data;
 
+    if (!Array.isArray(data)) {
+      return { redirect };
+    }
+
     return {
       props: { data, params },
     };
@@ -61,6 +66,7 @@ export const getStaticProps: GetStaticProps<ProductProps> = async ({ params }) =
     return { redirect };
   }
 };
+
 
 export default function Products({ data, params }: ProductProps) {
   const { id } = params || {};
