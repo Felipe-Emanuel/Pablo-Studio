@@ -4,16 +4,13 @@ import { Button } from "@util/buttons/Button";
 import { SectionTitle } from "@util/texts/SectionTitle";
 import { Text } from "@util/texts/Text";
 import { LocalVector, SearchWhiteVector } from "@vectores/Vectores";
-import { FormEvent, useRef, useState, useEffect } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { IMaskInput } from "react-imask";
 import { Freight } from "@layout/freight";
-import { setCookie } from "nookies";
 import { User } from "@models/User";
 import { DocumentData } from "firebase/firestore";
-import { addProductCart, getProductCart } from "@database/clientCart";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { Product } from "@models/Product";
-import { useAxios } from "@hooks/useAxios";
 import { Cookies } from "@functions/Cookies";
 
 export type newSelectedFreightCookieType = {
@@ -29,17 +26,21 @@ interface CepProps {
   guestId: string;
 }
 
+interface UserGenerator extends CepResponse {
+  error: boolean;
+}
+
 export function Cep({
   product,
   ssrCookieUser,
   guestId,
 }: CepProps) {
   const { SetCookie } = Cookies()
-  const { inputCepValue, clearCart, setIsLoading, updateProductCep, setInputCepValue } = useCartContext();
+  const { inputCepValue, clearCart, updateProductCep, setInputCepValue } = useCartContext();
   const [isVisible, setIsVisible] = useState(false);
   const [cookieUser, setCookieUser] = useState<User>(ssrCookieUser);
 
-  const [erro, setErro] = useState<Boolean | undefined>(false);
+  const [erro, setErro] = useState<UserGenerator>();
   const ref = useRef(null);
   const inputRef = useRef(null);
 
@@ -49,7 +50,7 @@ export function Cep({
 
   const changeRotate = () => setIsVisible((isVisible) => !isVisible);
 
-  const userGenerator = (resp: CepResponse) => {
+  const userGenerator = (resp: UserGenerator) => {
     const user: User = {
       id: guestId,
       guestId,
@@ -70,8 +71,8 @@ export function Cep({
 
     try {
       const resp = await consultarCep(inputCepValue).then(async (resp) => {
-        if (!resp.error) {
-          setErro(resp.error);
+        if (!resp) {
+          setErro(resp);
           cookieUser = userGenerator(JSON.parse(JSON.stringify(resp)));
           setCookieUser(cookieUser);
           SetCookie("_userGuest", cookieUser);
@@ -140,7 +141,7 @@ export function Cep({
             </button>
           </form>
           <div className="flex gap-1">
-            {erro ? (
+            {erro?.error ? (
               <>
                 <Text
                   as="span"
