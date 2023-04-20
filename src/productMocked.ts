@@ -4,7 +4,8 @@ import { Product } from "@models/Product";
 export const productMocked: Product[] = [
   {
     id: 0,
-    guestProductId: '',
+    freigthServiceChoise: "",
+    guestProductId: "",
     alt: "Imagem do Produto",
     cardDescription: "Laptop de alta performance com tela de 15 polegadas",
     count: 0,
@@ -36,6 +37,7 @@ export const productMocked: Product[] = [
           "Eu comprei este laptop para jogar meus jogos favoritos e estou muito satisfeito com ele. A placa de vídeo NVIDIA GeForce RTX 3070 é capaz de executar os jogos mais recentes sem problemas e o teclado retroiluminado é ótimo para jogar em ambientes com pouca luz. Eu recomendo este laptop para qualquer pessoa que esteja procurando por um dispositivo de alta performance.",
       },
     ],
+    weight: 2,
     dimensions: {
       sCepOrigem: "03582-040",
       sCepDestino: "35240-000",
@@ -49,15 +51,46 @@ export const productMocked: Product[] = [
     },
     isOnCart: false,
     SKU: "LPT-XYZ-15-16-512-3070",
-    freight: {
-      serviceType: "",
+    choisedService: {
       deadline: "",
       price: "",
-    }
+      serviceCode: ""
+    },
+    freight: {
+      PAC: {
+        Codigo: "",
+        Valor: "",
+        PrazoEntrega: "",
+        ValorSemAdicionais: "",
+        ValorMaoPropria: "",
+        ValorAvisoRecebimento: "",
+        ValorValorDeclarado: "",
+        EntregaDomiciliar: "",
+        EntregaSabado: "",
+        obsFim: "",
+        Erro: "",
+        MsgErro: "",
+      },
+      SEDEX: {
+        Codigo: "",
+        Valor: "",
+        PrazoEntrega: "",
+        ValorSemAdicionais: "",
+        ValorMaoPropria: "",
+        ValorAvisoRecebimento: "",
+        ValorValorDeclarado: "",
+        EntregaDomiciliar: "",
+        EntregaSabado: "",
+        obsFim: "",
+        Erro: "",
+        MsgErro: "",
+      },
+    },
   },
   {
     id: 1,
-    guestProductId: '',
+    freigthServiceChoise: "",
+    guestProductId: "",
     alt: "b",
     cardDescription: "Um produto premium de alta qualidade",
     count: 0,
@@ -98,6 +131,7 @@ export const productMocked: Product[] = [
       "https://picsum.photos/seed/4/800/600",
       "https://picsum.photos/seed/5/800/600",
     ],
+    weight: 1,
     dimensions: {
       sCepOrigem: "03582-040",
       sCepDestino: "48918-900",
@@ -111,15 +145,46 @@ export const productMocked: Product[] = [
     },
     isOnCart: false,
     SKU: "PRM-001-02",
-    freight: {
-      serviceType: "",
+    choisedService: {
       deadline: "",
       price: "",
-    }
+      serviceCode: ""
+    },
+    freight: {
+      PAC: {
+        Codigo: "",
+        Valor: "",
+        PrazoEntrega: "",
+        ValorSemAdicionais: "",
+        ValorMaoPropria: "",
+        ValorAvisoRecebimento: "",
+        ValorValorDeclarado: "",
+        EntregaDomiciliar: "",
+        EntregaSabado: "",
+        obsFim: "",
+        Erro: "",
+        MsgErro: "",
+      },
+      SEDEX: {
+        Codigo: "",
+        Valor: "",
+        PrazoEntrega: "",
+        ValorSemAdicionais: "",
+        ValorMaoPropria: "",
+        ValorAvisoRecebimento: "",
+        ValorValorDeclarado: "",
+        EntregaDomiciliar: "",
+        EntregaSabado: "",
+        obsFim: "",
+        Erro: "",
+        MsgErro: "",
+      },
+    },
   },
   {
     id: 2,
-    guestProductId: '',
+    freigthServiceChoise: "",
+    guestProductId: "",
     alt: "b",
     cardDescription: "a descrição do produto é incrível 2",
     count: 0,
@@ -160,6 +225,7 @@ export const productMocked: Product[] = [
       "https://picsum.photos/seed/4/800/600",
       "https://picsum.photos/seed/5/800/600",
     ],
+    weight: 1.5,
     dimensions: {
       sCepOrigem: "03582-040",
       sCepDestino: "89654-000",
@@ -173,10 +239,40 @@ export const productMocked: Product[] = [
     },
     isOnCart: false,
     SKU: "LPM-125-RMj",
-    freight: {
-      serviceType: "",
+    choisedService: {
       deadline: "",
       price: "",
-    }
+      serviceCode: ""
+    },
+    freight: {
+      PAC: {
+        Codigo: "",
+        Valor: "",
+        PrazoEntrega: "",
+        ValorSemAdicionais: "",
+        ValorMaoPropria: "",
+        ValorAvisoRecebimento: "",
+        ValorValorDeclarado: "",
+        EntregaDomiciliar: "",
+        EntregaSabado: "",
+        obsFim: "",
+        Erro: "",
+        MsgErro: "",
+      },
+      SEDEX: {
+        Codigo: "",
+        Valor: "",
+        PrazoEntrega: "",
+        ValorSemAdicionais: "",
+        ValorMaoPropria: "",
+        ValorAvisoRecebimento: "",
+        ValorValorDeclarado: "",
+        EntregaDomiciliar: "",
+        EntregaSabado: "",
+        obsFim: "",
+        Erro: "",
+        MsgErro: "",
+      },
+    },
   },
 ];

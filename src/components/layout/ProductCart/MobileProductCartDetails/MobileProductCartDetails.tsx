@@ -5,7 +5,7 @@ import { ArrowButton } from "@util/buttons/ArrowButton";
 import { DocumentData } from "firebase/firestore";
 
 interface MobileProductCartDetailsProps {
-  product: DocumentData;
+  product: DocumentData & Product
   isVisible: boolean
   cookieUser: string
   onClick: () => void;
@@ -14,7 +14,7 @@ interface MobileProductCartDetailsProps {
 interface renderButtonsCountsProps {
   text: string;
   className?: string;
-  onClick: (product: DocumentData) => void;
+  onClick: (product: DocumentData & Product) => void;
 }
 
 export function MobileProductCartDetails({
@@ -63,6 +63,7 @@ export function MobileProductCartDetails({
               text="Excluir"
               className="font-bold"
               onClick={() => {
+                //@ts-ignore
                 removeFromCart(product);
               }}
             />

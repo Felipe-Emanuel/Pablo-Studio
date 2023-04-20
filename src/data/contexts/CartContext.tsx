@@ -16,6 +16,8 @@ import {
 } from "@database/clientCart";
 import { DocumentData } from "firebase/firestore";
 import { Product } from "@models/Product";
+import { useAxios } from "@hooks/useAxios";
+import { PrecoPrazoResponse } from "correios-brasil/dist";
 
 type CartContextType = {
   inputCepValue: string;
@@ -24,13 +26,14 @@ type CartContextType = {
   isLoading: boolean;
   discount: number;
   progressValue: number;
+  newDataPost: PrecoPrazoResponse | undefined;
   paymentStates: paymentStatesType[];
   addToCart: (product: DocumentData & Product, guestId: string) => Promise<void>;
   removeFromCart: (product: DocumentData[] & Product[]) => Promise<void>;
   addToCount: (product: DocumentData & Product, guestId: string) => Promise<void>;
   removeToCount: (product: DocumentData & Product, guestId: string) => Promise<void>;
   updateProductCep: (product: DocumentData[] & Product[]) => void;
-  updateFreigthValue: (product: DocumentData[] & Product[], serviceType: string, deadline: string, price: string) => void;
+  freigthServiceChoise: (product: DocumentData[] & Product[], price: string, deadline: string, serviceCode: string) => void;
   clearCart: (guestId: string) => void;
   togglePopUp: (value: boolean) => void;
   FnsetProductName: (newName: string) => void;
@@ -59,6 +62,18 @@ export const CartContext = createContext<CartContextType>({
   isLoading: false,
   inputCepValue: '',
   productName: '',
+  newDataPost: {  Codigo: "",
+    Valor: "",
+    PrazoEntrega: "",
+    ValorSemAdicionais: "",
+    ValorMaoPropria: "",
+    ValorAvisoRecebimento: "",
+    ValorDeclarado: "",
+    EntregaDomiciliar: "",
+    EntregaSabado: "",
+    obsFim: "",
+    Erro: "",
+    MsgErro: "",},
   discount,
   setInputCepValue: () => {},
   //@ts-ignore
@@ -85,7 +100,8 @@ export const CartContext = createContext<CartContextType>({
 });
 
 export function CartProvider({ children }: cartProviderProps) {
-  const [productWithNewFreigthValues, setProductWithNewFreigthValues] = useState({});
+  const { postDate, dataPost } = useAxios()
+  const [newDataPost, setNewDataPost ] = useState<PrecoPrazoResponse | undefined>();
   const [inputCepValue, setInputCepValue] = useState("");
   const [productName, setProductName] = useState("")
   const [progressValue, setProgressValue] = useState(20);
@@ -128,23 +144,25 @@ export function CartProvider({ children }: cartProviderProps) {
         const sCepDestino = userGuest.cep;
 
         if (cartItem) {
+          const baseNvlPeso = cartItem.weight
           const newItem = {
             ...cartItem,
             count: cartItem.count + 1,
             productPrice: cartItem.initialPrice * (cartItem.count + 1),
-            finalWeigth:
-              cartItem.dimensions.nVlPeso +
-              +cartItem.dimensions.nVlPeso * cartItem.count,
-            dimensions: cartItem.dimensions,
+            dimensions: {
+              ...cartItem.dimensions,
+              nVlPeso: baseNvlPeso + +cartItem.dimensions.nVlPeso
+            },
             guestProductId: guestProductId,
           };
           if (sCepDestino) {
             newItem.dimensions = {
-              ...cartItem.dimensions,
+              ...newItem.dimensions,
               sCepDestino,
             };
           }
-          addProductCart(newItem);
+
+          await addProductCart(newItem);
         } else {
           const newItem = {
             ...product,
@@ -155,11 +173,12 @@ export function CartProvider({ children }: cartProviderProps) {
           };
           if (sCepDestino) {
             newItem.dimensions = {
-              ...product.dimensions,
+              ...newItem.dimensions,
               sCepDestino,
             };
           }
-          addProductCart(newItem);
+
+          await addProductCart(newItem);
         }
 
         resolve();
@@ -181,16 +200,18 @@ export function CartProvider({ children }: cartProviderProps) {
 
         if (cartItem) {
           setIsLoading(true);
+          const baseNvlPeso = cartItem.weight
           const newItem = {
             ...cartItem,
             count: cartItem.count + 1,
             productPrice: cartItem.initialPrice * (cartItem.count + 1),
-            finalWeigth:
-              cartItem.dimensions.nVlPeso +
-              +cartItem.dimensions.nVlPeso * cartItem.count,
+            dimensions: {
+              ...cartItem.dimensions,
+              nVlPeso: baseNvlPeso + +cartItem.dimensions.nVlPeso
+            },
           };
 
-          await addProductCart(newItem);
+          await postDate('/cart/freigth', newItem)
         }
 
         resolve();
@@ -212,17 +233,19 @@ export function CartProvider({ children }: cartProviderProps) {
         const cartItem = resp?.find((item) => item.id === product.id);
 
         if (cartItem && cartItem.count > 1) {
+          const baseNvlPeso = cartItem.weight
           setIsLoading(true);
           const newItem = {
             ...cartItem,
             count: cartItem.count - 1,
             productPrice: cartItem.initialPrice * (cartItem.count - 1),
-            finalWeigth:
-              cartItem.dimensions.nVlPeso -
-              +cartItem.dimensions.nVlPeso * cartItem.count,
-          };
+            dimensions: {
+              ...cartItem.dimensions,
+              nVlPeso: +cartItem.dimensions.nVlPeso - baseNvlPeso
+            },
+          }
 
-          await addProductCart(newItem);
+          await postDate('/cart/freigth', newItem)
         }
         if (product.count === 1) {
           togglePopUp(true);
@@ -255,30 +278,29 @@ export function CartProvider({ children }: cartProviderProps) {
   const FnsetProductName = (newName: string) => setProductName(newName)
 
 
-  const updateFreigthValue = (product: DocumentData[] & Product[],
-    serviceType: string,
-    deadline: string,
-    price: string) => {
+  const freigthServiceChoise = (product: DocumentData[] & Product[], price: string, deadline: string, serviceCode: string) => {
     setIsLoading(true)
     product.map(async (item: Product) => {
+
       const newFreigthValue = {
         ...item,
-        freight: {
-          serviceType,
-          deadline,
+        choisedService: {
+          serviceCode,
           price,
+          deadline
         }
       }
 
-      await addProductCart(newFreigthValue)
-        .then(() => {
-          setIsLoading(false)
-      })
+      await addProductCart(newFreigthValue);
+
+      setIsLoading(false)
+
     })
   }
 
   const updateProductCep = (product: DocumentData[] & Product[]) => {
 
+    setIsLoading(true)
     product?.map(async (item: Product) => {
       const updatedProduct = {
         ...item,
@@ -286,16 +308,13 @@ export function CartProvider({ children }: cartProviderProps) {
           ...item?.dimensions,
           sCepDestino: inputCepValue,
         },
-        freight: {
-          deadline: item?.freight.deadline,
-          serviceType: item?.freight.serviceType,
-          price: item?.freight.price
-        },
       };
-      addProductCart(updatedProduct)
+      await postDate('/cart/freigth', updatedProduct)
+        .then(() => setIsLoading(false))
     })
   }
 
+  useEffect(() => setNewDataPost(dataPost), [isLoading])
 
   return (
     <CartContext.Provider
@@ -307,7 +326,8 @@ export function CartProvider({ children }: cartProviderProps) {
         isLoading,
         productName,
         inputCepValue,
-        updateFreigthValue,
+        newDataPost,
+        freigthServiceChoise,
         setInputCepValue,
         updateProductCep,
         FnsetProductName,

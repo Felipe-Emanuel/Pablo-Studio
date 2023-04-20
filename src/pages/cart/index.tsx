@@ -13,13 +13,11 @@ import { getProductCart } from "@database/clientCart";
 import { useState, useEffect } from "react";
 import { DocumentData } from "firebase/firestore";
 import { Text } from "@util/texts/Text";
-import { PrecoPrazoRequest, calcularPrecoPrazo } from "correios-brasil/dist";
 import { ProductCartPopUp } from "@layout/ProductCart/ProductCartPopUp";
 
 interface CartProps {
   cookieUser: string;
   product: DocumentData[] & Product[];
-  freigthResponse: string;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -28,88 +26,45 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const cookieUser = cookies._userGuest ?? null;
     const guestId = cookies._guest ?? null;
 
-    const product = (await getProductCart(cookies._guest)) || null;
-    const cep = cookieUser && Array(JSON.parse(cookieUser)).map((key) => key.cep);
+    const product = (await getProductCart(guestId)) || null;
 
-    if (cep && cep[0] !== "") {
-      const stringfyFreigthResponse = await getProductCart(guestId).then(
-        (resp) => {
-          try {
-            if (resp != undefined) {
-              const dimensions =
-                resp?.map((product) => product.dimensions) ?? [];
-
-              const pricesPromises = dimensions.map((dimensions) => {
-                const prices = calcularPrecoPrazo(dimensions).catch((err) =>
-                  console.log("Erro ao calcular frete <Linha 45> '/cart/", err)
-                );
-                return prices;
-              });
-
-              return Promise.all(pricesPromises);
-            } else if (resp == undefined) {
-              console.log(
-                "/Resp undefined/ Erro em resgatar produtos em <Linha 53> ServerSideRendering: '/cart'"
-              );
-            }
-          } catch (err) {
-            console.log(
-              "/Catch/ Erro em resgatar produtos em <Linha 58> ServerSideRendering: '/cart'"
-            );
-          }
-        }
-      );
-
-      const freigthResponse =
-        stringfyFreigthResponse != undefined &&
-        JSON.stringify(stringfyFreigthResponse);
-
-      return {
-        props: {
-          cookieUser,
-          product,
-          freigthResponse,
-        },
-      };
-    }
+    return {
+      props: {
+        cookieUser,
+        product,
+      },
+    };
   } catch (err) {
     console.error(err);
   }
   return {
-    props: { },
+    props: {},
   };
 };
 
-export default function Cart({
-  cookieUser,
-  product,
-  freigthResponse,
-}: CartProps) {
-
+export default function Cart({ cookieUser, product }: CartProps) {
   const { progressValue, paymentStates, isLoading } = useCartContext();
-
-  const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(product);
-
+  const { price } = (product && product[0]?.choisedService) || "";
+  const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(
+    product
+  );
   const cookies = parseCookies();
   const guestId = cookies._guest;
-
-  const normalizedFreightInfo = cookieUser ? JSON.parse(freigthResponse) : [];
   const normalizedCookie = cookieUser ? JSON.parse(cookieUser) : [];
-
-  const count = productCart?.reduce((acc, item) => acc + item.count, 0);
-  const freightValueString = productCart && productCart[0]?.freight.price;
-  //@ts-ignore
-  const freightValue = freightValueString ? parseFloat(freightValueString?.replace("R$", "").trim()): 0;
-
-  const total = productCart &&
-    productCart?.reduce((acc: number, item: Product) => acc + item.productPrice + freightValue, 0);
+  const freightValue = price ? parseFloat(price?.replace("R$", "").trim()) : 0;
+  const total =
+    productCart &&
+    productCart?.reduce(
+      (acc: number, item: Product) => acc + item.productPrice + freightValue,
+      0
+    );
 
   useEffect(() => {
     const reloadProduct = async () => {
       //@ts-ignore
       await getProductCart(guestId).then((resp) => setProductCart(resp));
     };
-    reloadProduct()
+    reloadProduct();
   }, [isLoading]);
 
   return (
@@ -119,13 +74,12 @@ export default function Cart({
           <PaymentLine value={progressValue} paymentStates={paymentStates} />
           <ResumeCart
             total={total}
+            product={productCart}
             disabled={progressValue === 100}
-            freight={freightValue}
           />
           <LineVector />
           <Section>
             <Cep
-              info={normalizedFreightInfo}
               guestId={guestId}
               product={productCart}
               ssrCookieUser={normalizedCookie}
@@ -135,11 +89,10 @@ export default function Cart({
             <Text text="Carregando..." />
           ) : (
             <Section>
-              {productCart.length && (
-                productCart.map((item, i: number) =>
+              {productCart.length &&
+                productCart.map((item, i: number) => (
                   <ProductCartPopUp key={i} product={item} />
-                )
-              )}
+                ))}
               {productCart &&
                 productCart.length > 0 &&
                 productCart?.map((cart: Product, i: number) => {

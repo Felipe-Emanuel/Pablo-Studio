@@ -5,12 +5,13 @@ import { ProductCartDetails } from "./ProductCartDetails/ProductCartDetails";
 import { MobileProductCartDetails } from "./MobileProductCartDetails/MobileProductCartDetails";
 import { useEffect, useState } from "react";
 import { DocumentData } from "firebase/firestore";
+import { Product } from "@models/Product";
 
 interface ProductCartProps {
   image: string;
   productName: string;
   productDescription: string;
-  product: DocumentData;
+  product: DocumentData & Product;
   cookieUser: string;
   freight: number;
 }

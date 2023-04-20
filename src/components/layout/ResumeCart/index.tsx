@@ -1,28 +1,33 @@
+import { useAxios } from "@hooks/useAxios";
 import { useCartContext } from "@hooks/useCartContext";
+import { Product } from "@models/Product";
 import { Button } from "@util/buttons/Button";
 import { Price } from "@util/texts/Price";
 import { PricePixContent } from "@util/texts/PricePixContent";
 import { SectionTitle } from "@util/texts/SectionTitle";
 import { ResumeVector } from "@vectores/Vectores";
+import { DocumentData } from "firebase/firestore";
 import { useRouter } from "next/router";
 
 interface ResumeCartProps {
   disabled: boolean;
+  product: DocumentData[] & Product[]
   total: number
-  freight: number;
 }
 
-export function ResumeCart({ freight, disabled, total }: ResumeCartProps) {
-  const { discount,
-    changeProgressRingValue, changePaymentState } = useCartContext();
+export function ResumeCart({ disabled, product, total}: ResumeCartProps) {
+  const { discount, changeProgressRingValue, changePaymentState } = useCartContext();
 
   const router = useRouter();
-  const handleClick = (href: string) => {
-    router.push(href);
-  };
+  const handleClick = (href: string) => router.push(href);
 
-  const totalWithPix = total + freight;
-  const totalOnCredit = total + freight + total * discount;
+  const { price } = product && product[0]?.choisedService
+
+  const formattedPrice = price ? parseFloat(price?.replace("R$", "").trim()): 0
+  const totalWithPix = total + formattedPrice;
+  const totalOnCredit = total + formattedPrice + total * discount;
+
+  console.log()
 
   return (
     <div
@@ -37,7 +42,7 @@ export function ResumeCart({ freight, disabled, total }: ResumeCartProps) {
           <hr className="border border-white" />
         </div>
         <div>
-          <Price text="Frete" price={freight} />
+          <Price text="Frete" price={price} />
           <Price text="Total à prazo" price={totalOnCredit} />
           <PricePixContent total={total} totalWithPix={totalWithPix} />
         </div>

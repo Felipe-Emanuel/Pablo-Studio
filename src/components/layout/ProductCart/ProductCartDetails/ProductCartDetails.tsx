@@ -1,12 +1,13 @@
 import { normalize } from "@functions/normalized";
 import { useCartContext } from "@hooks/useCartContext";
+import { Product } from "@models/Product";
 import { Text } from "@util/texts/Text";
 import { TrashVector } from "@vectores/Vectores";
 import { DocumentData } from "firebase/firestore";
 import { LeftArrowIcon, RightArrowIcon } from "src/icons";
 
 interface ProductCartDetailsProps {
-  product: DocumentData;
+  product: DocumentData & Product;
   cookieUser: string;
 }
 
@@ -52,6 +53,7 @@ export function ProductCartDetails({ product, cookieUser }: ProductCartDetailsPr
         </div>
         <button
           onClick={() => {
+            //@ts-ignore
             removeFromCart(product);
           }}
           className="flex gap-1.5 items-center justify-center transition-all hover:opacity-75"

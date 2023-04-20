@@ -1,4 +1,3 @@
-import { useCartContext } from "@hooks/useCartContext";
 import db from "../config";
 import {
   addDoc,
@@ -11,7 +10,6 @@ import {
   DocumentData,
   writeBatch
 } from "firebase/firestore";
-import { Freight, Product } from "@models/Product";
 
 export const addProductCart = async (product: DocumentData) => {
   try {

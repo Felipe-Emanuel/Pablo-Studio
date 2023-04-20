@@ -1,7 +1,6 @@
-import { normalize } from "@functions/normalized";
 import * as Checkbox from "@radix-ui/react-checkbox";
+import { normalize } from "@functions/normalized";
 import { Text } from "@util/texts/Text";
-import { PrecoPrazoResponse } from "correios-brasil/dist";
 import { CheckIcon } from "src/icons";
 import { useState } from "react";
 import { DocumentData } from "firebase/firestore";
@@ -9,38 +8,42 @@ import { Product } from "@models/Product";
 import { useCartContext } from "@hooks/useCartContext";
 
 interface CheckboxProps {
-  freight: PrecoPrazoResponse[] | undefined;
   product: DocumentData[] & Product[];
 }
 
-export function CheckboxComp({ freight, product }: CheckboxProps) {
-  const { setIsLoading, updateFreigthValue } = useCartContext();
+export function CheckboxComp({ product }: CheckboxProps) {
+  const { freigthServiceChoise } = useCartContext();
   const { formatPrice } = normalize();
 
-  const [selectedOption, setSelectedOption] = useState<"PAC" | "Sedex" | "">(product[0].freight.serviceType ?? "");
-
   const renderOption = (
-    serviceType: "PAC" | "Sedex" | "",
-    serviceCode: string,
-    index: number,
+    serviceType: "PAC" | "SEDEX",
+    PacOrSedex: string,
     id: string
   ) => {
-    if (!freight || !freight[0]) return null;
+    const { PrazoEntrega, Valor, EntregaSabado } =
+      product[0].freight[serviceType];
+    const { serviceCode } = product[0]?.choisedService;
 
-    const { PrazoEntrega, Valor, EntregaSabado } = freight[0][index];
+    const selectedServiceType = serviceCode === "04510" ? "PAC" : "SEDEX" || "";
+    const theDeadLine = PrazoEntrega || "";
+    const formattedPrice = formatPrice(Valor) || "";
 
-    const deadline = PrazoEntrega || "";
-    const price = formatPrice(Valor) || "";
+    const [selectedOption, setSelectedOption] = useState(
+      selectedServiceType ?? ""
+    );
+
+    const handleClick = () => {
+      freigthServiceChoise(product, Valor, PrazoEntrega, PacOrSedex);
+
+      setSelectedOption(selectedOption);
+    };
 
     return (
       <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
         <Checkbox.Root
-          value={serviceCode}
+          value={PacOrSedex}
           checked={selectedOption === serviceType}
-          onClick={() => {
-            updateFreigthValue(product, serviceType, deadline, price)
-            setSelectedOption(serviceType);
-          }}
+          onClick={handleClick}
           id={id}
           className="
               transition-all flex h-3 w-3 md:h-5 md:w-5
@@ -56,7 +59,7 @@ export function CheckboxComp({ freight, product }: CheckboxProps) {
             className="font-bold text-xs md:text-md leading-none text-white"
             htmlFor={id}
           >
-            {serviceType} - entrega em até {deadline} dias: {price}
+            {serviceType} - entrega em até {theDeadLine} dias: {formattedPrice}
           </label>
           <Text
             light
@@ -72,8 +75,8 @@ export function CheckboxComp({ freight, product }: CheckboxProps) {
 
   return (
     <form className="flex flex-col gap-4">
-      {renderOption("PAC", "04510", 0, "c1")}
-      {renderOption("Sedex", "04014", 1, "c2")}
+      {renderOption("PAC", "04510", "c1")}
+      {renderOption("SEDEX", "04014", "c2")}
     </form>
   );
 }

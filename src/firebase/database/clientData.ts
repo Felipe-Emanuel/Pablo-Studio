@@ -41,7 +41,6 @@ export const addUser = async () => {
         console.log("ID Atualizado com ID: ", docRef.id);
       } else {
         const docRef = await addDoc(userRef, user);
-        console.log(user)
 
         console.log("ID Adicionado com ID: ", docRef.id);
       }

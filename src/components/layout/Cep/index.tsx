@@ -13,6 +13,8 @@ import { DocumentData } from "firebase/firestore";
 import { addProductCart, getProductCart } from "@database/clientCart";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { Product } from "@models/Product";
+import { useAxios } from "@hooks/useAxios";
+import { Cookies } from "@functions/Cookies";
 
 export type newSelectedFreightCookieType = {
   serviceType: CheckedState | undefined;
@@ -29,10 +31,10 @@ interface CepProps {
 
 export function Cep({
   product,
-  info,
   ssrCookieUser,
   guestId,
 }: CepProps) {
+  const { SetCookie } = Cookies()
   const { inputCepValue, clearCart, setIsLoading, updateProductCep, setInputCepValue } = useCartContext();
   const [isVisible, setIsVisible] = useState(false);
   const [cookieUser, setCookieUser] = useState<User>(ssrCookieUser);
@@ -55,7 +57,7 @@ export function Cep({
       city: resp?.localidade,
       uf: resp?.uf,
       error: {
-        cepError: resp?.erro,
+        cepError: resp?.error,
       },
     };
     return user;
@@ -65,20 +67,19 @@ export function Cep({
     e.preventDefault();
     let cookieUser;
 
-    setIsLoading(true);
 
     try {
-      const resp = await consultarCep(inputCepValue).then((resp) => {
-        if (!resp.erro) {
-          setErro(resp.erro);
+      const resp = await consultarCep(inputCepValue).then(async (resp) => {
+        if (!resp.error) {
+          setErro(resp.error);
           cookieUser = userGenerator(JSON.parse(JSON.stringify(resp)));
           setCookieUser(cookieUser);
-          setCookie({}, "_userGuest", JSON.stringify(cookieUser));
+          SetCookie("_userGuest", cookieUser);
 
           updateProductCep(product)
+
         }
       });
-      setIsLoading(false);
       return resp;
     } catch (err) {
       console.error("Erro na adição de CEP", err);
@@ -179,7 +180,6 @@ export function Cep({
       {cookieUser?.city && (
         <Freight
           product={product}
-          freight={info}
           onClick={changeRotate}
           isVisible={isVisible}
         />

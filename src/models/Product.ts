@@ -10,14 +10,46 @@ export interface ProductComment {
 }
 
 export interface Freight {
-  serviceType: "";
-  deadline: "";
-  price: "";
+    PAC: {
+      Codigo: string,
+      Valor: string,
+      PrazoEntrega: string,
+      ValorSemAdicionais: string,
+      ValorMaoPropria: string,
+      ValorAvisoRecebimento: string,
+      ValorValorDeclarado: string,
+      EntregaDomiciliar: string,
+      EntregaSabado: string,
+      obsFim: string,
+      Erro: string,
+      MsgErro: string
+    },
+    SEDEX: {
+      Codigo: string,
+      Valor: string,
+      PrazoEntrega: string,
+      ValorSemAdicionais: string,
+      ValorMaoPropria: string,
+      ValorAvisoRecebimento: string,
+      ValorValorDeclarado: string,
+      EntregaDomiciliar: string,
+      EntregaSabado: string,
+      obsFim: string,
+      Erro: string,
+      MsgErro: string
+    }
+}
+
+interface ChoisedService {
+  deadline: string;
+  price: string;
+  serviceCode: string;
 }
 
 export interface Product {
   id: number;
-  guestProductId?: string;
+  guestProductId: string;
+  freigthServiceChoise: string;
   count: number;
   productPrice: number;
   productViews: number;
@@ -35,7 +67,9 @@ export interface Product {
   isOnCart: boolean;
   productComments: ProductComment[];
   dimensions: PrecoPrazoRequest;
+  choisedService: ChoisedService;
   freight: Freight;
+  weight: number;
 }
 
 export interface DataType {

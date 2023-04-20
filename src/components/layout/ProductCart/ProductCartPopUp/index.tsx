@@ -1,5 +1,6 @@
 
 import { useCartContext } from "@hooks/useCartContext";
+import { Product } from "@models/Product";
 import { DocumentData } from "firebase/firestore";
 
 interface ProductCartPopUpProps {
@@ -41,6 +42,7 @@ export function ProductCartPopUp({ product }: ProductCartPopUpProps) {
           <div className="pb-8 w-full flex justify-evenly text-white">
             <button
               className="bg-danger py-2 px-4  transition-all rounded-md hover:bg-danger/75"
+              //@ts-ignore
               onClick={() => removeFromCart(product)}
             >
               Remover
