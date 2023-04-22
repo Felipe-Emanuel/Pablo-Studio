@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { Container } from "src/components/containers/Container";
 import api from "src/data/services/api";
+import { Text } from "@util/texts/Text";
 
 interface ProductProps {
   data: Product[];
@@ -83,7 +84,7 @@ export default function Products({ data, params }: ProductProps) {
 
 
 
-  return (
+  return data ? (
     <Container style pageTitle="Pablo Studio 3D | Nome do Produto">
       <SelectedCard
         product={data[+id]}
@@ -94,5 +95,5 @@ export default function Products({ data, params }: ProductProps) {
         <Comments data={data[id].productComments} id={id} />
       </Section>
     </Container>
-  );
+  ) : (<Text text="carregando produtos..." />);
 }

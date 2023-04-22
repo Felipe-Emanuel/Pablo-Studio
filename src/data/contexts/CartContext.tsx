@@ -211,7 +211,7 @@ export function CartProvider({ children }: cartProviderProps) {
             },
           };
 
-          await postDate('/cart/freigth', newItem)
+          await postDate('freigth', newItem)
         }
 
         resolve();
@@ -245,7 +245,7 @@ export function CartProvider({ children }: cartProviderProps) {
             },
           }
 
-          await postDate('/cart/freigth', newItem)
+          await postDate('freigth', newItem)
         }
         if (product.count === 1) {
           togglePopUp(true);
@@ -309,7 +309,7 @@ export function CartProvider({ children }: cartProviderProps) {
           sCepDestino: inputCepValue,
         },
       };
-      await postDate('/cart/freigth', updatedProduct)
+      await postDate('freigth', updatedProduct)
         .then(() => setIsLoading(false))
     })
   }
