@@ -94,7 +94,7 @@ export function ProductSlider({ data }: ProductSliderProps) {
       </motion.div>
       <SwiperComponent settings={settings}>
         {data.length > 0 &&
-          data.map((card, i: number) => {
+          data?.map((card, i: number) => {
             return (
               <SwiperSlide
                 key={i}
