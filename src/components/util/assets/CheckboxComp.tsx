@@ -1,8 +1,8 @@
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { normalize } from "@functions/normalized";
+import { Methods } from "@functions/Methods";
 import { Text } from "@util/texts/Text";
 import { CheckIcon } from "src/icons";
-import { useState } from "react";
 import { DocumentData } from "firebase/firestore";
 import { Product } from "@models/Product";
 import { useCartContext } from "@hooks/useCartContext";
@@ -14,35 +14,31 @@ interface CheckboxProps {
 export function CheckboxComp({ product }: CheckboxProps) {
   const { freigthServiceChoise } = useCartContext();
   const { formatPrice } = normalize();
+  const { reducePrice } = Methods()
 
   const renderOption = (
     serviceType: "PAC" | "SEDEX",
     PacOrSedex: string,
     id: string
   ) => {
-    const { PrazoEntrega, Valor, EntregaSabado } =
+    const { PrazoEntrega, EntregaSabado } =
       product[0].freight[serviceType];
     const { serviceCode } = product[0]?.choisedService;
 
     const selectedServiceType = serviceCode === "04510" ? "PAC" : "SEDEX" || "";
     const theDeadLine = PrazoEntrega || "";
-    const formattedPrice = formatPrice(Valor) || "";
-
-    const [selectedOption, setSelectedOption] = useState(
-      selectedServiceType ?? ""
-    );
+    const freigthValue = formatPrice(reducePrice(product, serviceType)) || "";
+    const strigfyiedFreigthValue = String(reducePrice(product, serviceType))
 
     const handleClick = () => {
-      freigthServiceChoise(product, Valor, PrazoEntrega, PacOrSedex);
-
-      setSelectedOption(selectedOption);
+      freigthServiceChoise(product, strigfyiedFreigthValue, PrazoEntrega, PacOrSedex);
     };
 
     return (
       <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
         <Checkbox.Root
           value={PacOrSedex}
-          checked={selectedOption === serviceType}
+          checked={selectedServiceType === serviceType}
           onClick={handleClick}
           id={id}
           className="
@@ -59,7 +55,7 @@ export function CheckboxComp({ product }: CheckboxProps) {
             className="font-bold text-xs md:text-md leading-none text-white"
             htmlFor={id}
           >
-            {serviceType} - entrega em até {theDeadLine} dias: {formattedPrice}
+            {serviceType} - entrega em até {theDeadLine} dias: {freigthValue}
           </label>
           <Text
             light

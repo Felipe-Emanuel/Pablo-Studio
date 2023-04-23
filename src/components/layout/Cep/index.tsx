@@ -71,8 +71,10 @@ export function Cep({
 
     try {
       const resp = await consultarCep(inputCepValue).then(async (resp) => {
-        if (!resp) {
-          setErro(resp);
+        //@ts-ignore
+        if (!resp.erro) {
+          //@ts-ignore
+          setErro(resp.erro);
           cookieUser = userGenerator(JSON.parse(JSON.stringify(resp)));
           setCookieUser(cookieUser);
           SetCookie("_userGuest", cookieUser);

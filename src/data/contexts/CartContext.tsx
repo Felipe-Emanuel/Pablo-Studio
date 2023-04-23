@@ -291,10 +291,8 @@ export function CartProvider({ children }: cartProviderProps) {
         }
       }
 
-      await addProductCart(newFreigthValue);
-
-      setIsLoading(false)
-
+      await postDate('freigth', newFreigthValue)
+        .then(() => setIsLoading(false))
     })
   }
 

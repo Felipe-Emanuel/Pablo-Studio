@@ -1,3 +1,5 @@
+import { Methods } from "@functions/Methods";
+import { normalize } from "@functions/normalized";
 import { useCartContext } from "@hooks/useCartContext";
 import { Product } from "@models/Product";
 import { CheckboxComp } from "@util/assets/CheckboxComp";
@@ -16,6 +18,8 @@ interface FreightProps {
 
 export function Freight({ onClick, isVisible, product }: FreightProps) {
   const { isLoading } = useCartContext();
+  const { formatPrice } = normalize();
+  const { reducePrice } = Methods()
 
   const checkVisibility = isVisible ? "h-32 md:h-36" : "h-12";
   const checkRotate = isVisible ? "-rotate-90" : "rotate-90";
@@ -26,7 +30,7 @@ export function Freight({ onClick, isVisible, product }: FreightProps) {
     ? "opacity-0 invisible sm:opacity-100 sm:visible"
     : "opacity-100 visible sm:opacity-100 sm:visible";
 
-  const { deadline, price, serviceCode } = product[0]?.choisedService || '';
+  const { deadline, serviceCode } = product[0]?.choisedService || '';
 
   const renderSelectedOption = () => {
     return (
@@ -45,7 +49,7 @@ export function Freight({ onClick, isVisible, product }: FreightProps) {
                 <Text
                   bold
                   className="text-xs md:text-sm"
-                  text={price}
+                  text={formatPrice(reducePrice(product))}
                 />
               </div>
               <Text

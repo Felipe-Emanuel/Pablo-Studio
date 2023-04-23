@@ -1,3 +1,4 @@
+import { Methods } from "@functions/Methods";
 import { useAxios } from "@hooks/useAxios";
 import { useCartContext } from "@hooks/useCartContext";
 import { Product } from "@models/Product";
@@ -8,6 +9,7 @@ import { SectionTitle } from "@util/texts/SectionTitle";
 import { ResumeVector } from "@vectores/Vectores";
 import { DocumentData } from "firebase/firestore";
 import { useRouter } from "next/router";
+import { parseCookies } from "nookies";
 
 interface ResumeCartProps {
   disabled: boolean;
@@ -17,17 +19,16 @@ interface ResumeCartProps {
 
 export function ResumeCart({ disabled, product, total}: ResumeCartProps) {
   const { discount, changeProgressRingValue, changePaymentState } = useCartContext();
+  const { reducePrice } = Methods()
+
+  const cookies = parseCookies();
+  const cookieUser = cookies._userGuest ?? null;
 
   const router = useRouter();
   const handleClick = (href: string) => router.push(href);
 
-  const { price } = product && product[0]?.choisedService
-
-  const formattedPrice = price ? parseFloat(price?.replace("R$", "").trim()): 0
-  const totalWithPix = total + formattedPrice;
-  const totalOnCredit = total + formattedPrice + total * discount;
-
-  console.log()
+  const totalWithPix = total + reducePrice(product);
+  const totalOnCredit = total + reducePrice(product) + total * discount;
 
   return (
     <div
@@ -42,7 +43,7 @@ export function ResumeCart({ disabled, product, total}: ResumeCartProps) {
           <hr className="border border-white" />
         </div>
         <div>
-          <Price text="Frete" price={price} />
+          <Price text="Frete" price={cookieUser ? reducePrice(product) : 0} />
           <Price text="Total à prazo" price={totalOnCredit} />
           <PricePixContent total={total} totalWithPix={totalWithPix} />
         </div>
