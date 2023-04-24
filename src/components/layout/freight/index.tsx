@@ -35,7 +35,7 @@ export function Freight({ onClick, isVisible, product }: FreightProps) {
   const renderSelectedOption = () => {
     return (
       <>
-        {product && +deadline > 1 && (
+        {product && +deadline > 0 && (
           <div
             className={`transition-all absolute flex flex-col right-3 w-fit h-fit ${isNewFreightObject}`}
           >
