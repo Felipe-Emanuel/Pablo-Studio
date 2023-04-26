@@ -22,6 +22,7 @@ import { PrecoPrazoResponse } from "correios-brasil/dist";
 type CartContextType = {
   inputCepValue: string;
   productName: string;
+  productId: number;
   popUp: boolean;
   isLoading: boolean;
   discount: number;
@@ -37,6 +38,7 @@ type CartContextType = {
   clearCart: (guestId: string) => void;
   togglePopUp: (value: boolean) => void;
   FnsetProductName: (newName: string) => void;
+  FnsetProductId: (newId: number) => void;
   changePaymentState: () => void;
   setInputCepValue: Dispatch<SetStateAction<string>>;
   setIsLoading: Dispatch<SetStateAction<boolean>>
@@ -62,6 +64,7 @@ export const CartContext = createContext<CartContextType>({
   isLoading: false,
   inputCepValue: '',
   productName: '',
+  productId: 0,
   newDataPost: {  Codigo: "",
     Valor: "",
     PrazoEntrega: "",
@@ -86,8 +89,8 @@ export const CartContext = createContext<CartContextType>({
   clearCart: () => {},
   //@ts-ignore
   removeFromCart: () => {},
-  //@ts-ignore
   FnsetProductName: () => {},
+  FnsetProductId: () => {},
   //@ts-ignore
   updateProductCep: () => {},
   updateFreigthValue: () => {},
@@ -104,6 +107,7 @@ export function CartProvider({ children }: cartProviderProps) {
   const [newDataPost, setNewDataPost ] = useState<PrecoPrazoResponse | undefined>();
   const [inputCepValue, setInputCepValue] = useState("");
   const [productName, setProductName] = useState("")
+  const [productId, setProductId] = useState(0)
   const [progressValue, setProgressValue] = useState(20);
   const [popUp, setPopUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -276,6 +280,7 @@ export function CartProvider({ children }: cartProviderProps) {
   };
 
   const FnsetProductName = (newName: string) => setProductName(newName)
+  const FnsetProductId = (newId: number) => setProductId(newId)
 
 
   const freigthServiceChoise = (product: DocumentData[] & Product[], price: string, deadline: string, serviceCode: string) => {
@@ -323,12 +328,14 @@ export function CartProvider({ children }: cartProviderProps) {
         discount,
         isLoading,
         productName,
+        productId,
         inputCepValue,
         newDataPost,
         freigthServiceChoise,
         setInputCepValue,
         updateProductCep,
         FnsetProductName,
+        FnsetProductId,
         setIsLoading,
         clearCart,
         togglePopUp,

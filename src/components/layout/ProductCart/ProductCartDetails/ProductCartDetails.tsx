@@ -13,7 +13,7 @@ interface ProductCartDetailsProps {
 
 export function ProductCartDetails({ product, cookieUser }: ProductCartDetailsProps) {
   const { formatPrice } = normalize();
-  const { discount, removeFromCart, addToCount, removeToCount, FnsetProductName } =
+  const { discount, removeFromCart, addToCount, removeToCount, FnsetProductName, FnsetProductId } =
     useCartContext();
 
   const checkHover =
@@ -35,6 +35,7 @@ export function ProductCartDetails({ product, cookieUser }: ProductCartDetailsPr
           <LeftArrowIcon
             onClick={() => {
               FnsetProductName(product.productName)
+              FnsetProductId(product.id)
               removeToCount(product, cookieUser);
             }}
             className={`

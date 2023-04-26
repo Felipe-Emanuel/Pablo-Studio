@@ -4,11 +4,11 @@ import { Product } from "@models/Product";
 import { DocumentData } from "firebase/firestore";
 
 interface ProductCartPopUpProps {
-  product: DocumentData;
+  product: DocumentData & Product;
 }
 
 export function ProductCartPopUp({ product }: ProductCartPopUpProps) {
-  const { popUp, productName, removeFromCart, togglePopUp } = useCartContext();
+  const { popUp, productName, productId, removeFromCart, togglePopUp } = useCartContext();
 
   const checkPopUp = popUp ? "opacity-100 visible" : " opacity-0 invisible";
 
@@ -28,11 +28,11 @@ export function ProductCartPopUp({ product }: ProductCartPopUpProps) {
           onClick={(e) => e.stopPropagation()}
           id="modalContent"
           className="
-              shadow shadow-white
-              rounded-md m-auto relative -left-5 -top-5 w-full
+              shadow shadow-white px-2
+              rounded-md m-auto relative w-fit sm:w-full
               max-w-md h-fit bg-white text-center"
         >
-          <div className="py-8">
+          <div className="py-8 text-sm md:text-md">
             <span>
               Realmente deseja remover{" "}
                 <span className="font-bold">{productName}</span>{" "}
@@ -42,8 +42,12 @@ export function ProductCartPopUp({ product }: ProductCartPopUpProps) {
           <div className="pb-8 w-full flex justify-evenly text-white">
             <button
               className="bg-danger py-2 px-4  transition-all rounded-md hover:bg-danger/75"
-              //@ts-ignore
-              onClick={() => removeFromCart(product)}
+              onClick={() =>
+                {
+                  const index = productId
+                  removeFromCart(product[index])
+                }
+              }
             >
               Remover
             </button>

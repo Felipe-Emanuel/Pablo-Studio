@@ -14,7 +14,6 @@ import { useState, useEffect } from "react";
 import { DocumentData } from "firebase/firestore";
 import { Text } from "@util/texts/Text";
 import { ProductCartPopUp } from "@layout/ProductCart/ProductCartPopUp";
-import api from "src/data/services/api";
 
 interface CartProps {
   cookieUser: string;
@@ -29,14 +28,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const product = await getProductCart(guestId)
       .then(async (response) => {
-        if(cookieUser) { return response
-          // console.log(response)
-          // const apiResponse = await api.post("/api/freigth", {
-          //   body: response
-          // })
-
-          // console.log("AAAAAAAAAAAAAAAAA", apiResponse.data)
-          // return apiResponse.data;
+        if(cookieUser) {
+          return response
         }
       }) || null
 
@@ -47,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   } catch (err) {
-    console.error("ERROOOOOOOOOOOOOOOOOOO", err);
+    console.error(err);
   }
   return {
     props: {},
@@ -101,10 +94,8 @@ export default function Cart({ cookieUser, product }: CartProps) {
             <Text text="Carregando..." />
           ) : (
             <Section>
-              {productCart.length &&
-                productCart.map((item, i: number) => (
-                  <ProductCartPopUp key={i} product={item} />
-                ))}
+              {/*@ts-ignore*/}
+            <ProductCartPopUp product={productCart} />
               {productCart &&
                 productCart.length > 0 &&
                 productCart?.map((cart: Product, i: number) => {
