@@ -39,10 +39,19 @@ module.exports = {
         '900': '#164E18',
         '600': '#427043',
         '400': '#C6EDC8'
+      },
+
+      gray: {
+        '400': '#373636'
       }
 
     },
     extend: {},
+    keyframes: {
+      shimmer: {
+        '100%' : {transform: 'translateX(100%)'}
+      }
+    }
   },
   plugins: [
     require('@tailwindcss/forms'),

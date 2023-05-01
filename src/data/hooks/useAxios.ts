@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../services/api";
 import { PrecoPrazoResponse } from "correios-brasil/dist";
+import { useCartContext } from "./useCartContext";
 
 export function useAxios() {
   const [dataGet, setDataGet] = useState([]);
@@ -15,6 +16,7 @@ export function useAxios() {
       })
       .then((response) => setDataGet(response.data))
       .catch((err) => console.error("Erro ao GET em getData /useAxios/", err));
+
     return req;
   };
 
@@ -23,10 +25,7 @@ export function useAxios() {
       .post(`/api/${path}`, {
         body,
       })
-      .then((response) =>{
-        setDataPost(response.data)
-        }
-      )
+      .then((response) => setDataPost(response.data))
       .catch((err) =>
         console.error("Erro ao POST em postData /useAxios/", err)
       );

@@ -16,10 +16,14 @@ import { Text } from "@util/texts/Text";
 import { ProductCartPopUp } from "@layout/ProductCart/ProductCartPopUp";
 import { getUser } from "@database/clientData";
 import { User } from "@models/User";
+import { NewItems } from "@layout/NewItems";
+import api from "src/data/services/api";
+import { SkeletonProductCart } from "src/components/skeletons/SkeletonProductCart";
 
 interface CartProps {
   stringifyUser: string & User[];
   product: DocumentData[] & Product[];
+  data: Product[]
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -27,6 +31,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const cookies = parseCookies(context);
     const cookieUser = cookies._userGuest ?? null;
     const guestId = cookies._guest ?? null;
+
+    const req = await api.get(`api/cart?mock=true&limit=3`);
+    const data = await req.data;
+
 
     if (cookieUser) {
       const user = await getUser()
@@ -37,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       const stringifyUser = JSON.stringify(user)
 
       return {
-        props: {stringifyUser}
+        props: {stringifyUser, data}
       }
     }
 
@@ -61,7 +69,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default function Cart({ product, stringifyUser }: CartProps) {
+export default function Cart({ product, stringifyUser, data }: CartProps) {
   const { progressValue, paymentStates, isLoading } = useCartContext();
   const { price } = (product && product[0]?.choisedService) || "";
   const [user, setUser] = useState<DocumentData[] | User[]>(stringifyUser);
@@ -116,8 +124,15 @@ export default function Cart({ product, stringifyUser }: CartProps) {
             />
           </Section>
           {isLoading ? (
-            <Text text="Carregando..." />
+            <div className="h-full">
+            {productCart.length && productCart.map((product) => {
+              return (
+                <SkeletonProductCart key={product.id} />
+              )
+            })}
+          </div>
           ) : (
+            <>
             <Section>
               {/*@ts-ignore*/}
             <ProductCartPopUp product={productCart} />
@@ -138,6 +153,10 @@ export default function Cart({ product, stringifyUser }: CartProps) {
                   );
                 })}
             </Section>
+            <Section>
+                <NewItems product={data} />
+            </Section>
+            </>
           )}
         </>
       ) : (
