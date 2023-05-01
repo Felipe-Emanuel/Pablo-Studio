@@ -38,10 +38,9 @@ export const addUser = async () => {
       if (querySnapshot.docs.length > 0) {
         const docRef = querySnapshot.docs[0].ref;
         await updateDoc(docRef, user);
-        console.log("ID Atualizado com ID: ", docRef.id);
       } else {
         const docRef = await addDoc(userRef, user);
-        console.log("ID Adicionado com ID: ", docRef.id);
+        return docRef;
       }
     }
 

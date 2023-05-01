@@ -54,8 +54,6 @@ export function Cep({
   const cookies = parseCookies()
   const guestUser = cookies && cookies._userGuest
 
-  console.log(guestUser)
-
   const userGenerator = (resp: UserGenerator) => {
     const user: User = {
       id: guestId,
