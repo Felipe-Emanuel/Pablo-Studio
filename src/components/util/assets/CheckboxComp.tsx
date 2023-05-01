@@ -6,7 +6,6 @@ import { CheckIcon } from "src/icons";
 import { DocumentData } from "firebase/firestore";
 import { Product } from "@models/Product";
 import { useCartContext } from "@hooks/useCartContext";
-
 interface CheckboxProps {
   product: DocumentData[] & Product[];
 }
@@ -25,14 +24,13 @@ export function CheckboxComp({ product }: CheckboxProps) {
       product[0].freight[serviceType];
     const { serviceCode } = product[0]?.choisedService;
 
-    const selectedServiceType = serviceCode === "04510" ? "PAC" : "SEDEX" || "";
+    const selectedServiceType = serviceCode === "04014" ? "SEDEX" : "PAC" || "";
     const theDeadLine = PrazoEntrega || "";
     const freigthValue = formatPrice(reducePrice(product, serviceType)) || "";
     const strigfyiedFreigthValue = String(reducePrice(product, serviceType))
 
-    const handleClick = () => {
-      freigthServiceChoise(product, strigfyiedFreigthValue, PrazoEntrega, PacOrSedex);
-    };
+    const handleClick = () =>
+      freigthServiceChoise(product, strigfyiedFreigthValue, PrazoEntrega, PacOrSedex)
 
     return (
       <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
@@ -46,7 +44,7 @@ export function CheckboxComp({ product }: CheckboxProps) {
               rounded-full appearance-none items-center justify-center
               bg-transparent outline-none ring-2 ring-white checked:ring-secondary"
         >
-          <Checkbox.Indicator className="text-violet11">
+          <Checkbox.Indicator >
             <CheckIcon />
           </Checkbox.Indicator>
         </Checkbox.Root>

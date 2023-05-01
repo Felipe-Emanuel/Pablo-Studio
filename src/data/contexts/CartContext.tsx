@@ -91,7 +91,6 @@ export const CartContext = createContext<CartContextType>({
   removeFromCart: () => {},
   FnsetProductName: () => {},
   FnsetProductId: () => {},
-  //@ts-ignore
   updateProductCep: () => {},
   updateFreigthValue: () => {},
   setIsLoading: () => {},
@@ -166,7 +165,7 @@ export function CartProvider({ children }: cartProviderProps) {
             };
           }
 
-          await addProductCart(newItem);
+          await postDate('freigth', newItem)
         } else {
           const newItem = {
             ...product,
@@ -182,7 +181,7 @@ export function CartProvider({ children }: cartProviderProps) {
             };
           }
 
-          await addProductCart(newItem);
+          await postDate('freigth', newItem)
         }
 
         resolve();
@@ -282,10 +281,9 @@ export function CartProvider({ children }: cartProviderProps) {
   const FnsetProductName = (newName: string) => setProductName(newName)
   const FnsetProductId = (newId: number) => setProductId(newId)
 
-
   const freigthServiceChoise = (product: DocumentData[] & Product[], price: string, deadline: string, serviceCode: string) => {
-    setIsLoading(true)
     product.map(async (item: Product) => {
+      setIsLoading(true)
 
       const newFreigthValue = {
         ...item,
@@ -298,6 +296,7 @@ export function CartProvider({ children }: cartProviderProps) {
 
       await postDate('freigth', newFreigthValue)
         .then(() => setIsLoading(false))
+        .catch(error => console.error("Erro ao atualizar serviceChoise:", error))
     })
   }
 
@@ -317,7 +316,7 @@ export function CartProvider({ children }: cartProviderProps) {
     })
   }
 
-  useEffect(() => setNewDataPost(dataPost), [isLoading])
+  useEffect(() => setNewDataPost(dataPost), [])
 
   return (
     <CartContext.Provider

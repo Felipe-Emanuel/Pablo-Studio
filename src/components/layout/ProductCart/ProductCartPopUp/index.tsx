@@ -12,6 +12,11 @@ export function ProductCartPopUp({ product }: ProductCartPopUpProps) {
 
   const checkPopUp = popUp ? "opacity-100 visible" : " opacity-0 invisible";
 
+  const handleDelete = () => {
+    const index = product.findIndex((item: Product) => item.id === productId)
+    removeFromCart(product[index])
+  }
+
   return (
     <>
       <div
@@ -42,12 +47,7 @@ export function ProductCartPopUp({ product }: ProductCartPopUpProps) {
           <div className="pb-8 w-full flex justify-evenly text-white">
             <button
               className="bg-danger py-2 px-4  transition-all rounded-md hover:bg-danger/75"
-              onClick={() =>
-                {
-                  const index = productId
-                  removeFromCart(product[index])
-                }
-              }
+              onClick={handleDelete}
             >
               Remover
             </button>

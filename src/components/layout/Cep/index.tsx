@@ -12,6 +12,8 @@ import { DocumentData } from "firebase/firestore";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { Product } from "@models/Product";
 import { Cookies } from "@functions/Cookies";
+import { addUser } from "@database/clientData";
+import { parseCookies } from "nookies";
 
 export type newSelectedFreightCookieType = {
   serviceType: CheckedState | undefined;
@@ -22,8 +24,8 @@ export type newSelectedFreightCookieType = {
 interface CepProps {
   product: DocumentData[] & Product[];
   info?: PrecoPrazoResponse[];
-  ssrCookieUser: User;
   guestId: string;
+  user: DocumentData[] | User[];
 }
 
 interface UserGenerator extends CepResponse {
@@ -32,23 +34,27 @@ interface UserGenerator extends CepResponse {
 
 export function Cep({
   product,
-  ssrCookieUser,
   guestId,
+  user,
 }: CepProps) {
   const { SetCookie } = Cookies()
   const { inputCepValue, clearCart, updateProductCep, setInputCepValue } = useCartContext();
-  const [isVisible, setIsVisible] = useState(false);
-  const [cookieUser, setCookieUser] = useState<User>(ssrCookieUser);
+  const { cep = "", city = "", uf = "" } = user && user.length ? user[0] : {};
 
+  const [isVisible, setIsVisible] = useState(false);
   const [erro, setErro] = useState<UserGenerator>();
   const ref = useRef(null);
   const inputRef = useRef(null);
-
   const cepMask = {
     mask: "00000-000",
   };
 
   const changeRotate = () => setIsVisible((isVisible) => !isVisible);
+
+  const cookies = parseCookies()
+  const guestUser = cookies && cookies._userGuest
+
+  console.log(guestUser)
 
   const userGenerator = (resp: UserGenerator) => {
     const user: User = {
@@ -68,7 +74,6 @@ export function Cep({
     e.preventDefault();
     let cookieUser;
 
-
     try {
       const resp = await consultarCep(inputCepValue).then(async (resp) => {
         //@ts-ignore
@@ -76,11 +81,10 @@ export function Cep({
           //@ts-ignore
           setErro(resp.erro);
           cookieUser = userGenerator(JSON.parse(JSON.stringify(resp)));
-          setCookieUser(cookieUser);
           SetCookie("_userGuest", cookieUser);
 
           updateProductCep(product)
-
+          addUser()
         }
       });
       return resp;
@@ -102,14 +106,14 @@ export function Cep({
             <div className="flex gap-4 items-center">
               <IMaskInput
                 className="
-                  outline-none rounded-md w-full max-w-xs h-11 px-1
+                  outline-none rounded-md w-full max-w-xs h-11 px-1 border-0 focus:ring-tertiary
                   bg-transparent ring-1 ring-tertiary text-white invalid:ring-danger"
                 mask={cepMask.mask}
                 unmask={false}
                 ref={ref}
                 placeholder={
-                  cookieUser.error && !cookieUser.error.cepError === true
-                    ? cookieUser?.cep
+                  guestUser && cep
+                    ? cep
                     : "Verifique seu frete"
                 }
                 type="text"
@@ -143,7 +147,9 @@ export function Cep({
             </button>
           </form>
           <div className="flex gap-1">
-            {erro?.error ? (
+            {guestUser && (
+<>
+{erro?.error ? (
               <>
                 <Text
                   as="span"
@@ -153,21 +159,23 @@ export function Cep({
                 />
               </>
             ) : (
-              cookieUser?.city !== undefined && (
+              city !== "" && (
                 <>
                   <Text
                     as="span"
                     light
                     text={
-                      cookieUser
-                        ? `Destino: ${cookieUser?.city} - ${cookieUser?.uf}`
+                      user
+                        ? `Destino: ${city} - ${uf}`
                         : ""
                     }
                     className="text-xs md:text-md"
                   />
                 </>
               )
+            )}</>
             )}
+
           </div>
         </div>
         <div className="relative flex items-center w-full max-w-xs h-fit">
@@ -180,7 +188,7 @@ export function Cep({
           />
         </div>
       </div>
-      {cookieUser?.city && (
+      {city && guestUser && (
         <Freight
           product={product}
           onClick={changeRotate}

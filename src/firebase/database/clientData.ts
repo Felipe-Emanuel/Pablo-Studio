@@ -41,7 +41,6 @@ export const addUser = async () => {
         console.log("ID Atualizado com ID: ", docRef.id);
       } else {
         const docRef = await addDoc(userRef, user);
-
         console.log("ID Adicionado com ID: ", docRef.id);
       }
     }
@@ -50,3 +49,11 @@ export const addUser = async () => {
     console.error("Ocorreu um erro ao adicionar o usuário", error);
   }
 };
+
+export const getUser = async () => {
+  const userRef = collection(db, "users");
+  const querySnapshot = await getDocs(userRef);
+  const users = querySnapshot.docs.map(doc => doc.data())
+
+  return users
+}

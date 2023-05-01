@@ -18,8 +18,9 @@ interface ResumeCartProps {
 }
 
 export function ResumeCart({ disabled, product, total}: ResumeCartProps) {
-  const { discount, changeProgressRingValue, changePaymentState } = useCartContext();
   const { reducePrice } = Methods()
+  const { discount, changeProgressRingValue, changePaymentState } = useCartContext();
+  const { serviceCode } = product[0]?.choisedService;
 
   const cookies = parseCookies();
   const cookieUser = cookies._userGuest ?? null;
@@ -29,6 +30,8 @@ export function ResumeCart({ disabled, product, total}: ResumeCartProps) {
 
   const totalWithPix = total + reducePrice(product);
   const totalOnCredit = total + reducePrice(product) + total * discount;
+
+  const selectedServiceType = serviceCode === "04014" ? "SEDEX" : "PAC" || "";
 
   return (
     <div
@@ -43,7 +46,7 @@ export function ResumeCart({ disabled, product, total}: ResumeCartProps) {
           <hr className="border border-white" />
         </div>
         <div>
-          <Price text="Frete" price={cookieUser ? reducePrice(product) : 0} />
+          <Price text="Frete" price={cookieUser ? reducePrice(product, selectedServiceType) : 0} />
           <Price text="Total à prazo" price={totalOnCredit} />
           <PricePixContent total={total} totalWithPix={totalWithPix} />
         </div>

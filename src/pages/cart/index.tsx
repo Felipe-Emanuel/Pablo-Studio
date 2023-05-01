@@ -14,9 +14,11 @@ import { useState, useEffect } from "react";
 import { DocumentData } from "firebase/firestore";
 import { Text } from "@util/texts/Text";
 import { ProductCartPopUp } from "@layout/ProductCart/ProductCartPopUp";
+import { getUser } from "@database/clientData";
+import { User } from "@models/User";
 
 interface CartProps {
-  cookieUser: string;
+  stringifyUser: string & User[];
   product: DocumentData[] & Product[];
 }
 
@@ -25,6 +27,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const cookies = parseCookies(context);
     const cookieUser = cookies._userGuest ?? null;
     const guestId = cookies._guest ?? null;
+
+    if (cookieUser) {
+      const user = await getUser()
+      .then(resp => {
+        const users = resp.filter((user) => user.guestId === guestId)
+        return users
+      })
+      const stringifyUser = JSON.stringify(user)
+
+      return {
+        props: {stringifyUser}
+      }
+    }
 
     const product = await getProductCart(guestId)
       .then(async (response) => {
@@ -35,7 +50,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
       props: {
-        cookieUser,
         product,
       },
     };
@@ -47,15 +61,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default function Cart({ cookieUser, product }: CartProps) {
+export default function Cart({ product, stringifyUser }: CartProps) {
   const { progressValue, paymentStates, isLoading } = useCartContext();
   const { price } = (product && product[0]?.choisedService) || "";
-  const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(
-    product
-  );
+  const [user, setUser] = useState<DocumentData[] | User[]>(stringifyUser);
+  const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(product);
   const cookies = parseCookies();
   const guestId = cookies._guest;
-  const normalizedCookie = cookieUser ? JSON.parse(cookieUser) : [];
+
   const freightValue = price ? parseFloat(price?.replace("R$", "").trim()) : 0;
   const total =
     productCart &&
@@ -70,6 +83,18 @@ export default function Cart({ cookieUser, product }: CartProps) {
       await getProductCart(guestId).then((resp) => setProductCart(resp));
     };
     reloadProduct();
+
+    stringifyUser && setUser(JSON.parse(stringifyUser))
+
+    const reloadUser = async () => {
+      const user = await getUser()
+      .then(resp => {
+        const users = resp.filter((user) => user.guestId === guestId)
+        return setUser(users)
+      })
+      user
+    }
+    reloadUser()
   }, [isLoading]);
 
   return (
@@ -85,9 +110,9 @@ export default function Cart({ cookieUser, product }: CartProps) {
           <LineVector />
           <Section>
             <Cep
+              user={user}
               guestId={guestId}
               product={productCart}
-              ssrCookieUser={normalizedCookie}
             />
           </Section>
           {isLoading ? (
