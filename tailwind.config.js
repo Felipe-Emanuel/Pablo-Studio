@@ -50,6 +50,9 @@ module.exports = {
     keyframes: {
       shimmer: {
         '100%' : {transform: 'translateX(100%)'}
+      },
+      appear: {
+        '0%' : {transform: 'translateY(-10%)'}
       }
     }
   },

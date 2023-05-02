@@ -87,6 +87,7 @@ export function ProductSlider({ data }: ProductSliderProps) {
           transition={{ duration: 0.5 }}
         >
           <CardDescription
+            homeDescription
             cardName={cardInfo.name}
             description={cardInfo.description}
           />

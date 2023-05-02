@@ -16,7 +16,7 @@ export function PricePixContent({ totalWithPix, total }: PricePixContentProps) {
       bg-green-400 rounded-md text-green-600 p-2
       flex justify-between items-center text-sm sm:text-md`}
     >
-      <p>
+      <p className="w-32 sm:w-full">
         Poupe{" "}
         <span className="font-bold text-green-900">
           {formatPrice(total * discount)}

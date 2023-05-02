@@ -1,3 +1,4 @@
+import api from "src/data/services/api";
 import { Container } from "@container/Container";
 import { PaymentLine } from "@layout/PaymentLine";
 import { ResumeCart } from "@layout/ResumeCart";
@@ -16,14 +17,13 @@ import { Text } from "@util/texts/Text";
 import { ProductCartPopUp } from "@layout/ProductCart/ProductCartPopUp";
 import { getUser } from "@database/clientData";
 import { User } from "@models/User";
-import { NewItems } from "@layout/NewItems";
-import api from "src/data/services/api";
 import { SkeletonProductCart } from "src/components/skeletons/SkeletonProductCart";
+import { RecomendedItems } from "@layout/RecomendedItems";
 
 interface CartProps {
   stringifyUser: string & User[];
   product: DocumentData[] & Product[];
-  data: Product[]
+  data: Product[];
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -35,26 +35,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const req = await api.get(`api/cart?mock=true&limit=3`);
     const data = await req.data;
 
-
     if (cookieUser) {
-      const user = await getUser()
-      .then(resp => {
-        const users = resp.filter((user) => user.guestId === guestId)
-        return users
-      })
-      const stringifyUser = JSON.stringify(user)
+      const user = await getUser().then((resp) => {
+        const users = resp.filter((user) => user.guestId === guestId);
+        return users;
+      });
+      const stringifyUser = JSON.stringify(user);
 
       return {
-        props: {stringifyUser, data}
-      }
+        props: { stringifyUser, data },
+      };
     }
 
-    const product = await getProductCart(guestId)
-      .then(async (response) => {
-        if(cookieUser) {
-          return response
+    const product =
+      (await getProductCart(guestId).then(async (response) => {
+        if (cookieUser) {
+          return response;
         }
-      }) || null
+      })) || null;
 
     return {
       props: {
@@ -73,7 +71,9 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
   const { progressValue, paymentStates, isLoading } = useCartContext();
   const { price } = (product && product[0]?.choisedService) || "";
   const [user, setUser] = useState<DocumentData[] | User[]>(stringifyUser);
-  const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(product);
+  const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(
+    product
+  );
   const cookies = parseCookies();
   const guestId = cookies._guest;
 
@@ -92,17 +92,16 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
     };
     reloadProduct();
 
-    stringifyUser && setUser(JSON.parse(stringifyUser))
+    stringifyUser && setUser(JSON.parse(stringifyUser));
 
     const reloadUser = async () => {
-      const user = await getUser()
-      .then(resp => {
-        const users = resp.filter((user) => user.guestId === guestId)
-        return setUser(users)
-      })
-      user
-    }
-    reloadUser()
+      const user = await getUser().then((resp) => {
+        const users = resp.filter((user) => user.guestId === guestId);
+        return setUser(users);
+      });
+      user;
+    };
+    reloadUser();
   }, [isLoading]);
 
   return (
@@ -117,47 +116,42 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
           />
           <LineVector />
           <Section>
-            <Cep
-              user={user}
-              guestId={guestId}
-              product={productCart}
-            />
+            <Cep user={user} guestId={guestId} product={productCart} />
           </Section>
           {isLoading ? (
             <div className="h-full">
-            {productCart.length && productCart.map((product) => {
-              return (
-                <SkeletonProductCart key={product.id} />
-              )
-            })}
-          </div>
+              {productCart.length &&
+                productCart.map((product) => {
+                  return <SkeletonProductCart key={product.id} />;
+                })}
+            </div>
           ) : (
             <>
-            <Section>
-              {/*@ts-ignore*/}
-            <ProductCartPopUp product={productCart} />
-              {productCart &&
-                productCart.length > 0 &&
-                productCart?.map((cart: Product, i: number) => {
-                  return (
-                    <div key={i} className="relative">
-                      <ProductCart
-                        freight={freightValue}
-                        cookieUser={guestId}
-                        product={cart}
-                        image={cart.images[0]}
-                        productName={cart.productName}
-                        productDescription={cart.productDescription}
-                      />
-                    </div>
-                  );
-                })}
-            </Section>
-            <Section>
-                <NewItems product={data} />
-            </Section>
+              <Section>
+                {/*@ts-ignore*/}
+                <ProductCartPopUp product={productCart} />
+                {productCart &&
+                  productCart.length > 0 &&
+                  productCart?.map((cart: Product, i: number) => {
+                    return (
+                      <div key={i} className="relative">
+                        <ProductCart
+                          freight={freightValue}
+                          cookieUser={guestId}
+                          product={cart}
+                          image={cart.images[0]}
+                          productName={cart.productName}
+                          productDescription={cart.productDescription}
+                        />
+                      </div>
+                    );
+                  })}
+              </Section>
             </>
           )}
+          <Section>
+            <RecomendedItems productCart={productCart} product={data} />
+          </Section>
         </>
       ) : (
         <Text text="Sem produto..." />

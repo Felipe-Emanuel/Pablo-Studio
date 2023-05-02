@@ -5,7 +5,7 @@ export interface WindowSize {
 }
 
 export const useWindow = () => {
-  const [width, setWidth] = useState(0);
+  const [width, setWidth] = useState(1024);
   const [windowSize, setWindowSize] = useState<WindowSize>({width: 0})
 
   useEffect(() => {

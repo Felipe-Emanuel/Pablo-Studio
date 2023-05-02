@@ -14,6 +14,7 @@ import { Product } from "@models/Product";
 import { Cookies } from "@functions/Cookies";
 import { addUser } from "@database/clientData";
 import { parseCookies } from "nookies";
+import { SearchLoading } from "@animations/searchLoading/SearchLoading";
 
 export type newSelectedFreightCookieType = {
   serviceType: CheckedState | undefined;
@@ -32,13 +33,10 @@ interface UserGenerator extends CepResponse {
   error: boolean;
 }
 
-export function Cep({
-  product,
-  guestId,
-  user,
-}: CepProps) {
-  const { SetCookie } = Cookies()
-  const { inputCepValue, clearCart, updateProductCep, setInputCepValue } = useCartContext();
+export function Cep({ product, guestId, user }: CepProps) {
+  const { SetCookie } = Cookies();
+  const { inputCepValue, isCepLoading, clearCart, updateProductCep, setInputCepValue } =
+    useCartContext();
   const { cep = "", city = "", uf = "" } = user && user.length ? user[0] : {};
 
   const [isVisible, setIsVisible] = useState(false);
@@ -51,8 +49,8 @@ export function Cep({
 
   const changeRotate = () => setIsVisible((isVisible) => !isVisible);
 
-  const cookies = parseCookies()
-  const guestUser = cookies && cookies._userGuest
+  const cookies = parseCookies();
+  const guestUser = cookies && cookies._userGuest;
 
   const userGenerator = (resp: UserGenerator) => {
     const user: User = {
@@ -81,8 +79,8 @@ export function Cep({
           cookieUser = userGenerator(JSON.parse(JSON.stringify(resp)));
           SetCookie("_userGuest", cookieUser);
 
-          updateProductCep(product)
-          addUser()
+          updateProductCep(product);
+          addUser();
         }
       });
       return resp;
@@ -109,11 +107,7 @@ export function Cep({
                 mask={cepMask.mask}
                 unmask={false}
                 ref={ref}
-                placeholder={
-                  guestUser && cep
-                    ? cep
-                    : "Verifique seu frete"
-                }
+                placeholder={guestUser && cep ? cep : "Verifique seu frete"}
                 type="text"
                 name="cep"
                 inputRef={inputRef}
@@ -141,39 +135,35 @@ export function Cep({
               bg-tertiary rounded-md w-8 h-8 transition-all hover:opacity-80
               disabled:opacity-80"
             >
-              <SearchWhiteVector />
+              {isCepLoading ? <SearchLoading /> : <SearchWhiteVector />}
             </button>
           </form>
           <div className="flex gap-1">
             {guestUser && (
-<>
-{erro?.error ? (
               <>
-                <Text
-                  as="span"
-                  light
-                  text="Cep não encontrado!"
-                  className="text-xs md:text-md"
-                />
+                {erro?.error ? (
+                  <>
+                    <Text
+                      as="span"
+                      light
+                      text="Cep não encontrado!"
+                      className="text-xs md:text-md"
+                    />
+                  </>
+                ) : (
+                  city !== "" && (
+                    <>
+                      <Text
+                        as="span"
+                        light
+                        text={user ? `Destino: ${city} - ${uf}` : ""}
+                        className="text-xs md:text-md"
+                      />
+                    </>
+                  )
+                )}
               </>
-            ) : (
-              city !== "" && (
-                <>
-                  <Text
-                    as="span"
-                    light
-                    text={
-                      user
-                        ? `Destino: ${city} - ${uf}`
-                        : ""
-                    }
-                    className="text-xs md:text-md"
-                  />
-                </>
-              )
-            )}</>
             )}
-
           </div>
         </div>
         <div className="relative flex items-center w-full max-w-xs h-fit">

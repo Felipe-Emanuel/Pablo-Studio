@@ -7,15 +7,15 @@ import Link from "next/link";
 interface ProductCartInfoProps {
   productName: string;
   productLink: string;
-  productPrice: number;
+  productPrice: number | undefined;
   productDescription: string;
-  totalOnCredit: number;
-  moneyToBeSaved: number;
+  totalOnCredit?: number | undefined;
+  moneyToBeSaved?: number | undefined;
 }
 
 interface RenderDetailsProps {
   text: string;
-  price: number;
+  price: number | undefined;
 }
 
 export function ProductCartInfo({

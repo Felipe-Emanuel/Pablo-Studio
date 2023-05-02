@@ -3,7 +3,7 @@ import { Text } from "./Text";
 import { ReactNode } from "react";
 
 interface PriceProps {
-  price: string | number;
+  price: string | number | undefined;
   text?: ReactNode;
   className?: string;
 }

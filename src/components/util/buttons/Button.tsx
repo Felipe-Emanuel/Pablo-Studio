@@ -1,5 +1,5 @@
 import { CartAnimation } from "@animations/cart/CartAnimation";
-import { TrashBigVector } from "@vectores/Vectores";
+import { TrashVector } from "@vectores/Vectores";
 import { useState } from "react";
 
 type ButtonProps = {
@@ -39,7 +39,7 @@ export function Button({
 
   const danger =
     isDanger &&
-    "bg-transparent border-2 border-danger h-14 hover:text-white hover:bg-danger";
+    "bg-transparent border-2 border-danger hover:text-white hover:bg-danger";
 
   const changeHover = () => setIsHover(isHover => !isHover)
 
@@ -50,9 +50,9 @@ export function Button({
       disabled={disabled}
       onClick={onClick && (() => onClick(href!))}
       className={`
-      text-sm md:text-md
+      text-xs sm:text-sm md:text-md
       flex items-center justify-center gap-4
-      transition-colors rounded w-full py-4
+      transition-colors rounded w-full p-2 md:py-4
       text-white hover:text-white/75
       ${primary}
       ${tertiary}
@@ -60,7 +60,7 @@ export function Button({
       ${className}`}
     >
       {cart && <CartAnimation hovered={isHovered} />}
-      {isDanger && <TrashBigVector isHovered={isHover} />}
+      {isDanger && <TrashVector isHovered={isHover} />}
       {text}
     </button>
   );

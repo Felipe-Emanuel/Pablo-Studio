@@ -5,7 +5,7 @@ interface ProgressRingProps {
 }
 
 export function ProgressRing({ value, max, color }: ProgressRingProps) {
-  const strokeWidth = 10;
+  const strokeWidth = 11;
   const radius = 50;
   const normalizedRadius = radius - strokeWidth * 2;
   const circumference = normalizedRadius * 2 * Math.PI;

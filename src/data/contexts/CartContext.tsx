@@ -25,6 +25,7 @@ type CartContextType = {
   productId: number;
   popUp: boolean;
   isLoading: boolean;
+  isCepLoading: boolean;
   discount: number;
   progressValue: number;
   newDataPost: PrecoPrazoResponse | undefined;
@@ -62,6 +63,7 @@ const states = [
 export const CartContext = createContext<CartContextType>({
   popUp: false,
   isLoading: false,
+  isCepLoading: false,
   inputCepValue: '',
   productName: '',
   productId: 0,
@@ -110,6 +112,7 @@ export function CartProvider({ children }: cartProviderProps) {
   const [progressValue, setProgressValue] = useState(20);
   const [popUp, setPopUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCepLoading, setIsCepLoading] = useState(false);
   const [paymentStates, setPaymentStates] =
     useState<paymentStatesType[]>(states);
 
@@ -137,6 +140,7 @@ export function CartProvider({ children }: cartProviderProps) {
   ): Promise<void> => {
     await getProductCart(guestId)
     return new Promise<void>(async (resolve, reject) => {
+      setIsLoading(true)
       try {
         const resp = await getProductCart(guestId);
         const cartItem = resp?.find((item) => item.id === product.id);
@@ -173,6 +177,7 @@ export function CartProvider({ children }: cartProviderProps) {
             productPrice: product.initialPrice,
             guestProductId: guestProductId,
             dimensions: product.dimensions,
+            isOnCart: true
           };
           if (sCepDestino) {
             newItem.dimensions = {
@@ -185,6 +190,7 @@ export function CartProvider({ children }: cartProviderProps) {
         }
 
         resolve();
+        setIsLoading(false)
       } catch (error) {
         console.log("Erro no cart context de adição: ", error);
         reject();
@@ -266,7 +272,12 @@ export function CartProvider({ children }: cartProviderProps) {
   const removeFromCart = async (product: DocumentData[] & Product[]): Promise<void> => {
     setIsLoading(true);
 
-    await removeProductCart(product);
+    const cartItem = {
+      ...product,
+      isOnCart: false,
+    }
+
+    await removeProductCart(cartItem);
     setIsLoading(false);
     setPopUp(false);
   };
@@ -302,6 +313,7 @@ export function CartProvider({ children }: cartProviderProps) {
 
   const updateProductCep = (product: DocumentData[] & Product[]) => {
 
+    setIsCepLoading(true)
     setIsLoading(true)
     product?.map(async (item: Product) => {
       const updatedProduct = {
@@ -312,7 +324,11 @@ export function CartProvider({ children }: cartProviderProps) {
         },
       };
       await postDate('freigth', updatedProduct)
-        .then(() => setIsLoading(false))
+        .then(() => {
+          setIsCepLoading(false),
+          setIsLoading(false)
+        }
+      )
     })
   }
 
@@ -326,6 +342,7 @@ export function CartProvider({ children }: cartProviderProps) {
         paymentStates,
         discount,
         isLoading,
+        isCepLoading,
         productName,
         productId,
         inputCepValue,

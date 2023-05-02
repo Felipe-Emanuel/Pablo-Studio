@@ -8,10 +8,12 @@ import { useRouter } from "next/router";
 import { Container } from "src/components/containers/Container";
 import api from "src/data/services/api";
 import { Text } from "@util/texts/Text";
+import { LineLoading } from "@animations/lineLoading/LineLoading";
+import { useCartContext } from "@hooks/useCartContext";
 
 interface ProductProps {
   data: Product[];
-  params: any
+  params: any;
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -19,26 +21,28 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const req = await api.get("api/cart?mock=true");
     const data = req.data;
 
-    const paths = Array.isArray(data) ? data.map((product: Product) => ({
-      params: { products: "products", id: product.id.toString() },
-    })) : [];
+    const paths = Array.isArray(data)
+      ? data.map((product: Product) => ({
+          params: { products: "products", id: product.id.toString() },
+        }))
+      : [];
 
     return {
       paths,
       fallback: true,
     };
   } catch (err) {
-    console.log("Erro ao recuperar produtos da API <Home> /linha 30/", err)
+    console.log("Erro ao recuperar produtos da API <Home> /linha 30/", err);
     return {
       paths: [],
-      fallback: true
-    }
+      fallback: true,
+    };
   }
-
 };
 
-
-export const getStaticProps: GetStaticProps<ProductProps> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<ProductProps> = async ({
+  params,
+}) => {
   const { id } = params || {};
 
   const redirect: Redirect = {
@@ -51,7 +55,6 @@ export const getStaticProps: GetStaticProps<ProductProps> = async ({ params }) =
   }
 
   try {
-
     const req = await api.get(`api/cart/?mock=true`);
     const data = req.data;
 
@@ -62,14 +65,13 @@ export const getStaticProps: GetStaticProps<ProductProps> = async ({ params }) =
     return {
       props: { data, params },
     };
-
-  } catch(err) {
+  } catch (err) {
     return { redirect };
   }
 };
 
-
 export default function Products({ data, params }: ProductProps) {
+  const { isLoading } = useCartContext()
   const { id } = params || {};
   const router = useRouter();
 
@@ -82,18 +84,15 @@ export default function Products({ data, params }: ProductProps) {
     }
   }, [router, data, id]);
 
-
-
   return data ? (
     <Container style pageTitle="Pablo Studio 3D | Nome do Produto">
-      <SelectedCard
-        product={data[+id]}
-        products={data}
-        id={+id}
-      />
+      {isLoading && <LineLoading />}
+      <SelectedCard product={data[+id]} products={data} id={+id} />
       <Section>
         <Comments data={data[id].productComments} id={id} />
       </Section>
     </Container>
-  ) : (<Text text="carregando produtos..." />);
+  ) : (
+    <Text text="carregando produtos..." />
+  );
 }

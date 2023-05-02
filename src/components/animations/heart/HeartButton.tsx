@@ -3,7 +3,11 @@ import { useState } from "react";
 import { HeartVector } from "src/components/vectores/Vectores";
 import Heart from "./heart.json";
 
-export function HeartButton() {
+interface HeartButtonProps {
+  className?: string
+}
+
+export function HeartButton({className}: HeartButtonProps) {
   const [isActive, setIsActive] = useState(false);
 
   const options = {
@@ -22,15 +26,15 @@ export function HeartButton() {
 
   return (
     <button
-      className="
-      relative w-14 h-14 flex justify-center
-      items-center pointer-events-none"
+      className={`
+        relative w-14 h-14 flex justify-center
+        items-center pointer-events-none ${className}`}
     >
       <span
         onClick={() => {
           setHeart();
         }}
-        className="absolute text-tertiary pointer-events-auto"
+        className="absolute pointer-events-auto"
       >
         <HeartVector />
       </span>
