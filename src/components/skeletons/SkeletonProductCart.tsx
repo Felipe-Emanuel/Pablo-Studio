@@ -3,7 +3,7 @@ export function SkeletonProductCart() {
     <div
       className="
       p-1 md:p-3 rounded-md mb-4 bg-placeholder flex relative
-      w-full h-fit md:justify-between overflow-hidden"
+      w-full max-w-7xl m-auto h-fit md:justify-between overflow-hidden"
     >
       <div className="w-32 md:w-52 h-32 md:h-60 bg-gray-400 rounded-md" />
       <div className="w-3/5 h-full py-4 px-3 justify-between flex flex-col

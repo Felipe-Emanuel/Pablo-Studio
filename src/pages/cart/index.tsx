@@ -68,7 +68,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function Cart({ product, stringifyUser, data }: CartProps) {
-  const { progressValue, paymentStates, isLoading } = useCartContext();
+  const { progressValue, paymentStates, isLoading, isFreigthLoading, isCepLoading } = useCartContext();
   const { price } = (product && product[0]?.choisedService) || "";
   const [user, setUser] = useState<DocumentData[] | User[]>(stringifyUser);
   const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(
@@ -102,19 +102,21 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
       user;
     };
     reloadUser();
-  }, [isLoading]);
+  }, [isLoading, isFreigthLoading, isCepLoading]);
 
   return (
     <Container style pageTitle="Pablo Studios 3D | Carrinho">
       {productCart ? (
         <>
-          <PaymentLine value={progressValue} paymentStates={paymentStates} />
-          <ResumeCart
-            total={total}
-            product={productCart}
-            disabled={progressValue === 100}
-          />
+          <Section>
+            <PaymentLine value={progressValue} paymentStates={paymentStates} />
+            <ResumeCart
+              total={total}
+              product={productCart}
+              disabled={progressValue === 100}
+            />
           <LineVector />
+          </Section>
           <Section>
             <Cep user={user} guestId={guestId} product={productCart} />
           </Section>

@@ -1,3 +1,4 @@
+import { TruckLoader } from "@animations/truckLoader/TruckLoader";
 import { Methods } from "@functions/Methods";
 import { normalize } from "@functions/normalized";
 import { useCartContext } from "@hooks/useCartContext";
@@ -17,7 +18,7 @@ interface FreightProps {
 }
 
 export function Freight({ onClick, isVisible, product }: FreightProps) {
-  const { isLoading } = useCartContext();
+  const { isFreigthLoading } = useCartContext();
   const { formatPrice } = normalize();
   const { reducePrice } = Methods()
 
@@ -81,7 +82,7 @@ export function Freight({ onClick, isVisible, product }: FreightProps) {
         title="Frete"
         className="flex justify-start w-fit items-start text-start"
       />
-      {!isLoading && (
+      {isFreigthLoading ? <TruckLoader /> : (
         <>
           {isVisible && <CheckboxComp product={product} />}
           {renderSelectedOption()}

@@ -1,9 +1,8 @@
 import { useCartContext } from "@hooks/useCartContext";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { ReactNode } from "react";
-import {  useEffect } from "react";
-import { v4 as uuidv4 } from 'uuid'
+import { ReactNode, useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { parseCookies, setCookie } from "nookies";
 
 interface ContainerProps {
@@ -12,28 +11,25 @@ interface ContainerProps {
   style?: boolean;
 }
 
-
-
 export function Container({ children, pageTitle, style }: ContainerProps) {
   const { popUp } = useCartContext();
 
   useEffect(() => {
-    const cookies = parseCookies()
+    const cookies = parseCookies();
 
     const verifyGuestCookie = () => {
-      const guestId = uuidv4()
-      if(cookies._guest) {
+      const guestId = uuidv4();
+      if (cookies._guest) {
         return;
       }
 
-      setCookie({}, '_guest', guestId, {
+      setCookie({}, "_guest", guestId, {
         maxAge: 86400 * 7,
-        path: '/'
-      })
-
+        path: "/",
+      });
     };
 
-    verifyGuestCookie()
+    verifyGuestCookie();
   }, []);
 
   const effect = {
@@ -42,9 +38,10 @@ export function Container({ children, pageTitle, style }: ContainerProps) {
   };
   const isPopUp = popUp ? "overflow-hidden" : "overflow-y-auto";
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const padding = router.asPath === '/cart' || router.asPath === '/' ? "p-1 sm:p-10" : "p-10"
+  const padding =
+    router.asPath === "/cart" || router.asPath === "/" ? "p-1 sm:p-10" : "p-10";
 
   return (
     <>

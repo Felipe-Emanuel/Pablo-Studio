@@ -24,7 +24,12 @@ export function MobileProductCartDetails({
   onClick,
 }: MobileProductCartDetailsProps) {
 
-  const { removeFromCart, addToCount, removeToCount } = useCartContext();
+  const { productId, removeFromCart, addToCount, removeToCount } = useCartContext();
+
+  const handleDelete = () => {
+    const index = product.findIndex((item: Product) => item.id === productId)
+    removeFromCart(product[index])
+  }
 
   const checkRotate = isVisible ? "-rotate-90" : "rotate-90";
   const checkVisibilityToHiddenElements = isVisible ? "flex" : "hidden";
@@ -62,10 +67,7 @@ export function MobileProductCartDetails({
             <RenderButtonsCount
               text="Excluir"
               className="font-bold"
-              onClick={() => {
-                //@ts-ignore
-                removeFromCart(product);
-              }}
+              onClick={handleDelete}
             />
           </div>
           <div className="flex gap-4">

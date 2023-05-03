@@ -9,7 +9,6 @@ import {
 import { createContext, ReactNode, useState, SetStateAction, Dispatch, useEffect } from "react";
 import { parseCookies } from "nookies";
 import {
-  addProductCart,
   clearCartContent,
   getProductCart,
   removeProductCart,
@@ -25,6 +24,7 @@ type CartContextType = {
   productId: number;
   popUp: boolean;
   isLoading: boolean;
+  isFreigthLoading: boolean;
   isCepLoading: boolean;
   discount: number;
   progressValue: number;
@@ -63,6 +63,7 @@ const states = [
 export const CartContext = createContext<CartContextType>({
   popUp: false,
   isLoading: false,
+  isFreigthLoading: false,
   isCepLoading: false,
   inputCepValue: '',
   productName: '',
@@ -112,6 +113,7 @@ export function CartProvider({ children }: cartProviderProps) {
   const [progressValue, setProgressValue] = useState(20);
   const [popUp, setPopUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFreigthLoading, setIsFreigthLoading] = useState(false);
   const [isCepLoading, setIsCepLoading] = useState(false);
   const [paymentStates, setPaymentStates] =
     useState<paymentStatesType[]>(states);
@@ -294,7 +296,7 @@ export function CartProvider({ children }: cartProviderProps) {
 
   const freigthServiceChoise = (product: DocumentData[] & Product[], price: string, deadline: string, serviceCode: string) => {
     product.map(async (item: Product) => {
-      setIsLoading(true)
+      setIsFreigthLoading(true)
 
       const newFreigthValue = {
         ...item,
@@ -306,7 +308,7 @@ export function CartProvider({ children }: cartProviderProps) {
       }
 
       await postDate('freigth', newFreigthValue)
-        .then(() => setIsLoading(false))
+        .then(() => setIsFreigthLoading(false))
         .catch(error => console.error("Erro ao atualizar serviceChoise:", error))
     })
   }
@@ -314,7 +316,6 @@ export function CartProvider({ children }: cartProviderProps) {
   const updateProductCep = (product: DocumentData[] & Product[]) => {
 
     setIsCepLoading(true)
-    setIsLoading(true)
     product?.map(async (item: Product) => {
       const updatedProduct = {
         ...item,
@@ -324,12 +325,9 @@ export function CartProvider({ children }: cartProviderProps) {
         },
       };
       await postDate('freigth', updatedProduct)
-        .then(() => {
-          setIsCepLoading(false),
-          setIsLoading(false)
-        }
-      )
-    })
+        .then(() => setIsCepLoading(false))
+      }
+    )
   }
 
   useEffect(() => setNewDataPost(dataPost), [])
@@ -343,6 +341,7 @@ export function CartProvider({ children }: cartProviderProps) {
         discount,
         isLoading,
         isCepLoading,
+        isFreigthLoading,
         productName,
         productId,
         inputCepValue,

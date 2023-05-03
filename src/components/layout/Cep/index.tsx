@@ -93,7 +93,7 @@ export function Cep({ product, guestId, user }: CepProps) {
     <>
       <div
         className="
-        w-full h-fit gap-4 bg-placeholder rounded-md
+        w-full max-w-7xl h-fit gap-4 bg-placeholder rounded-md
         p-3 flex flex-col sm:flex-row justify-between items-center"
       >
         <div className="flex flex-col justify-between gap-4">

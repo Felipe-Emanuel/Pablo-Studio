@@ -167,7 +167,7 @@ export function TrashVector({isHovered}: TrashVector) {
 
 export function LineVector() {
   return (
-    <svg className="w-full" viewBox="0 0 1294 1" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className="w-full py-2" viewBox="0 0 1294 1" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line y1="0.5" x2="1294" y2="0.5" stroke="white" strokeOpacity="0.35"/>
     </svg>
   );

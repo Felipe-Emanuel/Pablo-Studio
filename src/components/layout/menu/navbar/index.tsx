@@ -10,12 +10,15 @@ import { SearchInput } from "@util/inputs/SearchInput";
 import { useEffect, useState } from "react";
 import { useWindow } from "@hooks/useWindow";
 import { CartQtdNotification } from "@util/assets/CartQtdNotification";
+import { useRouter } from "next/router";
 
 export function NavBar() {
   const { width } = useWindow();
   const { openMenu, isMenuOpen } = useMobileMenu();
   const [isSearch, setIsSearch] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  const { asPath } = useRouter()
 
   const setIsSearchOpen = () =>
     width <= 560 && setIsSearch((isSearch) => !isSearch);
@@ -26,7 +29,7 @@ export function NavBar() {
   }, [width]);
 
   const style = {
-    background: "linear-gradient(180deg, #000 0%, rgba(170, 170, 170, 0) 100%)",
+    background: `linear-gradient(180deg, #000 ${asPath !== '/' ? '55%' : '0%' }, rgba(170, 170, 170, 0) 100%)`,
   };
 
   const dropDownMenu = isMenuOpen
@@ -46,7 +49,7 @@ export function NavBar() {
       {renderLogo()}
       <div
         style={style}
-        className="absolute z-40 justify-between items-center w-full h-16 hidden min-[935px]:flex pr-10"
+        className={`absolute z-40 justify-between items-center w-full h-16 hidden min-[935px]:flex pr-10 ${asPath !== '/' ? ' backdrop-brightness-75' : ' backdrop-brightness-100'}`}
       >
         <Navigation />
         <div className="relative flex gap-4 items-center justify-end">
