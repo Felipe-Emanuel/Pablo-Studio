@@ -23,13 +23,8 @@ export function MobileProductCartDetails({
   cookieUser,
   onClick,
 }: MobileProductCartDetailsProps) {
-
-  const { productId, removeFromCart, addToCount, removeToCount } = useCartContext();
-
-  const handleDelete = () => {
-    const index = product.findIndex((item: Product) => item.id === productId)
-    removeFromCart(product[index])
-  }
+  const { removeFromCart, addToCount, removeToCount, FnsetProductName, FnsetProductId } =
+  useCartContext();
 
   const checkRotate = isVisible ? "-rotate-90" : "rotate-90";
   const checkVisibilityToHiddenElements = isVisible ? "flex" : "hidden";
@@ -67,13 +62,18 @@ export function MobileProductCartDetails({
             <RenderButtonsCount
               text="Excluir"
               className="font-bold"
-              onClick={handleDelete}
+              onClick={() => {
+                //@ts-ignore
+                removeFromCart(product);
+              }}
             />
           </div>
           <div className="flex gap-4">
             <RenderButtonsCount
               text="Remover"
               onClick={() => {
+                FnsetProductName(product.productName)
+                FnsetProductId(product.id)
                 removeToCount(product, cookieUser);
               }}
             />

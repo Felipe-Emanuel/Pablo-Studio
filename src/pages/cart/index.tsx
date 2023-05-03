@@ -28,13 +28,13 @@ interface CartProps {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const req = await api.get(`api/cart?mock=true&limit=3`);
-  const data = await req.data;
-
   try {
     const cookies = parseCookies(context);
     const cookieUser = cookies._userGuest ?? null;
     const guestId = cookies._guest ?? null;
+
+    const req = await api.get(`api/cart?mock=true&limit=3`);
+    const data = await req.data;
 
     if (cookieUser) {
       const user = await getUser().then((resp) => {
@@ -87,6 +87,12 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
       0
     );
 
+    const getProducts = async () => {
+      getData('cart?mock=true', 3)
+
+      setProducts(dataGet)
+    };
+
   useEffect(() => {
     const reloadProduct = async () => {
       //@ts-ignore
@@ -105,15 +111,9 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
     };
     reloadUser();
 
-  }, [isLoading, isFreigthLoading, isCepLoading]);
+  }, [isLoading, isFreigthLoading, isCepLoading, guestUser]);
 
   useEffect(() => {
-    const getProducts = async () => {
-      getData('cart?mock=true', 3)
-
-      setProducts(dataGet)
-    };
-
     getProducts()
   }, [guestUser])
 
@@ -166,7 +166,7 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
           )}
           {guestUser && (
             <Section>
-              <RecomendedItems productCart={productCart} product={products} />
+              <RecomendedItems productCart={productCart} product={products && products.length === 0 ? data : products} />
             </Section>
           )}
         </>

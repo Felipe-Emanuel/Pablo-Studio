@@ -1,20 +1,33 @@
 // import { localStorageProduct } from "@functions/Cookies";
-import { useEffect } from "react";
+import { useCartContext } from "@hooks/useCartContext";
+import { Product } from "@models/Product";
+import { DocumentData } from "firebase/firestore";
+import { parseCookies } from "nookies";
+import { useEffect,useState } from "react";
+import { getProductCart } from "@database/clientCart";
 
 interface CartQtdNotificationProps {
   className?: string;
 }
 
 export function CartQtdNotification({ className }: CartQtdNotificationProps) {
-  // const { cookieCart, getCartFromCookie } = localStorageProduct();
+  const { isLoading } = useCartContext();
+  const [productCart, setProductCart] = useState<DocumentData[] & Product[]>([]);
+
+  const cookies = parseCookies()
+  const guestId = cookies._guest
 
   useEffect(() => {
-    // getCartFromCookie();
-  }, []);
+    const reloadProduct = async () => {
+      //@ts-ignore
+      await getProductCart(guestId).then((resp) => setProductCart(resp));
+    };
+    reloadProduct();
+  }, [isLoading]);
 
   return (
     <>
-      {/* {cookieCart.length > 0 && (
+      {productCart && productCart.length && (
         <span
           className={`
               w-4 h-4 rounded-full bg-tertiary pointer-events-none
@@ -24,10 +37,10 @@ export function CartQtdNotification({ className }: CartQtdNotificationProps) {
             `}
         >
           <span className="flex justify-center relative ">
-            {cookieCart.length}
+            {productCart.length}
           </span>
         </span>
-      )} */}
+      )}
     </>
   );
 }
