@@ -22,9 +22,9 @@ export function RecomendedItems({
   product,
   productCart,
 }: RecomendedItemsProps) {
+  const { formatPrice } = normalize();
   const { width } = useWindow();
   const { isLoading, addToCart } = useCartContext();
-  const { formatPrice } = normalize();
   const [hoverProductId, setHoverProductId] = useState<number | string>("");
 
   const changeVisibility = (productId: number | string) =>
@@ -41,7 +41,8 @@ export function RecomendedItems({
         </div>
       ) : (
         <div className="flex gap-2 md:gap-4 pt-4">
-          {product.length &&
+          {product &&
+            product?.length &&
             product.map((item) => {
               const productsInCart = productCart.filter(
                 (cartItem) => cartItem.isOnCart

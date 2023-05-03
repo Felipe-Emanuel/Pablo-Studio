@@ -19,6 +19,7 @@ import { getUser } from "@database/clientData";
 import { User } from "@models/User";
 import { SkeletonProductCart } from "src/components/skeletons/SkeletonProductCart";
 import { RecomendedItems } from "@layout/RecomendedItems";
+import { useAxios } from "@hooks/useAxios";
 
 interface CartProps {
   stringifyUser: string & User[];
@@ -27,13 +28,13 @@ interface CartProps {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const req = await api.get(`api/cart?mock=true&limit=3`);
+  const data = await req.data;
+
   try {
     const cookies = parseCookies(context);
     const cookieUser = cookies._userGuest ?? null;
     const guestId = cookies._guest ?? null;
-
-    const req = await api.get(`api/cart?mock=true&limit=3`);
-    const data = await req.data;
 
     if (cookieUser) {
       const user = await getUser().then((resp) => {
@@ -68,14 +69,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function Cart({ product, stringifyUser, data }: CartProps) {
+  const { dataGet, getData } = useAxios()
   const { progressValue, paymentStates, isLoading, isFreigthLoading, isCepLoading } = useCartContext();
   const { price } = (product && product[0]?.choisedService) || "";
   const [user, setUser] = useState<DocumentData[] | User[]>(stringifyUser);
-  const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(
-    product
-  );
+  const [products, setProducts] = useState<Product[]>(data);
+  const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(product);
   const cookies = parseCookies();
   const guestId = cookies._guest;
+  const guestUser = cookies && cookies._userGuest;
 
   const freightValue = price ? parseFloat(price?.replace("R$", "").trim()) : 0;
   const total =
@@ -102,7 +104,18 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
       user;
     };
     reloadUser();
+
   }, [isLoading, isFreigthLoading, isCepLoading]);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      getData('cart?mock=true', 3)
+
+      setProducts(dataGet)
+    };
+
+    getProducts()
+  }, [guestUser])
 
   return (
     <Container style pageTitle="Pablo Studios 3D | Carrinho">
@@ -151,9 +164,11 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
               </Section>
             </>
           )}
-          <Section>
-            <RecomendedItems productCart={productCart} product={data} />
-          </Section>
+          {guestUser && (
+            <Section>
+              <RecomendedItems productCart={productCart} product={products} />
+            </Section>
+          )}
         </>
       ) : (
         <Text text="Sem produto..." />

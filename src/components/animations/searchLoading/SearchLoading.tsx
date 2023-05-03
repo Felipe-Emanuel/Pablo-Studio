@@ -12,12 +12,12 @@ export function SearchLoading() {
   const { View } = useLottie(options);
 
   return (
-    <button
+    <span
       className="
         rounded-full transition-opacity
         relative w-10 h-10 flex items-center hover:opacity-75"
     >
       {View}
-    </button>
+    </span>
   );
 }
