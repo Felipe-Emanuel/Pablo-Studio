@@ -8,6 +8,7 @@ import { Button } from "@util/buttons/Button";
 import { Text } from "@util/texts/Text";
 import { Product } from "@models/Product";
 import { useCartContext } from "@hooks/useCartContext";
+import { useRouter } from "next/router";
 
 interface RecomendedItemsCardProps {
   item: Product;
@@ -19,6 +20,8 @@ interface RecomendedItemsCardProps {
   productDescription: string;
   guestProductId: string;
   initialPrice: number;
+  recently?: boolean;
+  recommended?: boolean;
 }
 
 export function RecomendedItemsCard({
@@ -31,14 +34,21 @@ export function RecomendedItemsCard({
   productDescription,
   guestProductId,
   initialPrice,
+  recently,
+  recommended
 }: RecomendedItemsCardProps) {
   const { formatPrice } = normalize();
   const { addToCart } = useCartContext();
   const { width } = useWindow();
   const [hoverProductId, setHoverProductId] = useState<number | string>("");
 
+  const router = useRouter();
+
   const changeVisibility = (productId: number | string) =>
     width >= 768 && setHoverProductId(productId);
+
+  const handleClick = () =>
+  recently ? router.push(`${link}`) : addToCart(item, guestProductId)
 
   const checkTextButton = (price: number) =>
     width >= 768
@@ -50,13 +60,18 @@ export function RecomendedItemsCard({
       ? "translate-y-[0%]"
       : "md:opacity-0 hover:opacity-100 -translate-y-[10%]";
 
+  const isRecently = recently && 'md:w-52 bg-gray-400 flex flex-col m-auto'
+  const isRecommended = recommended && `md:w-72 mb-4 bg-placeholder hover:bg-gray-400 flex flex-col relative`
+
   return (
     <div
       onMouseEnter={() => changeVisibility(item.id)}
       onMouseLeave={() => changeVisibility("")}
-      className="
-        p-1 md:p-3 rounded-md mb-4 transition-all bg-placeholder hover:bg-gray-400 flex flex-col relative
-        w-32 md:w-72 h-fit overflow-hidden"
+      className={`
+        w-32 h-fit overflow-hidden p-1 md:p-3 rounded-md transition-all
+        ${isRecommended}
+        ${isRecently}
+      `}
     >
       <div
         className={`flex justify-center items-center transition-all absolute`}
@@ -83,9 +98,9 @@ export function RecomendedItemsCard({
       </div>
       <div className="pt-2">
         <Button
-          onClick={() => addToCart(item, guestProductId)}
+          onClick={handleClick}
           isPrimary
-          text={checkTextButton(initialPrice)}
+          text={recently ? "Visualizar" : checkTextButton(initialPrice)}
         />
       </div>
     </div>

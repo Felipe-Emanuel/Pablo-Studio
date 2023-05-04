@@ -32,7 +32,7 @@ export function RecomendedItems({
           <div className="flex w-full gap-2 md:gap-4 pt-4">
             {product &&
               product?.length &&
-              product.map((item) => {
+              product.map((item, i) => {
                 const productsInCart = productCart.filter(
                   (cartItem) => cartItem.isOnCart
                 );
@@ -45,7 +45,8 @@ export function RecomendedItems({
 
                 return (
                   <RecomendedItemsCard
-                    key={item.id}
+                    recommended
+                    key={i}
                     alt={item.alt}
                     guestProductId={item.guestProductId}
                     id={item.id}
