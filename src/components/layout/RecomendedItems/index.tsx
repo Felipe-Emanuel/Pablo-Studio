@@ -12,6 +12,7 @@ import { DocumentData } from "firebase/firestore";
 import { SkeletonRecomended } from "src/components/skeletons/SkeletonRecomended";
 import { useWindow } from "@hooks/useWindow";
 import { normalize } from "@functions/normalized";
+import { Budget } from "@layout/Budget";
 
 interface RecomendedItemsProps {
   product: Product[];
@@ -40,7 +41,8 @@ export function RecomendedItems({
           ))}
         </div>
       ) : (
-        <div className="flex gap-2 md:gap-4 pt-4">
+        <div className="flex justify-between w-full gap-2 md:gap-4 pt-4">
+          <div className="flex w-full gap-2 md:gap-4 pt-4">
           {product &&
             product?.length &&
             product.map((item) => {
@@ -117,8 +119,14 @@ export function RecomendedItems({
                 </div>
               );
             })}
+          </div>
+          <Budget className="hidden sm:flex sm:flex-col"/>
         </div>
       )}
+      <div className="sm:hidden">
+        <Budget className="bg-gradient-to-l from-transparent to-dark w-full"/>
+      </div>
     </>
+
   );
 }

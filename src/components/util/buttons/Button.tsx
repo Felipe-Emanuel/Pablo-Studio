@@ -50,7 +50,7 @@ export function Button({
       disabled={disabled}
       onClick={onClick && (() => onClick(href!))}
       className={`
-      text-xs sm:text-sm md:text-md
+      text-xs md:text-md
       flex items-center justify-center gap-4
       transition-colors rounded w-full p-2 md:py-4
       text-white hover:text-white/75

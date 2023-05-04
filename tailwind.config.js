@@ -53,10 +53,15 @@ module.exports = {
       },
       appear: {
         '0%' : {transform: 'translateY(-10%)'}
+      },
+      wiggle: {
+        '0%, 100%': { transform: 'rotate(0deg)' },
+        '25%': { transform: 'rotate(3deg)' },
+        '75%': { transform: 'rotate(-3deg)' },
       }
+    },
+    animation: {
+      wiggle: 'wiggle 300ms 2 linear'
     }
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
 }

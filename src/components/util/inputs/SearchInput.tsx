@@ -33,7 +33,7 @@ export function SearchInput({onClick}: SearchInputProps) {
 
 
   return (
-    <div onClick={onClick ? () => onClick!() : undefined} className="relative w-96 flex items-center justify-end z-10">
+    <div onClick={onClick ? () => onClick() : undefined} className="relative w-96 flex items-center justify-end z-10">
       <form className="absolute flex -right-10">
         <input
           ref={inputRef}
@@ -42,7 +42,7 @@ export function SearchInput({onClick}: SearchInputProps) {
           value={value}
           type="text"
           className={`
-            text-white text-sm border border-tertiary bg-transparent
+            placeholder:text-white text-white text-sm border border-tertiary bg-transparent
             transition-all duration-300 outline-none px-2 rounded-full
             ${checkVisible}`}
         />
