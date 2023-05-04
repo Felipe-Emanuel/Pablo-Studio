@@ -14,7 +14,7 @@ export function RecentlyAdded({ product }: RecentlyAddedProps) {
     <Placeholder className="w-fit">
       <SectionTitle
         icon={<HourglassVector />}
-        text="Adicionados Recentemente"
+        text="Novos Produtos"
       />
       <Flex rowFlex className="gap-3 py-4">
         {product.slice(0, 2).map((item) => (
