@@ -11,6 +11,7 @@ type ButtonProps = {
   isTertiary?: boolean;
   isDanger?: boolean;
   disabled?: boolean;
+  recently?: boolean;
   href?: string
   onClick?: (href: string) => void;
 };
@@ -24,6 +25,7 @@ export function Button({
   isTertiary,
   isDanger,
   disabled,
+  recently,
   href,
   onClick
 }: ButtonProps) {
@@ -52,7 +54,7 @@ export function Button({
       className={`
       text-xs md:text-md
       flex items-center justify-center gap-4
-      transition-colors rounded w-full p-2 md:py-4
+      transition-colors rounded w-full ${recently ? 'p-2' : 'p-2 md:py-4'}
       text-white hover:text-white/75
       ${primary}
       ${tertiary}

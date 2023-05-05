@@ -58,9 +58,9 @@ export function RecomendedItemsCard({
   const checkVisibility =
     hoverProductId === id
       ? "translate-y-[0%]"
-      : "md:opacity-0 hover:opacity-100 -translate-y-[10%]";
+      : "md:opacity-0 md:p-3 hover:opacity-100 -translate-y-[10%]";
 
-  const isRecently = recently && 'md:w-52 bg-gray-400 flex flex-col m-auto'
+  const isRecently = recently && 'bg-gray-400 flex flex-col m-auto'
   const isRecommended = recommended && `md:w-72 mb-4 bg-placeholder hover:bg-gray-400 flex flex-col relative`
 
   return (
@@ -68,7 +68,7 @@ export function RecomendedItemsCard({
       onMouseEnter={() => changeVisibility(item.id)}
       onMouseLeave={() => changeVisibility("")}
       className={`
-        w-32 h-fit overflow-hidden p-1 md:p-3 rounded-md transition-all
+        w-32 h-fit overflow-hidden p-1 rounded-md transition-all
         ${isRecommended}
         ${isRecently}
       `}
@@ -85,19 +85,21 @@ export function RecomendedItemsCard({
         </div>
       </div>
       <ProductCartImage
+        recently
         productLink={link}
         alt={alt}
         src={images}
         className="md:w-full md:h-full"
       />
-      <div className="py-2 h-20 md:h-fit">
-        <Title className="text-xs md:text-md h-8" bold title={productName} />
-        <div className="pt-2 h-10 md:h-[110px] overflow-hidden line-clamp-2 md:line-clamp-4">
-          <Text className={`text-xs md:text-md`} text={productDescription} />
+      <div className={`py-2 ${recently ? 'h-20' : 'h-20 md:h-fit'}`}>
+        <Title className={`${recently ? 'text-xs' : 'text-xs md:text-md h-8'}`} bold title={productName} />
+        <div className={`pt-2 h-10  overflow-hidden ${recently ? 'line-clamp-2' : 'line-clamp-2 md:line-clamp-4 md:h-[110px]'}`}>
+          <Text className={`${recently ? 'text-xs' : 'text-xs md:text-md'}`} text={productDescription} />
         </div>
       </div>
       <div className="pt-2">
         <Button
+          recently
           onClick={handleClick}
           isPrimary
           text={recently ? "Visualizar" : checkTextButton(initialPrice)}

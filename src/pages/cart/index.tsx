@@ -20,7 +20,8 @@ import { User } from "@models/User";
 import { SkeletonProductCart } from "src/components/skeletons/SkeletonProductCart";
 import { RecomendedItems } from "@layout/RecomendedItems";
 import { useAxios } from "@hooks/useAxios";
-import { RecentlyAdded } from "@layout/RecentlyAdded";
+import { RecentlyAdded } from "@layout/EmptyCart/RecentlyAdded";
+import { EmptyCart } from "@layout/EmptyCart";
 
 interface CartProps {
   stringifyUser: string & User[];
@@ -172,7 +173,9 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
           )}
         </>
       ) : (
-        <RecentlyAdded product={products && products.length === 0 ? data : products} />
+        <Section>
+          <EmptyCart product={products && products.length === 0 ? data : products} />
+        </Section>
       )}
     </Container>
   );
