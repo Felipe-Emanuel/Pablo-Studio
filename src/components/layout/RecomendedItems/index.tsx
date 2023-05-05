@@ -45,7 +45,6 @@ export function RecomendedItems({
 
                 return (
                   <RecomendedItemsCard
-                    recommended
                     key={i}
                     alt={item.alt}
                     guestProductId={item.guestProductId}

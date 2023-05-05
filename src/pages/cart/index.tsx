@@ -174,7 +174,8 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
         </>
       ) : (
         <Section>
-          <EmptyCart product={products && products.length === 0 ? data : products} />
+          {/* TROCAR RECENTLYsEEN POR OUTRA CHAMADA DA API QUE IRÁ BUSCAR REALMENTE OS PULTIMOS VISUALIZADOS */}
+          <EmptyCart recentlySeen={products && products.length === 0 ? data : products} product={products && products.length === 0 ? data : products} />
         </Section>
       )}
     </Container>

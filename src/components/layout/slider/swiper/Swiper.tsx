@@ -8,8 +8,9 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 type ISwiperComponentProps = {
-  settings: SwiperProps;
+  settings?: SwiperProps;
   thumbs?: ThumbsOptions;
+  maxHeigth?: boolean;
   children: ReactNode;
 };
 
@@ -17,13 +18,14 @@ export default function SwiperComponent({
   children,
   settings,
   thumbs,
+  maxHeigth,
 }: ISwiperComponentProps) {
   return (
     <Swiper
       modules={[Navigation, Pagination, A11y, Thumbs]}
       thumbs={thumbs}
       {...settings}
-      className="w-screen"
+      className={`w-screen ${maxHeigth ? 'sm:h-[340px] md:h-[430px]' : 'h-full'}`}
     >
       {children}
     </Swiper>

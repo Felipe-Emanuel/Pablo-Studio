@@ -21,7 +21,6 @@ interface RecomendedItemsCardProps {
   guestProductId: string;
   initialPrice: number;
   recently?: boolean;
-  recommended?: boolean;
 }
 
 export function RecomendedItemsCard({
@@ -35,7 +34,6 @@ export function RecomendedItemsCard({
   guestProductId,
   initialPrice,
   recently,
-  recommended
 }: RecomendedItemsCardProps) {
   const { formatPrice } = normalize();
   const { addToCart } = useCartContext();
@@ -48,7 +46,7 @@ export function RecomendedItemsCard({
     width >= 768 && setHoverProductId(productId);
 
   const handleClick = () =>
-  recently ? router.push(`${link}`) : addToCart(item, guestProductId)
+    recently ? router.push(link) : addToCart(item, guestProductId)
 
   const checkTextButton = (price: number) =>
     width >= 768
@@ -60,17 +58,12 @@ export function RecomendedItemsCard({
       ? "translate-y-[0%]"
       : "md:opacity-0 md:p-3 hover:opacity-100 -translate-y-[10%]";
 
-  const isRecently = recently && 'bg-gray-400 flex flex-col m-auto'
-  const isRecommended = recommended && `md:w-72 mb-4 bg-placeholder hover:bg-gray-400 flex flex-col relative`
-
   return (
     <div
       onMouseEnter={() => changeVisibility(item.id)}
       onMouseLeave={() => changeVisibility("")}
       className={`
-        w-32 h-fit overflow-hidden p-1 rounded-md transition-all
-        ${isRecommended}
-        ${isRecently}
+        w-52 sm:w-72 h-fit overflow-hidden p-1 rounded-md transition-all mb-4 bg-placeholder hover:bg-gray-400 flex flex-col relative
       `}
     >
       <div
@@ -91,10 +84,10 @@ export function RecomendedItemsCard({
         src={images}
         className="md:w-full md:h-full"
       />
-      <div className={`py-2 ${recently ? 'h-20' : 'h-20 md:h-fit'}`}>
-        <Title className={`${recently ? 'text-xs' : 'text-xs md:text-md h-8'}`} bold title={productName} />
-        <div className={`pt-2 h-10  overflow-hidden ${recently ? 'line-clamp-2' : 'line-clamp-2 md:line-clamp-4 md:h-[110px]'}`}>
-          <Text className={`${recently ? 'text-xs' : 'text-xs md:text-md'}`} text={productDescription} />
+      <div className={`py-2 h-20 md:h-fit`}>
+        <Title className={`text-xs md:text-md h-8`} bold title={productName} />
+        <div className={`pt-2 h-10  overflow-hidden line-clamp-2 md:line-clamp-4 md:h-[110px]`}>
+          <Text className={`text-xs md:text-md`} text={productDescription} />
         </div>
       </div>
       <div className="pt-2">

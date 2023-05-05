@@ -1,23 +1,26 @@
 import { Product } from "@models/Product";
 import { RecentlyAdded } from "./RecentlyAdded";
-import { Flex } from "@container/Flex";
 import { EmptyCartTitle } from "./EmptyCartTitle";
-import { Budget } from "@layout/Budget";
+import { RecentlySeen } from "./RecentlySeen";
+import { useCartContext } from "@hooks/useCartContext";
+import { LineLoading } from "@animations/lineLoading/LineLoading";
 
 interface EmptyCartProps {
   product: Product[];
+  recentlySeen: Product[];
 }
 
-export function EmptyCart({ product }: EmptyCartProps) {
+export function EmptyCart({ product, recentlySeen }: EmptyCartProps) {
+  const { isLoading } = useCartContext()
+
   return (
     <>
-      <Flex className="gap-3 justify-between flex md:flex-row">
-        <EmptyCartTitle />
-        <div className="m-auto flex justify-between gap-3">
-          <RecentlyAdded product={product} />
-          <Budget className="hidden min-[500px]:flex md:hidden xl:hidden" />
-        </div>
-      </Flex>
+     {isLoading && <LineLoading />}
+      <EmptyCartTitle />
+      <div className="flex flex-col gap-4">
+        <RecentlyAdded product={product} />
+        <RecentlySeen recentlySeen={recentlySeen} />
+      </div>
     </>
   );
 }
