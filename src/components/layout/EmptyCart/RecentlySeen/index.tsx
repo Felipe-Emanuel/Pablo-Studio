@@ -18,17 +18,15 @@ export function RecentlySeen({recentlySeen}: RecentlySeenProps) {
       slidesPerView: "auto"
     };
 
-
   return (
     <div>
-      {recentlySeen.length > 0 ? (
+      {recentlySeen?.length > 0 ? (
       <>
         <SectionTitle icon={eyeIcon} text="Vistos Recentemente" />
         <SwiperComponent maxHeigth settings={settings}>
           {recentlySeen?.map((item, i) =>
-          <SwiperSlide>
+          <SwiperSlide key={i}>
             <RecomendedItemsCard
-              key={i}
               alt={item.alt}
               guestProductId={item.guestProductId}
               id={item.id}

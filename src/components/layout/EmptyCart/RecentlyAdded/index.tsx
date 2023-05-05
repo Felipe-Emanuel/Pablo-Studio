@@ -5,10 +5,10 @@ import { HourglassVector } from "@vectores/Vectores";
 import { SwiperComponent, SwiperProps, SwiperSlide } from "@layout/slider/swiper";
 
 interface RecentlyAddedProps {
-  product: Product[];
+  products: Product[];
 }
 
-export function RecentlyAdded({ product }: RecentlyAddedProps) {
+export function RecentlyAdded({ products }: RecentlyAddedProps) {
   const settings: SwiperProps = {
     spaceBetween: 0,
     slidesPerView: "auto"
@@ -21,11 +21,10 @@ export function RecentlyAdded({ product }: RecentlyAddedProps) {
         text="Novos Produtos"
       />
       <SwiperComponent maxHeigth settings={settings}>
-        {product.slice(0, 10).map((item, i) => (
-          <SwiperSlide >
+        {products?.length && products.slice(0, 10).map((item, i) => (
+          <SwiperSlide key={i}>
             <RecomendedItemsCard
               recently
-              key={i}
               alt={item.alt}
               guestProductId={item.guestProductId}
               id={item.id}

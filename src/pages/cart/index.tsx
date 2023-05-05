@@ -74,9 +74,11 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
   const { dataGet, getData } = useAxios()
   const { progressValue, paymentStates, isLoading, isFreigthLoading, isCepLoading } = useCartContext();
   const { price } = (product && product[0]?.choisedService) || "";
+
   const [user, setUser] = useState<DocumentData[] | User[]>(stringifyUser);
   const [products, setProducts] = useState<Product[]>(data);
   const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(product);
+
   const cookies = parseCookies();
   const guestId = cookies._guest;
   const guestUser = cookies && cookies._userGuest;
@@ -90,9 +92,8 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
     );
 
     const getProducts = async () => {
-      getData('cart?mock=true', 3)
-
-      setProducts(dataGet)
+      await getData("cart?mock=true", 10)
+        .then(({data}) => setProducts(data))
     };
 
   useEffect(() => {
@@ -120,7 +121,7 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
   }, [guestUser])
 
   return (
-    <Container style pageTitle="Pablo Studios 3D | Carrinho">
+    <Container pageTitle="Pablo Studios 3D | Carrinho">
       {productCart ? (
         <>
           <Section>
@@ -175,7 +176,7 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
       ) : (
         <Section>
           {/* TROCAR RECENTLYsEEN POR OUTRA CHAMADA DA API QUE IRÁ BUSCAR REALMENTE OS PULTIMOS VISUALIZADOS */}
-          <EmptyCart recentlySeen={products && products.length === 0 ? data : products} product={products && products.length === 0 ? data : products} />
+          <EmptyCart recentlySeen={products && products.length === 0 ? data : products} products={products && products.length === 0 ? data : products} />
         </Section>
       )}
     </Container>

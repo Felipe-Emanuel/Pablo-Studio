@@ -4,18 +4,23 @@ import { PrecoPrazoResponse } from "correios-brasil/dist";
 import { useCartContext } from "./useCartContext";
 
 export function useAxios() {
+  const { setIsLoading } = useCartContext();
   const [dataGet, setDataGet] = useState([]);
   const [dataPost, setDataPost] = useState<PrecoPrazoResponse>()
 
   const getData = async (path: string, limit?: number) => {
+    setIsLoading(true);
     const req = await api
       .get(`/api/${path}`, {
         params: {
           limit: limit ?? Infinity,
         },
       })
-      .then((response) => setDataGet(response.data))
-      .catch((err) => console.error("Erro ao GET em getData /useAxios/", err));
+      const resp = await req.data
+      setIsLoading(false);
+      setDataGet(resp)
+      // .then((response) => setDataGet(response.data))
+      // .catch((err) => console.error("Erro ao GET em getData /useAxios/", err));
 
     return req;
   };
