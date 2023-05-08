@@ -4,7 +4,6 @@ import { SectionTitle } from "@util/texts/SectionTitle";
 import { BagVector } from "@vectores/Vectores";
 import { DocumentData } from "firebase/firestore";
 import { SkeletonRecomended } from "src/components/skeletons/SkeletonRecomended";
-import { Budget } from "@layout/Budget";
 import { RecomendedItemsCard } from "./RecomendedItemsCard";
 import {
   SwiperComponent,
@@ -53,11 +52,9 @@ export function RecomendedItems({
                   if (isItemInCart) {
                     return null;
                   }
-
                   return (
                       <SwiperSlide key={i}>
                         <RecomendedItemsCard
-                          trashIcon
                           alt={item.alt}
                           guestProductId={item.guestProductId}
                           id={item.id}
