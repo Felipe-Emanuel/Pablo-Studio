@@ -22,6 +22,7 @@ import { EmptyCart } from "@layout/EmptyCart";
 import { getFireStore } from "@database/clientCart";
 import { useRecentlySeen } from "@hooks/useRecentlySeen";
 import { RecentlySeen } from "@layout/EmptyCart/RecentlySeen";
+import { Budget } from "@layout/Budget";
 
 interface CartProps {
   stringifyUser: string & User[];
@@ -130,7 +131,7 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
   }, [isLoading])
 
   return (
-    <Container pageTitle="Pablo Studios 3D | Carrinho">
+    <Container pageTitle="Carrinho | Pablo Studios 3D ">
       {productCart ? (
         <>
           <Section>
@@ -177,6 +178,7 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
             </>
           )}
             <Section>
+              <Budget neverDesappear />
               <RecomendedItems productCart={productCart} product={products && products.length === 0 ? data : products} />
               <RecentlySeen recentlySeen={recentlySeen} />
             </Section>

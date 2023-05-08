@@ -19,9 +19,10 @@ export function RecentlySeen({recentlySeen}: RecentlySeenProps) {
       slidesPerView: "auto"
     };
 
+
   return (
     <div>
-      {recentlySeen?.length > 0 ? (
+      {recentlySeen?.length > 0 && (
       <>
         <SectionTitle icon={eyeIcon} text="Vistos Recentemente" />
         <SwiperComponent maxHeigth settings={settings}>
@@ -43,7 +44,7 @@ export function RecentlySeen({recentlySeen}: RecentlySeenProps) {
           )}
         </SwiperComponent>
       </>
-      ) : <Text text="Exibir depois os produtos com maior visualização" />}
+      )}
     </div>
   )
 }

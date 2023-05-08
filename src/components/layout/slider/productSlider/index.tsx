@@ -28,10 +28,10 @@ export function ProductSlider({ data }: ProductSliderProps) {
 
   const isNavigation = () => setNavigation((navigation) => !navigation);
 
+
   const settings: SwiperProps = {
-    spaceBetween: 20,
-    navigation: width < 500 ? false : navigation,
-    slidesPerView: "auto",
+    spaceBetween: 0,
+    slidesPerView: "auto"
   };
 
   useEffect(() => {

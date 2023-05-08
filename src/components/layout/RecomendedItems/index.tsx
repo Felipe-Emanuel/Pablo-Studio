@@ -6,6 +6,11 @@ import { DocumentData } from "firebase/firestore";
 import { SkeletonRecomended } from "src/components/skeletons/SkeletonRecomended";
 import { Budget } from "@layout/Budget";
 import { RecomendedItemsCard } from "./RecomendedItemsCard";
+import {
+  SwiperComponent,
+  SwiperSlide,
+  SwiperProps,
+} from "@layout/slider/swiper";
 
 interface RecomendedItemsProps {
   product: Product[];
@@ -18,9 +23,16 @@ export function RecomendedItems({
 }: RecomendedItemsProps) {
   const { isLoading } = useCartContext();
 
+  const settings: SwiperProps = {
+    spaceBetween: 0,
+    slidesPerView: "auto",
+  };
+
   return (
     <>
-      <SectionTitle icon={<BagVector />} text="Outros Produtos" />
+      <div className="py-4">
+        <SectionTitle icon={<BagVector />} text="Outros Produtos" />
+      </div>
       {isLoading ? (
         <div className="pt-4 flex gap-3">
           {product?.map((item) => (
@@ -28,43 +40,39 @@ export function RecomendedItems({
           ))}
         </div>
       ) : (
-        <div className="flex justify-between w-full gap-2 md:gap-4 pt-4">
-          <div className="flex w-full gap-2 md:gap-4 pt-4">
-            {product &&
-              product?.length &&
-              product.map((item, i) => {
-                const productsInCart = productCart.filter(
-                  (cartItem) => cartItem.isOnCart
-                );
-                const isItemInCart = productsInCart.some(
-                  (cartItem) => cartItem.id === item.id
-                );
-                if (isItemInCart) {
-                  return null;
-                }
+            <SwiperComponent maxHeigth settings={settings}>
+              {product &&
+                product?.length &&
+                product.map((item, i) => {
+                  const productsInCart = productCart.filter(
+                    (cartItem) => cartItem.isOnCart
+                  );
+                  const isItemInCart = productsInCart.some(
+                    (cartItem) => cartItem.id === item.id
+                  );
+                  if (isItemInCart) {
+                    return null;
+                  }
 
-                return (
-                  <RecomendedItemsCard
-                    key={i}
-                    alt={item.alt}
-                    guestProductId={item.guestProductId}
-                    id={item.id}
-                    images={item.images[0]}
-                    initialPrice={item.initialPrice}
-                    item={item}
-                    link={item.link}
-                    productDescription={item.productDescription}
-                    productName={item.productName}
-                  />
-                );
-              })}
-          </div>
-          <Budget className="hidden sm:flex sm:flex-col" />
-        </div>
+                  return (
+                      <SwiperSlide key={i}>
+                        <RecomendedItemsCard
+                          trashIcon
+                          alt={item.alt}
+                          guestProductId={item.guestProductId}
+                          id={item.id}
+                          images={item.images[0]}
+                          initialPrice={item.initialPrice}
+                          item={item}
+                          link={item.link}
+                          productDescription={item.productDescription}
+                          productName={item.productName}
+                        />
+                      </SwiperSlide>
+                  );
+                })}
+            </SwiperComponent>
       )}
-      <div className="sm:hidden">
-        <Budget className="bg-gradient-to-l from-transparent to-dark w-full" />
-      </div>
     </>
   );
 }

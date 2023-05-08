@@ -6,7 +6,7 @@ import { LineVector } from "@vectores/Vectores";
 
 export function EmptyCartTitle() {
   return (
-    <div className="flex flex-col w-full ">
+    <div className="flex flex-col w-full pt-10 lg:pt-0">
       <Placeholder className="mb-3 md:mb-0">
         <Title
           size="lg"

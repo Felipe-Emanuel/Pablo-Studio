@@ -21,7 +21,7 @@ export function RecentlyAdded({ products }: RecentlyAddedProps) {
         text="Novos Produtos"
       />
       <SwiperComponent maxHeigth settings={settings}>
-        {products?.length && products.slice(0, 10).map((item, i) => (
+        {products?.length && products.slice(0, 5).map((item, i) => (
           <SwiperSlide key={i}>
             <RecomendedItemsCard
               recently
