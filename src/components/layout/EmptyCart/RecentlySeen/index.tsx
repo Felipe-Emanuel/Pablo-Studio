@@ -4,9 +4,10 @@ import { SectionTitle } from "@util/texts/SectionTitle";
 import { Text } from "@util/texts/Text";
 import { EyeVector } from "@vectores/Vectores";
 import { SwiperComponent, SwiperProps, SwiperSlide } from "@layout/slider/swiper";
+import { DocumentData } from "firebase/firestore";
 
 interface RecentlySeenProps{
-  recentlySeen: Product[];
+  recentlySeen: Product[] | DocumentData[];
 }
 
 export function RecentlySeen({recentlySeen}: RecentlySeenProps) {
@@ -27,6 +28,7 @@ export function RecentlySeen({recentlySeen}: RecentlySeenProps) {
           {recentlySeen?.map((item, i) =>
           <SwiperSlide key={i}>
             <RecomendedItemsCard
+              trashIcon
               alt={item.alt}
               guestProductId={item.guestProductId}
               id={item.id}

@@ -10,18 +10,18 @@ import { Cep } from "@layout/Cep";
 import { Product } from "@models/Product";
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
-import { getProductCart } from "@database/clientCart";
 import { useState, useEffect } from "react";
 import { DocumentData } from "firebase/firestore";
-import { Text } from "@util/texts/Text";
 import { ProductCartPopUp } from "@layout/ProductCart/ProductCartPopUp";
 import { getUser } from "@database/clientData";
 import { User } from "@models/User";
 import { SkeletonProductCart } from "src/components/skeletons/SkeletonProductCart";
 import { RecomendedItems } from "@layout/RecomendedItems";
 import { useAxios } from "@hooks/useAxios";
-import { RecentlyAdded } from "@layout/EmptyCart/RecentlyAdded";
 import { EmptyCart } from "@layout/EmptyCart";
+import { getFireStore } from "@database/clientCart";
+import { useRecentlySeen } from "@hooks/useRecentlySeen";
+import { RecentlySeen } from "@layout/EmptyCart/RecentlySeen";
 
 interface CartProps {
   stringifyUser: string & User[];
@@ -51,7 +51,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const product =
-      (await getProductCart(guestId).then(async (response) => {
+      (await getFireStore("carts", guestId).then(async (response) => {
         if (cookieUser) {
           return response;
         }
@@ -71,7 +71,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function Cart({ product, stringifyUser, data }: CartProps) {
-  const { dataGet, getData } = useAxios()
+  const { getRecentlySeen, recentlySeen } = useRecentlySeen()
+  const { getData } = useAxios()
   const { progressValue, paymentStates, isLoading, isFreigthLoading, isCepLoading } = useCartContext();
   const { price } = (product && product[0]?.choisedService) || "";
 
@@ -99,7 +100,7 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
   useEffect(() => {
     const reloadProduct = async () => {
       //@ts-ignore
-      await getProductCart(guestId).then((resp) => setProductCart(resp));
+      await getFireStore("carts", guestId).then((resp) => setProductCart(resp));
     };
     reloadProduct();
 
@@ -119,6 +120,14 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
   useEffect(() => {
     getProducts()
   }, [guestUser])
+
+  useEffect(() => {
+    const getRecently = async () => {
+      await getRecentlySeen(guestId)
+    }
+
+    getRecently()
+  }, [isLoading])
 
   return (
     <Container pageTitle="Pablo Studios 3D | Carrinho">
@@ -167,16 +176,14 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
               </Section>
             </>
           )}
-          {guestUser && (
             <Section>
               <RecomendedItems productCart={productCart} product={products && products.length === 0 ? data : products} />
+              <RecentlySeen recentlySeen={recentlySeen} />
             </Section>
-          )}
         </>
       ) : (
         <Section>
-          {/* TROCAR RECENTLYsEEN POR OUTRA CHAMADA DA API QUE IRÁ BUSCAR REALMENTE OS PULTIMOS VISUALIZADOS */}
-          <EmptyCart recentlySeen={products && products.length === 0 ? data : products} products={products && products.length === 0 ? data : products} />
+          <EmptyCart recentlySeen={recentlySeen} products={products && products.length === 0 ? data : products} />
         </Section>
       )}
     </Container>

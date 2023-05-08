@@ -9,9 +9,12 @@ import { Text } from "@util/texts/Text";
 import { Product } from "@models/Product";
 import { useCartContext } from "@hooks/useCartContext";
 import { useRouter } from "next/router";
+import { DocumentData } from "firebase/firestore";
+import { TrashVector } from "@vectores/Vectores";
+import { useRecentlySeen } from "@hooks/useRecentlySeen";
 
 interface RecomendedItemsCardProps {
-  item: Product;
+  item: Product | DocumentData;
   id: number;
   link: string;
   alt: string;
@@ -21,6 +24,7 @@ interface RecomendedItemsCardProps {
   guestProductId: string;
   initialPrice: number;
   recently?: boolean;
+  trashIcon?: boolean;
 }
 
 export function RecomendedItemsCard({
@@ -34,8 +38,10 @@ export function RecomendedItemsCard({
   guestProductId,
   initialPrice,
   recently,
+  trashIcon,
 }: RecomendedItemsCardProps) {
   const { formatPrice } = normalize();
+  const { removeRecentlySeen } = useRecentlySeen();
   const { addToCart } = useCartContext();
   const { width } = useWindow();
   const [hoverProductId, setHoverProductId] = useState<number | string>("");
@@ -46,7 +52,7 @@ export function RecomendedItemsCard({
     width >= 768 && setHoverProductId(productId);
 
   const handleClick = () =>
-    recently ? router.push(link) : addToCart(item, guestProductId)
+    recently ? router.push(link) : addToCart(item, guestProductId);
 
   const checkTextButton = (price: number) =>
     width >= 768
@@ -66,17 +72,26 @@ export function RecomendedItemsCard({
         w-52 sm:w-72 h-fit overflow-hidden p-1 rounded-md transition-all mb-4 bg-placeholder hover:bg-gray-400 flex flex-col relative
       `}
     >
-      <div
-        className={`flex justify-center items-center transition-all absolute`}
-      >
-        <div
-          className={`transition-all md:hover:bg-black/25 rounded-full
+        <div className="flex justify-center items-center transition-all relative">
+          <div
+            className={`transition-all md:hover:bg-black/25 rounded-full
           w-11 h-10 absolute -top-2 -left-1 md:top-0 md:left-0 flex items-center
           ${checkVisibility}`}
-        >
-          <HeartButton className="w-8 md:w-12" />
+          >
+            <HeartButton className="w-8 md:w-12" />
+          </div>
+          {trashIcon && (
+            <div
+              onClick={() => removeRecentlySeen(item)}
+              className={`transition-all md:hover:bg-black/25 rounded-full
+              w-11 h-10 absolute -top-2 -right-3 md:top-0 md:right-0 flex items-center
+              cursor-pointer
+              ${checkVisibility}`}
+            >
+              <TrashVector recently />
+            </div>
+          )}
         </div>
-      </div>
       <ProductCartImage
         recently
         productLink={link}
@@ -86,7 +101,9 @@ export function RecomendedItemsCard({
       />
       <div className={`py-2 h-20 md:h-fit`}>
         <Title className={`text-xs md:text-md h-8`} bold title={productName} />
-        <div className={`pt-2 h-10  overflow-hidden line-clamp-2 md:line-clamp-4 md:h-[110px]`}>
+        <div
+          className={`pt-2 h-10  overflow-hidden line-clamp-2 md:line-clamp-4 md:h-[110px]`}
+        >
           <Text className={`text-xs md:text-md`} text={productDescription} />
         </div>
       </div>

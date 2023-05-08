@@ -9,9 +9,8 @@ import {
 import { createContext, ReactNode, useState, SetStateAction, Dispatch, useEffect } from "react";
 import { parseCookies } from "nookies";
 import {
-  clearCartContent,
-  getProductCart,
-  removeProductCart,
+  clearCartContent, getFireStore, removeProductFireStore,
+
 } from "@database/clientCart";
 import { DocumentData } from "firebase/firestore";
 import { Product } from "@models/Product";
@@ -30,10 +29,10 @@ type CartContextType = {
   progressValue: number;
   newDataPost: PrecoPrazoResponse | undefined;
   paymentStates: paymentStatesType[];
-  addToCart: (product: DocumentData & Product, guestId: string) => Promise<void>;
+  addToCart: (product: Product | DocumentData, guestId: string) => Promise<void>;
   removeFromCart: (product: DocumentData[] & Product[]) => Promise<void>;
-  addToCount: (product: DocumentData & Product, guestId: string) => Promise<void>;
-  removeToCount: (product: DocumentData & Product, guestId: string) => Promise<void>;
+  addToCount: (product: Product | DocumentData, guestId: string) => Promise<void>;
+  removeToCount: (product: Product | DocumentData, guestId: string) => Promise<void>;
   updateProductCep: (product: DocumentData[] & Product[]) => void;
   freigthServiceChoise: (product: DocumentData[] & Product[], price: string, deadline: string, serviceCode: string) => void;
   clearCart: (guestId: string) => void;
@@ -137,14 +136,14 @@ export function CartProvider({ children }: cartProviderProps) {
   };
 
   const addToCart = async (
-    product: DocumentData & Product,
+    product: Product | DocumentData,
     guestId: string
   ): Promise<void> => {
-    await getProductCart(guestId)
+    await getFireStore("carts", guestId)
     return new Promise<void>(async (resolve, reject) => {
       setIsLoading(true)
       try {
-        const resp = await getProductCart(guestId);
+        const resp = await getFireStore("carts", guestId);
         const cartItem = resp?.find((item) => item.id === product.id);
         const cookies = parseCookies();
         const guestProductId = cookies._guest ? cookies._guest : "";
@@ -201,12 +200,12 @@ export function CartProvider({ children }: cartProviderProps) {
   };
 
   const addToCount = async (
-    product: DocumentData & Product,
+    product: Product | DocumentData,
     guestId: string
   ): Promise<void> => {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        const resp = await getProductCart(guestId);
+        const resp = await getFireStore("carts", guestId);
         const cartItem = resp?.find((item) => item.id === product.id);
 
         if (cartItem) {
@@ -235,12 +234,12 @@ export function CartProvider({ children }: cartProviderProps) {
   };
 
   const removeToCount = async (
-    product: DocumentData & Product,
+    product: Product | DocumentData,
     guestId: string
   ): Promise<void> => {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        const resp = await getProductCart(guestId);
+        const resp = await getFireStore("carts", guestId);
         const cartItem = resp?.find((item) => item.id === product.id);
 
         if (cartItem && cartItem.count > 1) {
@@ -279,7 +278,7 @@ export function CartProvider({ children }: cartProviderProps) {
       isOnCart: false,
     }
 
-    await removeProductCart(cartItem);
+    await removeProductFireStore("carts", cartItem);
     setIsLoading(false);
     setPopUp(false);
   };

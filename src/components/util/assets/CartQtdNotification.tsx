@@ -1,10 +1,10 @@
 // import { localStorageProduct } from "@functions/Cookies";
+import { getFireStore } from "@database/clientCart";
 import { useCartContext } from "@hooks/useCartContext";
 import { Product } from "@models/Product";
 import { DocumentData } from "firebase/firestore";
 import { parseCookies } from "nookies";
 import { useEffect,useState } from "react";
-import { getProductCart } from "@database/clientCart";
 
 interface CartQtdNotificationProps {
   className?: string;
@@ -20,7 +20,7 @@ export function CartQtdNotification({ className }: CartQtdNotificationProps) {
   useEffect(() => {
     const reloadProduct = async () => {
       //@ts-ignore
-      await getProductCart(guestId).then((resp) => setProductCart(resp));
+      await getFireStore("carts", guestId).then((resp) => setProductCart(resp));
     };
     reloadProduct();
   }, [isLoading]);

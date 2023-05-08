@@ -4,35 +4,35 @@ import {
   collection,
   getDocs,
   query,
-  updateDoc,
   where,
   deleteDoc,
   DocumentData,
-  writeBatch
+  writeBatch,
+  setDoc
 } from "firebase/firestore";
 
-export const addProductCart = async (product: DocumentData) => {
+export const addFireStore = async (collectionRef: string, product: DocumentData) => {
   try {
-    const cartRef = collection(db, "carts");
+    const cartRef = collection(db, collectionRef);
     const querySnapshot = await getDocs(
       query(cartRef, where("id", "==", product.id))
     );
 
-    if (querySnapshot.docs.length > 0) {
-      const docRef = querySnapshot.docs[0].ref;
-      await updateDoc(docRef, product);
-    } else {
-      const docRef = await addDoc(cartRef, product);
-      return docRef
-    }
+    const docRef = querySnapshot.docs.length > 0
+      ? querySnapshot.docs[0].ref
+      : await addDoc(cartRef, product);
+
+    await setDoc(docRef, product);
+    return docRef;
   } catch (error) {
     console.error("Ocorreu um erro na adição ou atualização do produto", error);
   }
 };
 
-export const getProductCart = async (guestId: string) => {
+
+export const getFireStore = async (collectionRef: string, guestId: string) => {
   try {
-    const cartRef = collection(db, "carts");
+    const cartRef = collection(db, collectionRef);
     const querySnapshot = await getDocs(
       query(cartRef, where("guestProductId", "==", guestId))
     );
@@ -47,9 +47,9 @@ export const getProductCart = async (guestId: string) => {
   }
 };
 
-export const removeProductCart = async (product: DocumentData) => {
+export const removeProductFireStore = async (collectionRef: string, product: DocumentData) => {
   try {
-    const itemRef = collection(db, "carts");
+    const itemRef = collection(db, collectionRef);
     const querySnapshot = await getDocs(
       query(itemRef, where("id", "==", product.id))
     );

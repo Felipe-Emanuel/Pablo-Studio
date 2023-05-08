@@ -10,6 +10,8 @@ import api from "src/data/services/api";
 import { Text } from "@util/texts/Text";
 import { LineLoading } from "@animations/lineLoading/LineLoading";
 import { useCartContext } from "@hooks/useCartContext";
+import { useRecentlySeen } from "@hooks/useRecentlySeen";
+import { parseCookies } from "nookies";
 
 interface ProductProps {
   data: Product[];
@@ -71,18 +73,25 @@ export const getStaticProps: GetStaticProps<ProductProps> = async ({
 };
 
 export default function Products({ data, params }: ProductProps) {
+  const { addRecentlySeen } = useRecentlySeen()
   const { isLoading } = useCartContext()
   const { id } = params || {};
-  const router = useRouter();
+  const { isFallback, push } = useRouter();
+  const cookies = parseCookies()
+  const guestId = cookies._guest
 
   useEffect(() => {
-    if (router.isFallback) {
+    const product = data[id];
+    addRecentlySeen(product, guestId);
+
+    if (isFallback) {
       return;
     }
     if (!data || !id) {
-      router.push("/");
+      push("/");
     }
-  }, [router, data, id]);
+  }, [data, id]);
+
 
   return data ? (
     <Container style pageTitle="Pablo Studio 3D | Nome do Produto">

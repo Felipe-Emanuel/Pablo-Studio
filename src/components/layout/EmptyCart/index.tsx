@@ -5,10 +5,11 @@ import { RecentlySeen } from "./RecentlySeen";
 import { useCartContext } from "@hooks/useCartContext";
 import { LineLoading } from "@animations/lineLoading/LineLoading";
 import { SkeletonRecomended } from "src/components/skeletons/SkeletonRecomended";
+import { DocumentData } from "firebase/firestore";
 
 interface EmptyCartProps {
   products: Product[];
-  recentlySeen: Product[];
+  recentlySeen: DocumentData[] | Product[];
 }
 
 export function EmptyCart({ products, recentlySeen }: EmptyCartProps) {
@@ -33,11 +34,7 @@ export function EmptyCart({ products, recentlySeen }: EmptyCartProps) {
         ) : (
           skeletonDiv
         )}
-        {recentlySeen?.length > 0 ? (
-          <RecentlySeen recentlySeen={recentlySeen} />
-        ) : (
-          skeletonDiv
-        )}
+        <RecentlySeen recentlySeen={recentlySeen} />
       </div>
     </>
   );
