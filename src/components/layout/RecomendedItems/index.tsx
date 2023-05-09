@@ -9,7 +9,6 @@ import {
 } from "@layout/slider/swiper";
 import { DocumentData } from "firebase/firestore";
 import { User } from "@models/User";
-import { SkeletonRecomended } from "src/components/skeletons/SkeletonRecomended";
 import { useCartContext } from "@hooks/useCartContext";
 import { SkeletonLoadingArray } from "@util/assets/SkeletonLoadingArray";
 
@@ -42,38 +41,40 @@ export function RecomendedItems({ preference, product }: RecomendedItemsProps) {
 
   return (
     <>
-      <div className="py-4">
-        <SectionTitle
-          icon={<CartVector />}
-          text={`Porque você curte ${userPreferedBrand}!`}
-        />
-      </div>
-      {isLoading ? (
-        <SkeletonLoadingArray />
-      ) : (
+      {preference[0] !== undefined && (
         <>
-          {preference[0] !== undefined && (
-            <div className="py-4">
-              <SwiperComponent maxHeigth settings={settings}>
-                {product?.length &&
-                  product.slice(0, 10).map((item, i) => (
-                    <SwiperSlide key={i}>
-                      <RecomendedItemsCard
-                        brand={item.brand}
-                        alt={item.alt}
-                        guestProductId={item.guestProductId}
-                        id={item.id}
-                        images={item.images[0]}
-                        initialPrice={item.initialPrice}
-                        item={item}
-                        link={item.link}
-                        productDescription={item.productDescription}
-                        productName={item.productName}
-                      />
-                    </SwiperSlide>
-                  ))}
-              </SwiperComponent>
-            </div>
+          <div className="py-4">
+            <SectionTitle
+              icon={<CartVector />}
+              text={`Porque você curte ${userPreferedBrand}!`}
+            />
+          </div>
+          {isLoading ? (
+            <SkeletonLoadingArray />
+          ) : (
+            <>
+              <div className="py-4">
+                <SwiperComponent maxHeigth settings={settings}>
+                  {product?.length &&
+                    product.slice(0, 10).map((item, i) => (
+                      <SwiperSlide key={i}>
+                        <RecomendedItemsCard
+                          brand={item.brand}
+                          alt={item.alt}
+                          guestProductId={item.guestProductId}
+                          id={item.id}
+                          images={item.images[0]}
+                          initialPrice={item.initialPrice}
+                          item={item}
+                          link={item.link}
+                          productDescription={item.productDescription}
+                          productName={item.productName}
+                        />
+                      </SwiperSlide>
+                    ))}
+                </SwiperComponent>
+              </div>
+            </>
           )}
         </>
       )}
