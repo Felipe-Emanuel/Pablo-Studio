@@ -1,7 +1,7 @@
 import { Section } from "@container/section";
 import { Comments } from "@layout/Comments";
 import { SelectedCard } from "@layout/selectedCard";
-import { Product, ProductView } from "@models/Product";
+import { Product } from "@models/Product";
 import { GetStaticPaths, GetStaticProps, Redirect } from "next";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -13,6 +13,7 @@ import { useCartContext } from "@hooks/useCartContext";
 import { useRecentlySeen } from "@hooks/useRecentlySeen";
 import { parseCookies } from "nookies";
 import { getFireStoreViewInfo } from "@database/productViewInfo";
+import { addUser } from "@database/clientData";
 
 interface ProductProps {
   data: Product[];
@@ -86,9 +87,15 @@ export default function Products({ data, params }: ProductProps) {
     const product = data[id];
     addRecentlySeen(product, guestId);
 
-    getFireStoreViewInfo(product).then((resp) =>
-      setNumberOfViews(resp![0].productViewInfo.numberOfViews)
-    );
+    const getViewInfo = async () => {
+      await getFireStoreViewInfo(product).then((resp) =>
+        setNumberOfViews(resp && resp[0]?.productViewInfo.numberOfViews)
+      );
+    };
+
+    getViewInfo();
+
+    addUser(product);
 
     if (isFallback) {
       return;

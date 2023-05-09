@@ -26,7 +26,7 @@ export function PriceCard({ price, product}: PriceCardProps) {
 
   const handleClick = () => {
     addToCart(product, guestId)
-    addUser()
+    addUser(product)
   }
 
   return (

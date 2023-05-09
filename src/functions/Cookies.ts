@@ -5,7 +5,7 @@ export function Cookies() {
     setCookie({}, cookieName, JSON.stringify(newCookieObj), {
       maxAge: 86400 * 7,
       path: "/",
-    });
+    })
   };
 
   return {

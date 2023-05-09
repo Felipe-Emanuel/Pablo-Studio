@@ -74,7 +74,7 @@ export function ProductSlider({ data }: ProductSliderProps) {
         flex-col md:flex md:flex-row items-center gap-4"
     >
       <motion.div
-        className="pb-4 md:pb-0 md:w-[70%] flex items-center justify-center min-h-[15rem]"
+        className="pb-4 md:pb-0 md:w-[70%] h-fit md:px-10 flex items-center justify-center"
         initial="hidden"
         animate="visible"
         variants={textVariants}

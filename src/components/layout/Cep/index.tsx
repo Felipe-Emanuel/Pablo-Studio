@@ -12,7 +12,7 @@ import { DocumentData } from "firebase/firestore";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { Product } from "@models/Product";
 import { Cookies } from "@functions/Cookies";
-import { addUser } from "@database/clientData";
+import { addUser, getUser } from "@database/clientData";
 import { parseCookies } from "nookies";
 import { SearchLoading } from "@animations/searchLoading/SearchLoading";
 
@@ -52,23 +52,33 @@ export function Cep({ product, guestId, user }: CepProps) {
   const cookies = parseCookies();
   const guestUser = cookies && cookies._userGuest;
 
-  const userGenerator = (resp: UserGenerator) => {
+  const userGenerator = async (resp: UserGenerator) => {
+    const currentUser = await getUser().then((resp) => {
+      const users = resp.filter((user) => user.guestId === guestId);
+      return users;
+    });
+
+   const userPreferences = currentUser[0]?.preferences || {};
+
+   const updatedPreferences = {
+    ...userPreferences,
+  };
+
     const user: User = {
       id: guestId,
       guestId,
       cep: inputCepValue,
       city: resp?.localidade,
       uf: resp?.uf,
-      error: {
-        cepError: resp?.error,
-      },
+      preferences: updatedPreferences
     };
+
     return user;
   };
 
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let cookieUser;
 
     try {
       const resp = await consultarCep(inputCepValue).then(async (resp) => {
@@ -76,8 +86,8 @@ export function Cep({ product, guestId, user }: CepProps) {
         if (!resp.erro) {
           //@ts-ignore
           setErro(resp.erro);
-          cookieUser = userGenerator(JSON.parse(JSON.stringify(resp)));
-          SetCookie("_userGuest", cookieUser);
+          const user = await userGenerator(JSON.parse(JSON.stringify(resp)));
+          SetCookie("_userGuest", user)
 
           updateProductCep(product);
           addUser();

@@ -25,6 +25,7 @@ interface RecomendedItemsCardProps {
   initialPrice: number;
   recently?: boolean;
   trashIcon?: boolean;
+  brand?: "marvel" | "dc" | "disney" | "anime" | "starWars" | "games" | "statueDrawing" | "drawing" | "actionFigure";
 }
 
 export function RecomendedItemsCard({
@@ -39,6 +40,7 @@ export function RecomendedItemsCard({
   initialPrice,
   recently,
   trashIcon,
+  brand
 }: RecomendedItemsCardProps) {
   const { formatPrice } = normalize();
   const { removeRecentlySeen } = useRecentlySeen();
@@ -107,7 +109,10 @@ export function RecomendedItemsCard({
         />
       </div>
       <div className={`py-2 h-20 md:h-fit`}>
-        <Title className={`text-xs md:text-md h-8`} bold title={productName} />
+        <div className="relative">
+          <Title className={`text-xs md:text-md h-8`} bold title={productName} />
+          <Text text={brand} light className="text-xs absolute top-6" />
+        </div>
         <div
           className={`pt-2 h-10  overflow-hidden line-clamp-2 md:line-clamp-4 md:h-[110px]`}
         >

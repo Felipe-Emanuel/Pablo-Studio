@@ -16,13 +16,14 @@ import { ProductCartPopUp } from "@layout/ProductCart/ProductCartPopUp";
 import { getUser } from "@database/clientData";
 import { User } from "@models/User";
 import { SkeletonProductCart } from "src/components/skeletons/SkeletonProductCart";
-import { RecomendedItems } from "@layout/RecomendedItems";
+import { OtherProducts } from "@layout/RecomendedItems/OtherProducts";
 import { useAxios } from "@hooks/useAxios";
 import { EmptyCart } from "@layout/EmptyCart";
 import { getFireStore } from "@database/clientCart";
 import { useRecentlySeen } from "@hooks/useRecentlySeen";
 import { RecentlySeen } from "@layout/EmptyCart/RecentlySeen";
 import { Budget } from "@layout/Budget";
+import { RecomendedItems } from "@layout/RecomendedItems";
 
 interface CartProps {
   stringifyUser: string & User[];
@@ -72,14 +73,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function Cart({ product, stringifyUser, data }: CartProps) {
-  const { getRecentlySeen, recentlySeen } = useRecentlySeen()
-  const { getData } = useAxios()
-  const { progressValue, paymentStates, isLoading, isFreigthLoading, isCepLoading } = useCartContext();
+  const { getRecentlySeen, recentlySeen } = useRecentlySeen();
+  const { getData } = useAxios();
+  const {
+    progressValue,
+    paymentStates,
+    isLoading,
+    isFreigthLoading,
+    isCepLoading,
+  } = useCartContext();
   const { price } = (product && product[0]?.choisedService) || "";
 
   const [user, setUser] = useState<DocumentData[] | User[]>(stringifyUser);
   const [products, setProducts] = useState<Product[]>(data);
-  const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(product);
+  const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(
+    product
+  );
 
   const cookies = parseCookies();
   const guestId = cookies._guest;
@@ -93,10 +102,9 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
       0
     );
 
-    const getProducts = async () => {
-      await getData("cart?mock=true", 10)
-        .then(({data}) => setProducts(data))
-    };
+  const getProducts = async () => {
+    await getData("cart?mock=true", 10).then(({ data }) => setProducts(data));
+  };
 
   useEffect(() => {
     const reloadProduct = async () => {
@@ -115,20 +123,21 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
       user;
     };
     reloadUser();
-
   }, [isLoading, isFreigthLoading, isCepLoading, guestUser]);
 
   useEffect(() => {
-    getProducts()
-  }, [guestUser])
+    getProducts();
+  }, [guestUser]);
 
   useEffect(() => {
     const getRecently = async () => {
-      await getRecentlySeen(guestId)
-    }
+      await getRecentlySeen(guestId);
+    };
 
-    getRecently()
-  }, [isLoading])
+    getRecently();
+  }, [isLoading]);
+
+  const checkedProducts = products && products.length === 0 ? data : products;
 
   return (
     <Container pageTitle="Carrinho | Pablo Studios 3D ">
@@ -141,7 +150,7 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
               product={productCart}
               disabled={progressValue === 100}
             />
-          <LineVector />
+            <LineVector />
           </Section>
           <Section>
             <Cep user={user} guestId={guestId} product={productCart} />
@@ -177,15 +186,25 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
               </Section>
             </>
           )}
-            <Section>
-              <Budget neverDesappear />
-              <RecomendedItems productCart={productCart} product={products && products.length === 0 ? data : products} />
-              <RecentlySeen recentlySeen={recentlySeen} />
-            </Section>
+          <Section>
+            {!isLoading && <Budget neverDesappear />}
+            <RecentlySeen recentlySeen={recentlySeen} />
+            {user && (
+              <RecomendedItems preference={user} product={checkedProducts} />
+            )}
+            <OtherProducts
+              productCart={productCart}
+              product={checkedProducts}
+            />
+          </Section>
         </>
       ) : (
         <Section>
-          <EmptyCart recentlySeen={recentlySeen} products={products && products.length === 0 ? data : products} />
+          <EmptyCart
+            preference={user}
+            recentlySeen={recentlySeen}
+            products={checkedProducts}
+          />
         </Section>
       )}
     </Container>
