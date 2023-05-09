@@ -183,3 +183,16 @@ export function HourglassVector() {
     </svg>
   );
 }
+
+export function DisneyVector() {
+  return (
+  <svg width="640" height="347" viewBox="0 0 640 347" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+    <rect width="640" height="347" fill="url(#pattern0)"/>
+    <defs>
+      <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+        <use xlinkHref="#image0_241_2" transform="scale(0.0015625 0.00288184)"/>
+      </pattern>
+    </defs>
+  </svg>
+  );
+}
