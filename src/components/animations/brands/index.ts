@@ -6,7 +6,7 @@ import mangaJson from "./mangaJson.json";
 import marvelJson from "./marvelJson.json";
 import starWarsJson from "./starWarsJson.json";
 import statueJson from "./statueJson.json";
-import disneyJson from "./disneyJson.json";
+import disneyJson from "./disney.json";
 
 export const courseIcons = {
   marvel: marvelJson,
