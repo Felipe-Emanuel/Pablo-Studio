@@ -1,8 +1,9 @@
 import { useLottie } from "lottie-react";
+import { EnumType } from "typescript";
 
 interface BrandAnimationProps {
   className?: string;
-  animationData: any;
+  animationData: EnumType;
 }
 
 export function BrandAnimation({ className, animationData }: BrandAnimationProps) {
@@ -13,7 +14,6 @@ export function BrandAnimation({ className, animationData }: BrandAnimationProps
   };
 
   const { View } = useLottie(options);
-
 
   return (
     <div

@@ -128,7 +128,7 @@ export function RecomendedItemsCard({
           {brand && (
             <TooltipComp text={item.brand}>
               <BrandAnimation
-                animationData={brandAnimation}
+                animationData={brandAnimation || ''}
                 className="z-50"
               />
             </TooltipComp>
