@@ -14,15 +14,7 @@ import { useRecentlySeen } from "@hooks/useRecentlySeen";
 import { TooltipComp } from "@util/assets/TooltipComp";
 import { TrashVector } from "@vectores/Vectores";
 import { BrandAnimation } from "@animations/brands/BrandAnimation";
-import actionFigureJson from "@animations/brands/actionFigureJson.json";
-import dcComicsJson from "@animations/brands/dcComicsJson.json";
-import drawingJson from "@animations/brands/drawingJson.json";
-import gamesJson from "@animations/brands/gamesJson.json";
-import mangaJson from "@animations/brands/mangaJson.json";
-import marvelJson from "@animations/brands/marvelJson.json";
-import starWarsJson from "@animations/brands/starWarsJson.json";
-import statueJson from "@animations/brands/statueJson.json";
-import disneyJson from "@animations/brands/disneyJson.json";
+import { courseIcons } from "@animations/brands/index";
 
 interface RecomendedItemsCardProps {
   item: Product | DocumentData;
@@ -85,18 +77,6 @@ export function RecomendedItemsCard({
     hoverProductId === id
       ? "translate-y-[0%]"
       : "md:opacity-0 md:p-3 hover:opacity-100 -translate-y-[10%]";
-
-  const courseIcons = {
-    marvel: marvelJson,
-    dc: dcComicsJson,
-    disney: disneyJson,
-    anime: mangaJson,
-    starWars: starWarsJson,
-    games: gamesJson,
-    statueDrawing: statueJson,
-    drawing: drawingJson,
-    actionFigure: actionFigureJson,
-  };
 
   //@ts-ignore
   const brandAnimation = courseIcons[item.brand]
