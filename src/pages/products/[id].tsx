@@ -1,9 +1,9 @@
 import { Section } from "@container/section";
 import { Comments } from "@layout/Comments";
 import { SelectedCard } from "@layout/selectedCard";
-import { Product } from "@models/Product";
+import { Product, ProductView } from "@models/Product";
 import { GetStaticPaths, GetStaticProps, Redirect } from "next";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Container } from "src/components/containers/Container";
 import api from "src/data/services/api";
@@ -12,6 +12,7 @@ import { LineLoading } from "@animations/lineLoading/LineLoading";
 import { useCartContext } from "@hooks/useCartContext";
 import { useRecentlySeen } from "@hooks/useRecentlySeen";
 import { parseCookies } from "nookies";
+import { getFireStoreViewInfo } from "@database/productViewInfo";
 
 interface ProductProps {
   data: Product[];
@@ -73,16 +74,21 @@ export const getStaticProps: GetStaticProps<ProductProps> = async ({
 };
 
 export default function Products({ data, params }: ProductProps) {
-  const { addRecentlySeen } = useRecentlySeen()
-  const { isLoading } = useCartContext()
+  const { addRecentlySeen } = useRecentlySeen();
+  const { isLoading } = useCartContext();
   const { id } = params || {};
   const { isFallback, push } = useRouter();
-  const cookies = parseCookies()
-  const guestId = cookies._guest
+  const [numberOfViews, setNumberOfViews] = useState(0);
+  const cookies = parseCookies();
+  const guestId = cookies._guest;
 
   useEffect(() => {
     const product = data[id];
     addRecentlySeen(product, guestId);
+
+    getFireStoreViewInfo(product).then((resp) =>
+      setNumberOfViews(resp![0].productViewInfo.numberOfViews)
+    );
 
     if (isFallback) {
       return;
@@ -92,11 +98,15 @@ export default function Products({ data, params }: ProductProps) {
     }
   }, [data, id]);
 
-
   return data ? (
     <Container style pageTitle="Pablo Studio 3D | Nome do Produto">
       {isLoading && <LineLoading />}
-      <SelectedCard product={data[+id]} products={data} id={+id} />
+      <SelectedCard
+        product={data[+id]}
+        products={data}
+        id={+id}
+        numberOfViews={numberOfViews}
+      />
       <Section>
         <Comments data={data[id].productComments} id={id} />
       </Section>

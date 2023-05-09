@@ -39,13 +39,28 @@ export interface Freight {
     MsgErro: string;
   };
 }
-
 interface ChoisedService {
   deadline: string;
   price: string;
   serviceCode: string;
 }
 
+export interface ProductViewInfo {
+  numberOfPurchases: number;
+  numberOfViews: number;
+}
+
+
+export interface ProductView {
+  id: number;
+  id_produto: number;
+  data_visualizacao: Date;
+  hora_visualizacao: string;
+  fonte_trafego: string;
+  duracao_visualizacao: number;
+  numero_compras: number;
+  localizacao_geografica: string;
+  }
 export interface Product {
   id: number;
   marca:
@@ -63,7 +78,6 @@ export interface Product {
   freigthServiceChoise: string;
   count: number;
   productPrice: number;
-  productViews: number;
   productQtd: number;
   productName: string;
   images: string[];
@@ -76,11 +90,12 @@ export interface Product {
   initialTotal: number;
   SKU: string;
   isOnCart: boolean;
+  weight: number;
   productComments: ProductComment[];
   dimensions: PrecoPrazoRequest;
   choisedService: ChoisedService;
   freight: Freight;
-  weight: number;
+  productViewInfo: ProductViewInfo
 }
 
 export interface RecomendedTable {

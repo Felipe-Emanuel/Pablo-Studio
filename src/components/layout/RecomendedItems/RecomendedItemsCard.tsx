@@ -69,12 +69,18 @@ export function RecomendedItemsCard({
       onMouseEnter={() => changeVisibility(item.id)}
       onMouseLeave={() => changeVisibility("")}
       className={`
-        w-52 sm:w-72 h-fit overflow-hidden p-1 rounded-md transition-all mb-4 bg-placeholder hover:bg-gray-400 flex flex-col relative
+        w-52 sm:w-72 h-fit overflow-hidden p-1 rounded-md transition-all
+        mb-4 bg-placeholder hover:bg-gray-400 flex flex-col relative
       `}
     >
+      <div
+        className={`transition-all duration-100 ease-in-out ${
+          hoverProductId === id ? "scale-105" : "scale-100"
+        }`}
+      >
         <div className="flex justify-center items-center transition-all relative">
           <div
-            className={`transition-all md:hover:bg-black/25 rounded-full
+            className={`transition-all duration-500 md:hover:bg-black/25 rounded-full
           w-11 h-10 absolute -top-2 -left-1 md:top-0 md:left-0 flex items-center
           ${checkVisibility}`}
           >
@@ -83,7 +89,7 @@ export function RecomendedItemsCard({
           {trashIcon && (
             <div
               onClick={() => removeRecentlySeen(item)}
-              className={`transition-all md:hover:bg-black/25 rounded-full
+              className={`transition-all duration-500 md:hover:bg-black/25 rounded-full
               w-11 h-10 absolute -top-2 -right-3 md:top-0 md:right-0 flex items-center
               cursor-pointer
               ${checkVisibility}`}
@@ -92,13 +98,14 @@ export function RecomendedItemsCard({
             </div>
           )}
         </div>
-      <ProductCartImage
-        recently
-        productLink={link}
-        alt={alt}
-        src={images}
-        className="md:w-full md:h-full"
-      />
+        <ProductCartImage
+          recently
+          productLink={link}
+          alt={alt}
+          src={images}
+          className={`md:w-full md:h-full`}
+        />
+      </div>
       <div className={`py-2 h-20 md:h-fit`}>
         <Title className={`text-xs md:text-md h-8`} bold title={productName} />
         <div

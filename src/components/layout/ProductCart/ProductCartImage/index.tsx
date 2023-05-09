@@ -14,7 +14,7 @@ export function ProductCartImage({
   alt,
   productLink,
   className,
-  recently
+  recently,
 }: ProductCartImageProps) {
   return (
     <Link className="flex" href={productLink}>
@@ -23,7 +23,7 @@ export function ProductCartImage({
         src={src}
         width={250}
         height={300}
-        className={`m-auto ${recently ? 'w-full' : 'md:w-52 h-20 md:h-40 lg:h-48'} ${className}`}
+        className={`m-auto ${recently ? 'w-full' : 'md:w-52 h-20 md:h-40 lg:h-48'} ${className} `}
       />
     </Link>
   );
