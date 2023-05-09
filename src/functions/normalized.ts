@@ -8,8 +8,18 @@ export function normalize() {
     })
   }
 
+  const capitalizeName = (str: string) => {
+    return str
+      .trim()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+
   return {
-    formatPrice
+    formatPrice,
+    capitalizeName
   }
 }
 

@@ -10,8 +10,19 @@ import { Product } from "@models/Product";
 import { useCartContext } from "@hooks/useCartContext";
 import { useRouter } from "next/router";
 import { DocumentData } from "firebase/firestore";
-import { TrashVector } from "@vectores/Vectores";
 import { useRecentlySeen } from "@hooks/useRecentlySeen";
+import { TooltipComp } from "@util/assets/TooltipComp";
+import { TrashVector } from "@vectores/Vectores";
+import { BrandAnimation } from "@animations/brands/BrandAnimation";
+import actionFigureJson from "@animations/brands/actionFigureJson.json";
+import dcComicsJson from "@animations/brands/dcComicsJson.json";
+import drawingJson from "@animations/brands/drawingJson.json";
+import gamesJson from "@animations/brands/gamesJson.json";
+import mangaJson from "@animations/brands/mangaJson.json";
+import marvelJson from "@animations/brands/marvelJson.json";
+import starWarsJson from "@animations/brands/starWarsJson.json";
+import statueJson from "@animations/brands/statueJson.json";
+import disneyJson from "@animations/brands/disneyJson.json";
 
 interface RecomendedItemsCardProps {
   item: Product | DocumentData;
@@ -25,7 +36,16 @@ interface RecomendedItemsCardProps {
   initialPrice: number;
   recently?: boolean;
   trashIcon?: boolean;
-  brand?: "marvel" | "dc" | "disney" | "anime" | "starWars" | "games" | "statueDrawing" | "drawing" | "actionFigure";
+  brand?:
+    | "marvel"
+    | "dc"
+    | "disney"
+    | "anime"
+    | "starWars"
+    | "games"
+    | "statueDrawing"
+    | "drawing"
+    | "actionFigure";
 }
 
 export function RecomendedItemsCard({
@@ -40,7 +60,7 @@ export function RecomendedItemsCard({
   initialPrice,
   recently,
   trashIcon,
-  brand
+  brand,
 }: RecomendedItemsCardProps) {
   const { formatPrice } = normalize();
   const { removeRecentlySeen } = useRecentlySeen();
@@ -65,6 +85,21 @@ export function RecomendedItemsCard({
     hoverProductId === id
       ? "translate-y-[0%]"
       : "md:opacity-0 md:p-3 hover:opacity-100 -translate-y-[10%]";
+
+  const courseIcons = {
+    marvel: marvelJson,
+    dc: dcComicsJson,
+    disney: disneyJson,
+    anime: mangaJson,
+    starWars: starWarsJson,
+    games: gamesJson,
+    statueDrawing: statueJson,
+    drawing: drawingJson,
+    actionFigure: actionFigureJson,
+  };
+
+  //@ts-ignore
+  const brandAnimation = courseIcons[item.brand]
 
   return (
     <div
@@ -110,8 +145,19 @@ export function RecomendedItemsCard({
       </div>
       <div className={`py-2 h-20 md:h-fit`}>
         <div className="relative">
-          <Title className={`text-xs md:text-md h-8`} bold title={productName} />
-          <Text text={brand} light className="text-xs absolute top-6" />
+          {brand && (
+            <TooltipComp text={item.brand}>
+              <BrandAnimation
+                animationData={brandAnimation}
+                className="z-50"
+              />
+            </TooltipComp>
+          )}
+          <Title
+            className={`text-xs md:text-md h-8`}
+            bold
+            title={productName}
+          />
         </div>
         <div
           className={`pt-2 h-10  overflow-hidden line-clamp-2 md:line-clamp-4 md:h-[110px]`}

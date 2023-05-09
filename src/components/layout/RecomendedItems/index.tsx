@@ -11,6 +11,7 @@ import { DocumentData } from "firebase/firestore";
 import { User } from "@models/User";
 import { useCartContext } from "@hooks/useCartContext";
 import { SkeletonLoadingArray } from "@util/assets/SkeletonLoadingArray";
+import { normalize } from "@functions/normalized";
 
 interface RecomendedItemsProps {
   preference: DocumentData[] | User[];
@@ -18,6 +19,7 @@ interface RecomendedItemsProps {
 }
 
 export function RecomendedItems({ preference, product }: RecomendedItemsProps) {
+  const { capitalizeName } = normalize();
   const { isLoading } = useCartContext();
 
   const settings: SwiperProps = {
@@ -33,11 +35,7 @@ export function RecomendedItems({ preference, product }: RecomendedItemsProps) {
     return bBrandViews - aBrandViews;
   });
 
-  const userPreferedBrand =
-    product &&
-    String(product[0].brand)
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+  const userPreferedBrand = product && capitalizeName(String(product[0].brand));
 
   return (
     <>
@@ -56,22 +54,24 @@ export function RecomendedItems({ preference, product }: RecomendedItemsProps) {
               <div className="py-4">
                 <SwiperComponent maxHeigth settings={settings}>
                   {product?.length &&
-                    product.slice(0, 10).map((item, i) => (
-                      <SwiperSlide key={i}>
-                        <RecomendedItemsCard
-                          brand={item.brand}
-                          alt={item.alt}
-                          guestProductId={item.guestProductId}
-                          id={item.id}
-                          images={item.images[0]}
-                          initialPrice={item.initialPrice}
-                          item={item}
-                          link={item.link}
-                          productDescription={item.productDescription}
-                          productName={item.productName}
-                        />
-                      </SwiperSlide>
-                    ))}
+                    product.slice(0, 10).map((item, i) => {
+                      return (
+                        <SwiperSlide key={i}>
+                          <RecomendedItemsCard
+                            brand={item.brand}
+                            alt={item.alt}
+                            guestProductId={item.guestProductId}
+                            id={item.id}
+                            images={item.images[0]}
+                            initialPrice={item.initialPrice}
+                            item={item}
+                            link={item.link}
+                            productDescription={item.productDescription}
+                            productName={item.productName}
+                          />
+                        </SwiperSlide>
+                      );
+                    })}
                 </SwiperComponent>
               </div>
             </>
