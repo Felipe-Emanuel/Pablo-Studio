@@ -29,11 +29,12 @@ export function RecomendedItems({ preference, product }: RecomendedItemsProps) {
 
   const preferences = (preference && preference[0]?.preferences) || [];
 
-  product.sort((a, b) => {
-    const aBrandViews = (preferences && preferences[a.brand]) || 0;
-    const bBrandViews = (preferences && preferences[b.brand]) || 0;
-    return bBrandViews - aBrandViews;
-  });
+  product &&
+    product.sort((a, b) => {
+      const aBrandViews = (preferences && preferences[a.brand]) || 0;
+      const bBrandViews = (preferences && preferences[b.brand]) || 0;
+      return bBrandViews - aBrandViews;
+    });
 
   const userPreferedBrand = product && capitalizeName(String(product[0].brand));
 
@@ -41,7 +42,7 @@ export function RecomendedItems({ preference, product }: RecomendedItemsProps) {
     <>
       {preference[0] !== undefined && (
         <>
-          <div className="py-4">
+          <div className="pt-4">
             <SectionTitle
               icon={<CartVector />}
               text={`Porque você curte ${userPreferedBrand}!`}
@@ -50,31 +51,27 @@ export function RecomendedItems({ preference, product }: RecomendedItemsProps) {
           {isLoading ? (
             <SkeletonLoadingArray />
           ) : (
-            <>
-              <div className="py-4">
-                <SwiperComponent maxHeigth settings={settings}>
-                  {product?.length &&
-                    product.slice(0, 10).map((item, i) => {
-                      return (
-                        <SwiperSlide key={i}>
-                          <RecomendedItemsCard
-                            brand={item.brand}
-                            alt={item.alt}
-                            guestProductId={item.guestProductId}
-                            id={item.id}
-                            images={item.images[0]}
-                            initialPrice={item.initialPrice}
-                            item={item}
-                            link={item.link}
-                            productDescription={item.productDescription}
-                            productName={item.productName}
-                          />
-                        </SwiperSlide>
-                      );
-                    })}
-                </SwiperComponent>
-              </div>
-            </>
+            <SwiperComponent maxHeigth settings={settings}>
+              {product?.length &&
+                product.slice(0, 10).map((item, i) => {
+                  return (
+                    <SwiperSlide key={i}>
+                      <RecomendedItemsCard
+                        brand={item.brand}
+                        alt={item.alt}
+                        guestProductId={item.guestProductId}
+                        id={item.id}
+                        images={item.images[0]}
+                        initialPrice={item.initialPrice}
+                        item={item}
+                        link={item.link}
+                        productDescription={item.productDescription}
+                        productName={item.productName}
+                      />
+                    </SwiperSlide>
+                  );
+                })}
+            </SwiperComponent>
           )}
         </>
       )}
