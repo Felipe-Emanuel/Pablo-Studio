@@ -1,12 +1,12 @@
-import actionFigureJson from "@animations/brands/actionFigureJson.json";
-import dcComicsJson from "@animations/brands/dcComicsJson.json";
-import drawingJson from "@animations/brands/drawingJson.json";
-import gamesJson from "@animations/brands/gamesJson.json";
-import mangaJson from "@animations/brands/mangaJson.json";
-import marvelJson from "@animations/brands/marvelJson.json";
-import starWarsJson from "@animations/brands/starWarsJson.json";
-import statueJson from "@animations/brands/statueJson.json";
-import disneyJson from "@animations/brands/disneyJson.json";
+import disneyJson from "./disneyJson.json"
+import actionFigureJson from "./actionFigureJson.json";
+import dcComicsJson from "./dcComicsJson.json";
+import drawingJson from "./drawingJson.json";
+import gamesJson from "./gamesJson.json";
+import mangaJson from "./mangaJson.json";
+import marvelJson from "./marvelJson.json";
+import starWarsJson from "./starWarsJson.json";
+import statueJson from "./statueJson.json";
 
 export const courseIcons = {
   marvel: marvelJson,
