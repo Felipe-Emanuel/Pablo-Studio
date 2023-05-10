@@ -44,7 +44,7 @@ export function SelectedCard({ id, product, products, numberOfViews}: SelectedCa
                   title={product.productName}
                   className="hidden lg:flex md:pt-8 xl:pt-0 max-w-lg text-xl sm:text-2xl "
                 />
-                <CardInfo views={numberOfViews} />
+                <CardInfo product={product} views={numberOfViews} />
                 <PriceCard
                   price={product.initialPrice}
                   product={product}

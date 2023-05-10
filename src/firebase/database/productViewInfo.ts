@@ -12,9 +12,9 @@ import {
 
 export const addFireStoreViewInfo = async (product: DocumentData) => {
   try {
-    const cartRef = collection(db, "productViewInfo");
+    const productViewInfoRef = collection(db, "productViewInfo");
     const querySnapshot = await getDocs(
-      query(cartRef, where("id", "==", product.id))
+      query(productViewInfoRef, where("id", "==", product.id))
     );
 
     if (!querySnapshot.empty) {
@@ -27,7 +27,7 @@ export const addFireStoreViewInfo = async (product: DocumentData) => {
       });
       return docRef;
     } else {
-      const docRef = await addDoc(cartRef, {
+      const docRef = await addDoc(productViewInfoRef, {
         ...product,
         productViewInfo: {
           numberOfViews: 1,
@@ -43,15 +43,15 @@ export const addFireStoreViewInfo = async (product: DocumentData) => {
   export const getFireStoreViewInfo = async (product: DocumentData | Product) => {
 
     try {
-      const cartRef = collection(db, "productViewInfo");
+      const productViewInfoRef = collection(db, "productViewInfo");
       const querySnapshot = await getDocs(
-        query(cartRef, where("id", "==", product.id))
+        query(productViewInfoRef, where("id", "==", product.id))
       );
 
       if (!querySnapshot.empty) {
         const docRef = querySnapshot.docs;
-        const cartItems = docRef.map((item) => item.data());
-        return cartItems;
+        const productViewInfoItem = docRef.map((item) => item.data());
+        return productViewInfoItem;
       }
     } catch (error) {
       console.error("Ocorreu um erro ao resgatar os produto", error);

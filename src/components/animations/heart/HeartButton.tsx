@@ -1,28 +1,45 @@
-import { useLottie } from "lottie-react";
-import { useState } from "react";
-import { HeartVector } from "src/components/vectores/Vectores";
 import Heart from "./heart.json";
+import { useState, useEffect, useCallback } from "react";
+import { HeartFillVector, HeartVector } from "src/components/vectores/Vectores";
+import { DocumentData } from "firebase/firestore";
+import { Product } from "@models/Product";
+import { changeLikeState, getProductLiked } from "@database/productLiked";
+import { useCartContext } from "@hooks/useCartContext";
 
 interface HeartButtonProps {
-  className?: string
+  className?: string;
+  guestId: string;
+  product: DocumentData | Product;
 }
 
-export function HeartButton({className}: HeartButtonProps) {
+export function HeartButton({ className, product, guestId }: HeartButtonProps) {
+  const { setIsLoading } = useCartContext();
   const [isActive, setIsActive] = useState(false);
+  const [showHeartFill, setShowHeartFill] = useState(false);
 
-  const options = {
-    animationData: Heart,
-    autoplay: false,
-    loop: 0,
-  };
+  const getProducts = useCallback(async () => {
+    await getProductLiked(product).then((resp) => {
+      const isLiked = resp && resp[0].isLiked;
+      setShowHeartFill(isLiked);
 
-  const { View, play, setDirection } = useLottie(options);
+    });
+  }, [setIsLoading, product]);
 
-  function setHeart() {
+  const setProductsLiked = useCallback(async () => {
+    setIsLoading(true);
+
+    await changeLikeState(product, guestId).then(() => {setIsLoading(false)});
+  }, [setIsLoading, product, guestId]);
+
+  useEffect(() => {
+    getProducts();
+  }, [getProducts, isActive]);
+
+  const setHeart = async () => {
+    await setProductsLiked();
+
     setIsActive((isActive) => !isActive);
-    isActive === true ? setDirection(-1) : setDirection(1);
-    play();
-  }
+  };
 
   return (
     <button
@@ -30,15 +47,9 @@ export function HeartButton({className}: HeartButtonProps) {
         relative w-14 h-14 flex justify-center
         items-center pointer-events-none ${className}`}
     >
-      <span
-        onClick={() => {
-          setHeart();
-        }}
-        className="absolute pointer-events-auto"
-      >
-        <HeartVector />
+      <span onClick={setHeart} className="absolute pointer-events-auto hover:animate-heartWiggle">
+        {showHeartFill ? <HeartFillVector /> : <HeartVector />}
       </span>
-      {View}
     </button>
   );
 }

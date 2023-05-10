@@ -29,7 +29,6 @@ export const addFireStore = async (collectionRef: string, product: DocumentData)
   }
 };
 
-
 export const getFireStore = async (collectionRef: string, guestId: string) => {
   try {
     const cartRef = collection(db, collectionRef);

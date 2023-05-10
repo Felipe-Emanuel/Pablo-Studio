@@ -58,10 +58,16 @@ module.exports = {
         '0%, 100%': { transform: 'rotate(0deg)' },
         '25%': { transform: 'rotate(3deg)' },
         '75%': { transform: 'rotate(-3deg)' },
+      },
+      heartWiggle: {
+        '0%, 100%': { transform: 'rotate(0deg)' },
+        '25%': { transform: 'rotate(8deg)' },
+        '75%': { transform: 'rotate(-8deg)' },
       }
     },
     animation: {
-      wiggle: 'wiggle 300ms 2 linear'
+      wiggle: 'wiggle 300ms 2 linear',
+      heartWiggle: 'heartWiggle 150ms 2 linear',
     }
   },
 }

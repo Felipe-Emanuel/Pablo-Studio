@@ -1,3 +1,5 @@
+import { useCartContext } from "@hooks/useCartContext";
+
 export function MenuVector() {
   return (
     <svg
@@ -62,6 +64,15 @@ export function HeartVector() {
   );
 }
 
+export function HeartFillVector() {
+
+  return (
+    <svg className="w-3 md:w-5" width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M28.5 7.75C28.5 16.5 15.5262 23.5825 14.9737 23.875C14.8281 23.9533 14.6654 23.9943 14.5 23.9943C14.3346 23.9943 14.1719 23.9533 14.0262 23.875C13.4737 23.5825 0.5 16.5 0.5 7.75C0.502316 5.69528 1.31958 3.72539 2.77248 2.27248C4.22539 0.819575 6.19528 0.00231592 8.25 0C10.8312 0 13.0912 1.11 14.5 2.98625C15.9088 1.11 18.1688 0 20.75 0C22.8047 0.00231592 24.7746 0.819575 26.2275 2.27248C27.6804 3.72539 28.4977 5.69528 28.5 7.75Z" fill="#FF0000"/>
+    </svg>
+  );
+}
+
 export function ViewVector() {
   return (
     <svg className="w-full h-full" width="61" height="62" viewBox="0 0 61 62" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -77,7 +88,6 @@ export function EyeVector() {
     </svg>
   );
 }
-
 
 export function CartVector() {
   return (

@@ -1,5 +1,5 @@
-import { useState } from "react";
 import api from "../services/api";
+import { useState } from "react";
 import { PrecoPrazoResponse } from "correios-brasil/dist";
 import { useCartContext } from "./useCartContext";
 
@@ -19,8 +19,6 @@ export function useAxios() {
       const resp = await req.data
       setIsLoading(false);
       setDataGet(resp)
-      // .then((response) => setDataGet(response.data))
-      // .catch((err) => console.error("Erro ao GET em getData /useAxios/", err));
 
     return req;
   };

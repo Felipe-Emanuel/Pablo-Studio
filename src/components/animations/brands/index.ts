@@ -8,7 +8,7 @@ import starWarsJson from "./starWarsJson.json";
 import statueJson from "./statueJson.json";
 import disneyJson from "./disney.json";
 
-export const courseIcons = {
+export const courseIcons: any = {
   marvel: marvelJson,
   dc: dcComicsJson,
   anime: mangaJson,
