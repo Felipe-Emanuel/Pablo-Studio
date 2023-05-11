@@ -10,16 +10,13 @@ import {
   SwiperSlide,
   SwiperProps,
 } from "@layout/slider/swiper";
+import { SkeletonLoadingArray } from "@util/assets/SkeletonLoadingArray";
 
 interface RecomendedItemsProps {
   product: Product[];
-  productCart: DocumentData[] & Product[];
 }
 
-export function OtherProducts({
-  product,
-  productCart,
-}: RecomendedItemsProps) {
+export function OtherProducts({ product }: RecomendedItemsProps) {
   const { isLoading } = useCartContext();
 
   const settings: SwiperProps = {
@@ -27,49 +24,50 @@ export function OtherProducts({
     slidesPerView: "auto",
   };
 
+  const isItemInCart = (item: DocumentData | Product) =>
+    product && product.some((cartItem) => cartItem.id === item.id);
+
+  const renderProducts = () => {
+    const filtredProducts = product
+      ?.filter((item) => !isItemInCart(item))
+      ?.slice(0, 10);
+
+    if (!filtredProducts || filtredProducts.length === 0) return null;
+
+    return (
+      <SwiperComponent maxHeigth settings={settings}>
+        {filtredProducts.map((item, i) => {
+          return (
+            <SwiperSlide key={i}>
+              <RecomendedItemsCard
+                trashIcon
+                alt={item.alt}
+                guestProductId={item.guestProductId}
+                id={item.id}
+                images={item.images[0]}
+                initialPrice={item.initialPrice}
+                item={item}
+                link={item.link}
+                productDescription={item.productDescription}
+                productName={item.productName}
+              />
+            </SwiperSlide>
+          );
+        })}
+      </SwiperComponent>
+    );
+  };
+
+  if (isLoading) return <SkeletonLoadingArray />;
+
   return (
     <>
-      <div className="py-4">
-        <SectionTitle icon={<BagVector />} text="Outros Produtos" />
-      </div>
-      {isLoading ? (
-        <div className="pt-4 flex gap-3">
-          {product?.map((item) => (
-            <SkeletonRecomended key={item.id} />
-          ))}
+      {renderProducts() && (
+        <div className="py-4">
+          <SectionTitle icon={<BagVector />} text="Outros Produtos" />
         </div>
-      ) : (
-        <SwiperComponent maxHeigth settings={settings}>
-          {product &&
-            product?.length &&
-            product.map((item, i) => {
-              const productsInCart = productCart.filter(
-                (cartItem) => cartItem.isOnCart
-              );
-              const isItemInCart = productsInCart.some(
-                (cartItem) => cartItem.id === item.id
-              );
-              if (isItemInCart) {
-                return null;
-              }
-              return (
-                <SwiperSlide key={i}>
-                  <RecomendedItemsCard
-                    alt={item.alt}
-                    guestProductId={item.guestProductId}
-                    id={item.id}
-                    images={item.images[0]}
-                    initialPrice={item.initialPrice}
-                    item={item}
-                    link={item.link}
-                    productDescription={item.productDescription}
-                    productName={item.productName}
-                  />
-                </SwiperSlide>
-              );
-            })}
-        </SwiperComponent>
       )}
+      {renderProducts()}
     </>
   );
 }

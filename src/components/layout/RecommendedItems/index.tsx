@@ -51,65 +51,69 @@ export function RecommendedItems({
       return bBrandViews - aBrandViews;
     });
 
-  const userPreferedBrand =
-    productLiked &&
-    capitalizeName(String(productLiked && productLiked[0].brand));
-
-  const gettingProductLiked = async () => {
-    await getFireStore("productLiked", guestId).then((resp) => {
-      const productLiked = resp && resp.filter((item) => item.isLiked);
-      setProductLiked(productLiked);
-    });
-  };
+  const userPreferedBrand = productLiked
+    ? capitalizeName(String(productLiked && productLiked[0]?.brand))
+    : "";
 
   useEffect(() => {
+    const gettingProductLiked = async () => {
+      await getFireStore("productLiked", guestId).then((resp) => {
+        const productLiked = resp && resp.filter((item) => item.isLiked);
+        setProductLiked(productLiked);
+      });
+    };
+
     gettingProductLiked();
   }, [isLoading]);
 
+  const isItemInCart = (item: DocumentData | Product) =>
+    productsInCart &&
+    productsInCart.some((cartItem) => cartItem.id === item.id);
+
+  const renderProducts = () => {
+    const filtredProducts = productLiked
+      ?.filter((item) => !isItemInCart(item))
+      ?.slice(0, 10);
+
+    if (!filtredProducts || filtredProducts.length === 0) return null;
+
+    return (
+      <SwiperComponent maxHeigth settings={settings}>
+        {filtredProducts.map((item, i) => {
+          return (
+            <SwiperSlide key={i}>
+              <RecomendedItemsCard
+                brand={item.brand}
+                alt={item.alt}
+                guestProductId={item.guestProductId}
+                id={item.id}
+                images={item.images[0]}
+                initialPrice={item.initialPrice}
+                item={item}
+                link={item.link}
+                productDescription={item.productDescription}
+                productName={item.productName}
+              />
+            </SwiperSlide>
+          );
+        })}
+      </SwiperComponent>
+    );
+  };
+
+  if (isLoading) return <SkeletonLoadingArray />;
+
   return (
     <>
-      {productLiked && productLiked?.length >= 0 && (
-        <>
-          <div className="pt-4">
-            <SectionTitle
-              icon={<CartVector />}
-              text={`Porque você curte ${userPreferedBrand}!`}
-            />
-          </div>
-          {isLoading ? (
-            <SkeletonLoadingArray />
-          ) : (
-            <SwiperComponent maxHeigth settings={settings}>
-              {productLiked &&
-                productLiked?.length &&
-                productLiked.slice(0, 10).map((item, i) => {
-                  const isItemInCart =
-                    productsInCart &&
-                    productsInCart.some((cartItem) => cartItem.id === item.id);
-                  if (isItemInCart) {
-                    return null;
-                  }
-                  return (
-                    <SwiperSlide key={i}>
-                      <RecomendedItemsCard
-                        brand={item.brand}
-                        alt={item.alt}
-                        guestProductId={item.guestProductId}
-                        id={item.id}
-                        images={item.images[0]}
-                        initialPrice={item.initialPrice}
-                        item={item}
-                        link={item.link}
-                        productDescription={item.productDescription}
-                        productName={item.productName}
-                      />
-                    </SwiperSlide>
-                  );
-                })}
-            </SwiperComponent>
-          )}
-        </>
+      {renderProducts() && (
+        <div className="pt-4">
+          <SectionTitle
+            icon={<CartVector />}
+            text={`Porque você curte ${userPreferedBrand}!`}
+          />
+        </div>
       )}
+      {renderProducts()}
     </>
   );
 }

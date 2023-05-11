@@ -25,9 +25,8 @@ export function MostViwed({
 }: MostViwedProps) {
   const { isLoading } = useCartContext();
 
-                    const productsInCart =
-                    productCart &&
-                    productCart.filter((cartItem) => cartItem.isOnCart);
+  const productsInCart =
+    productCart && productCart.filter((cartItem) => cartItem.isOnCart);
 
   const settings: SwiperProps = {
     spaceBetween: 0,
@@ -43,50 +42,51 @@ export function MostViwed({
       return bBrandViews - aBrandViews;
     });
 
+  const isItemInCart = (item: DocumentData | Product) =>
+    productsInCart &&
+    productsInCart.some((cartItem) => cartItem.id === item.id);
+
+  const renderProducts = () => {
+    const filteredProducts = product?.filter(
+      (item) => !isItemInCart(item)
+    )?.slice(0, 10);
+
+    if (!filteredProducts || filteredProducts.length === 0) return null
+
+    return (
+      <SwiperComponent maxHeigth settings={settings}>
+        {filteredProducts.map((item, i) => (
+          <SwiperSlide key={i}>
+            <RecomendedItemsCard
+              alt={item.alt}
+              guestProductId={item.guestProductId}
+              id={item.id}
+              images={item.images[0]}
+              initialPrice={item.initialPrice}
+              item={item}
+              link={item.link}
+              productDescription={item.productDescription}
+              productName={item.productName}
+            />
+          </SwiperSlide>
+        ))}
+      </SwiperComponent>
+    );
+  };
+
+  if (isLoading) return <SkeletonLoadingArray />
+
   return (
     <>
-      {preference[0] !== undefined && productsInCart.length >= 0 && (
-        <>
-          <div className="pt-4">
-            <SectionTitle
-              icon={<CartVector />}
-              text={`Com base nos que você mais visualizou!`}
-            />
-          </div>
-          {isLoading ? (
-            <SkeletonLoadingArray />
-          ) : (
-            <SwiperComponent maxHeigth settings={settings}>
-              {product &&
-                product?.length &&
-                product.slice(0, 10).map((item, i) => {
-
-                  const isItemInCart =
-                    productsInCart &&
-                    productsInCart.some((cartItem) => cartItem.id === item.id);
-                  if (isItemInCart) {
-                    return null;
-                  }
-                  return (
-                    <SwiperSlide key={i}>
-                      <RecomendedItemsCard
-                        alt={item.alt}
-                        guestProductId={item.guestProductId}
-                        id={item.id}
-                        images={item.images[0]}
-                        initialPrice={item.initialPrice}
-                        item={item}
-                        link={item.link}
-                        productDescription={item.productDescription}
-                        productName={item.productName}
-                      />
-                    </SwiperSlide>
-                  );
-                })}
-            </SwiperComponent>
-          )}
-        </>
+      {renderProducts() && (
+        <div className="pt-4">
+          <SectionTitle
+            icon={<CartVector />}
+            text={`Com base nos que você mais visualizou!`}
+          />
+        </div>
       )}
+      {renderProducts()}
     </>
   );
 }

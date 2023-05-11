@@ -197,10 +197,6 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
             {user && <MostViwed productCart={productCart} preference={user} product={checkedProducts} />}
             {checkedProducts && <RecommendedItems productCart={productCart} preference={user} />}
             <RecentlySeen recentlySeen={recentlySeen} productCart={productCart} />
-            <OtherProducts
-              productCart={productCart}
-              product={checkedProducts}
-            />
           </Section>
         </>
       ) : (

@@ -10,10 +10,20 @@ export const useRecentlySeen = () => {
   const [recentlySeen, setRecentlySeen] = useState<DocumentData[] | Product[]>([]);
 
   const addRecentlySeen = async (product: Product, guestId: string) => {
-    const newProduct = {
-      ...product,
-      guestProductId: guestId,
-    }
+
+    const newDate = new Date();
+    const hours = String(newDate.getHours()).padStart(2, '0');
+    const minutes = String(newDate.getMinutes()).padStart(2, '0');
+    const seconds = String(newDate.getSeconds()).padStart(2, '0');
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+      const recentlySeen = formattedTime
+
+      const newProduct = {
+        ...product,
+        guestProductId: guestId,
+        recentlySeen,
+      }
 
     await addFireStore("recentlySeen", newProduct)
       .catch((err) => console.error("Erro ao adicionar vistos por último: ", err));
