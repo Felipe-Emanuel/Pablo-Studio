@@ -50,10 +50,12 @@ export function MostViwed({
     productsInCart &&
     productsInCart.some((cartItem) => cartItem.id === item.id);
 
+    const numberOfVisualization = 5
+
     const renderProducts = () => {
       const filteredProducts = recentlySeen
         ?.filter((item) => !isItemInCart(item))
-        ?.filter((item) => preferences[item.brand] >= 10)
+        ?.filter((item) => preferences[item.brand] >= numberOfVisualization)
         ?.slice(0, 10);
 
         console.log(filteredProducts)
