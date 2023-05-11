@@ -8,6 +8,7 @@ import { SkeletonRecomended } from "src/components/skeletons/SkeletonRecomended"
 
 interface RecentlyAddedProps {
   products: Product[];
+
 }
 
 export function RecentlyAdded({ products }: RecentlyAddedProps) {

@@ -25,7 +25,6 @@ import { RecentlySeen } from "@layout/EmptyCart/RecentlySeen";
 import { Budget } from "@layout/Budget";
 import { MostViwed } from "@layout/RecommendedItems/MostViwed";
 import { RecommendedItems } from "@layout/RecommendedItems";
-import { getProductLiked } from "@database/productLiked";
 
 interface CartProps {
   stringifyUser: string & User[];
@@ -90,7 +89,6 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
   const [products, setProducts] = useState<Product[]>(data);
   const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(product);
 
-
   const checkedProducts = products && products.length === 0 ? data : products;
 
   const cookies = parseCookies();
@@ -126,8 +124,6 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
       user;
     };
     reloadUser();
-
-
 
   }, [isLoading, isFreigthLoading, isCepLoading, guestUser]);
 
@@ -194,7 +190,7 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
           )}
           <Section>
             {!isLoading && <Budget neverDesappear />}
-            {user && <MostViwed productCart={productCart} preference={user} product={checkedProducts} />}
+            {user && <MostViwed productCart={productCart} preference={user} recentlySeen={recentlySeen} />}
             {checkedProducts && <RecommendedItems productCart={productCart} preference={user} />}
             <RecentlySeen recentlySeen={recentlySeen} productCart={productCart} />
           </Section>

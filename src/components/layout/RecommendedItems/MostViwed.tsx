@@ -14,13 +14,13 @@ import { SkeletonLoadingArray } from "@util/assets/SkeletonLoadingArray";
 
 interface MostViwedProps {
   preference: DocumentData[] | User[];
-  product: Product[];
+  recentlySeen: DocumentData[] | Product[];
   productCart: Product[];
 }
 
 export function MostViwed({
   preference,
-  product,
+  recentlySeen,
   productCart,
 }: MostViwedProps) {
   const { isLoading } = useCartContext();
@@ -35,46 +35,53 @@ export function MostViwed({
 
   const preferences = (preference && preference[0]?.preferences) || [];
 
-  product &&
-    product.sort((a, b) => {
+  recentlySeen &&
+    recentlySeen.sort((a, b) => {
       const aBrandViews = (preferences && preferences[a.brand]) || 0;
       const bBrandViews = (preferences && preferences[b.brand]) || 0;
-      return bBrandViews - aBrandViews;
+
+      if (aBrandViews >= 10 && bBrandViews >= 10) {
+        return bBrandViews - aBrandViews;
+      }
+      return -1;
     });
 
   const isItemInCart = (item: DocumentData | Product) =>
     productsInCart &&
     productsInCart.some((cartItem) => cartItem.id === item.id);
 
-  const renderProducts = () => {
-    const filteredProducts = product?.filter(
-      (item) => !isItemInCart(item)
-    )?.slice(0, 10);
+    const renderProducts = () => {
+      const filteredProducts = recentlySeen
+        ?.filter((item) => !isItemInCart(item))
+        ?.filter((item) => preferences[item.brand] >= 10)
+        ?.slice(0, 10);
 
-    if (!filteredProducts || filteredProducts.length === 0) return null
+        console.log(filteredProducts)
 
-    return (
-      <SwiperComponent maxHeigth settings={settings}>
-        {filteredProducts.map((item, i) => (
-          <SwiperSlide key={i}>
-            <RecomendedItemsCard
-              alt={item.alt}
-              guestProductId={item.guestProductId}
-              id={item.id}
-              images={item.images[0]}
-              initialPrice={item.initialPrice}
-              item={item}
-              link={item.link}
-              productDescription={item.productDescription}
-              productName={item.productName}
-            />
-          </SwiperSlide>
-        ))}
-      </SwiperComponent>
-    );
-  };
+      if (!filteredProducts || filteredProducts.length === 0) return null;
 
-  if (isLoading) return <SkeletonLoadingArray />
+      return (
+        <SwiperComponent maxHeigth settings={settings}>
+          {filteredProducts.map((item, i) => (
+            <SwiperSlide key={i}>
+              <RecomendedItemsCard
+                alt={item.alt}
+                guestProductId={item.guestProductId}
+                id={item.id}
+                images={item.images[0]}
+                initialPrice={item.initialPrice}
+                item={item}
+                link={item.link}
+                productDescription={item.productDescription}
+                productName={item.productName}
+              />
+            </SwiperSlide>
+          ))}
+        </SwiperComponent>
+      );
+    };
+
+  if (isLoading) return <SkeletonLoadingArray />;
 
   return (
     <>
