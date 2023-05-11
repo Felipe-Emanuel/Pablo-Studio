@@ -15,7 +15,6 @@ import { TooltipComp } from "@util/assets/TooltipComp";
 import { TrashVector } from "@vectores/Vectores";
 import { BrandAnimation } from "@animations/brands/BrandAnimation";
 import { courseIcons } from "@animations/brands/index";
-import { parseCookies } from "nookies";
 
 interface RecomendedItemsCardProps {
   item: Product | DocumentData;
@@ -61,9 +60,6 @@ export function RecomendedItemsCard({
   const { width } = useWindow();
   const [hoverProductId, setHoverProductId] = useState<number | string>("");
 
-  const cookies = parseCookies()
-  const guestId = cookies._guest
-
   const router = useRouter();
 
   const changeVisibility = (productId: number | string) =>
@@ -100,12 +96,11 @@ export function RecomendedItemsCard({
       >
         <div className="flex justify-center items-center transition-all relative">
           <div
-            // onClick={() => console.log(productLiked.isLiked)}
             className={`transition-all duration-500 md:hover:bg-black/25 rounded-full
               w-11 h-10 absolute -top-2 -left-1 md:top-0 md:left-0 flex items-center
               ${checkVisibility}`}
           >
-            <HeartButton guestId={guestId} product={item} className="w-8 md:w-12" />
+            <HeartButton product={item} className="w-8 md:w-12" />
           </div>
           {trashIcon && (
             <div

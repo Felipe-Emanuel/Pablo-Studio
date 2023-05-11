@@ -28,11 +28,11 @@ export function EmptyCart({
       {isLoading && <LineLoading />}
       <EmptyCartTitle />
       <div className="flex flex-col gap-4">
-        <RecentlySeen recentlySeen={recentlySeen} />
+        <RecentlySeen productCart={[]} recentlySeen={recentlySeen} />
         {preference && (
           <>
-            <RecommendedItems preference={preference} product={products} />
-            <MostViwed preference={preference} product={products} />
+            <RecommendedItems productCart={[]} preference={preference} />
+            <MostViwed productCart={[]} preference={preference} product={products} />
           </>
         )}
         {products?.length > 0 ? (

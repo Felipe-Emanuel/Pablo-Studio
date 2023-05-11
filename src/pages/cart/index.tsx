@@ -144,6 +144,7 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
     getRecently();
   }, [isLoading]);
 
+
   return (
     <Container pageTitle="Carrinho | Pablo Studios 3D ">
       {productCart ? (
@@ -193,12 +194,9 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
           )}
           <Section>
             {!isLoading && <Budget neverDesappear />}
-            {user && (
-              <>
-                <RecommendedItems preference={user} product={checkedProducts} />
-                <MostViwed preference={user} product={checkedProducts} />
-              </>
-            )}
+            {user && <MostViwed productCart={productCart} preference={user} product={checkedProducts} />}
+            {checkedProducts && <RecommendedItems productCart={productCart} preference={user} />}
+            <RecentlySeen recentlySeen={recentlySeen} productCart={productCart} />
             <OtherProducts
               productCart={productCart}
               product={checkedProducts}

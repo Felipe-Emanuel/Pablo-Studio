@@ -1,8 +1,12 @@
 import { DocumentData, addDoc, collection, getDocs, query, updateDoc, where } from "firebase/firestore";
 import db from "../config";
 import { Product } from "@models/Product";
+import { parseCookies } from "nookies";
 
-export const changeLikeState = async (product: DocumentData | Product, guestId: string) => {
+export const changeLikeState = async (product: DocumentData | Product) => {
+  const cookies = parseCookies();
+  const guestId = cookies._guest;
+
   try {
     const productLikedRef = collection(db, "productLiked");
     const querySnapshot = await getDocs(
@@ -14,6 +18,7 @@ export const changeLikeState = async (product: DocumentData | Product, guestId: 
       const isLiked = querySnapshot.docs[0].data().isLiked;
       await updateDoc(docRef, {
         isLiked: !isLiked,
+        guestProductId: guestId
       });
       return docRef;
     } else {

@@ -5,14 +5,14 @@ import { Product } from "@models/Product";
 import { changeLikeState, getProductLiked } from "@database/productLiked";
 import { useCartContext } from "@hooks/useCartContext";
 import { addUser } from "@database/clientData";
+import { parseCookies } from "nookies";
 
 interface HeartButtonProps {
   className?: string;
-  guestId: string;
   product: DocumentData | Product;
 }
 
-export function HeartButton({ className, product, guestId }: HeartButtonProps) {
+export function HeartButton({ className, product }: HeartButtonProps) {
   const { setIsLoading } = useCartContext();
   const [isActive, setIsActive] = useState(false);
   const [showHeartFill, setShowHeartFill] = useState(false);
@@ -28,8 +28,8 @@ export function HeartButton({ className, product, guestId }: HeartButtonProps) {
   const setProductsLiked = useCallback(async () => {
     setIsLoading(true);
 
-    await changeLikeState(product, guestId).then(() => {setIsLoading(false)});
-  }, [setIsLoading, product, guestId]);
+    await changeLikeState(product).then(() => {setIsLoading(false)});
+  }, [setIsLoading, product]);
 
   useEffect(() => {
     getProducts();

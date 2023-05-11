@@ -10,12 +10,10 @@ interface CardInfoProps {
 }
 
 export function CardInfo({ views, product }: CardInfoProps) {
-  const cookies = parseCookies()
-  const guestId = cookies._guest
 
   return (
     <div className="relative -left-4 flex items-center w-fit">
-      <HeartButton guestId={guestId} product={product} />
+      <HeartButton product={product} />
       <HeaderInfo icon={<ViewVector />} qtd={views} />
     </div>
   );

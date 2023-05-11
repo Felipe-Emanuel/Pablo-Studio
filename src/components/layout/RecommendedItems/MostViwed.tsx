@@ -15,10 +15,19 @@ import { SkeletonLoadingArray } from "@util/assets/SkeletonLoadingArray";
 interface MostViwedProps {
   preference: DocumentData[] | User[];
   product: Product[];
+  productCart: Product[];
 }
 
-export function MostViwed({ preference, product }: MostViwedProps) {
+export function MostViwed({
+  preference,
+  product,
+  productCart,
+}: MostViwedProps) {
   const { isLoading } = useCartContext();
+
+                    const productsInCart =
+                    productCart &&
+                    productCart.filter((cartItem) => cartItem.isOnCart);
 
   const settings: SwiperProps = {
     spaceBetween: 0,
@@ -36,7 +45,7 @@ export function MostViwed({ preference, product }: MostViwedProps) {
 
   return (
     <>
-      {preference[0] !== undefined && (
+      {preference[0] !== undefined && productsInCart.length >= 0 && (
         <>
           <div className="pt-4">
             <SectionTitle
@@ -48,8 +57,16 @@ export function MostViwed({ preference, product }: MostViwedProps) {
             <SkeletonLoadingArray />
           ) : (
             <SwiperComponent maxHeigth settings={settings}>
-              {product?.length &&
+              {product &&
+                product?.length &&
                 product.slice(0, 10).map((item, i) => {
+
+                  const isItemInCart =
+                    productsInCart &&
+                    productsInCart.some((cartItem) => cartItem.id === item.id);
+                  if (isItemInCart) {
+                    return null;
+                  }
                   return (
                     <SwiperSlide key={i}>
                       <RecomendedItemsCard
