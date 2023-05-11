@@ -4,22 +4,24 @@ import { EmptyCartTitle } from "./EmptyCartTitle";
 import { RecentlySeen } from "./RecentlySeen";
 import { useCartContext } from "@hooks/useCartContext";
 import { LineLoading } from "@animations/lineLoading/LineLoading";
-import { SkeletonRecomended } from "src/components/skeletons/SkeletonRecomended";
 import { DocumentData } from "firebase/firestore";
-import { RecomendedItems } from "@layout/RecomendedItems";
+import { MostViwed } from "@layout/RecommendedItems/MostViwed";
 import { User } from "@models/User";
 import { SkeletonLoadingArray } from "@util/assets/SkeletonLoadingArray";
+import { RecommendedItems } from "@layout/RecommendedItems";
 
 interface EmptyCartProps {
   products: Product[];
   recentlySeen: DocumentData[] | Product[];
-  preference: DocumentData[] | User[]
+  preference: DocumentData[] | User[];
 }
 
-export function EmptyCart({ products, recentlySeen, preference }: EmptyCartProps) {
+export function EmptyCart({
+  products,
+  recentlySeen,
+  preference,
+}: EmptyCartProps) {
   const { isLoading } = useCartContext();
-
-
 
   return (
     <>
@@ -27,14 +29,17 @@ export function EmptyCart({ products, recentlySeen, preference }: EmptyCartProps
       <EmptyCartTitle />
       <div className="flex flex-col gap-4">
         <RecentlySeen recentlySeen={recentlySeen} />
+        {preference && (
+          <>
+            <RecommendedItems preference={preference} product={products} />
+            <MostViwed preference={preference} product={products} />
+          </>
+        )}
         {products?.length > 0 ? (
           <RecentlyAdded products={products} />
         ) : (
           <SkeletonLoadingArray />
         )}
-        {preference &&
-          <RecomendedItems preference={preference} product={products} />
-        }
       </div>
     </>
   );

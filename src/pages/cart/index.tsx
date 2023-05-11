@@ -16,14 +16,16 @@ import { ProductCartPopUp } from "@layout/ProductCart/ProductCartPopUp";
 import { getUser } from "@database/clientData";
 import { User } from "@models/User";
 import { SkeletonProductCart } from "src/components/skeletons/SkeletonProductCart";
-import { OtherProducts } from "@layout/RecomendedItems/OtherProducts";
+import { OtherProducts } from "@layout/RecommendedItems/OtherProducts";
 import { useAxios } from "@hooks/useAxios";
 import { EmptyCart } from "@layout/EmptyCart";
 import { getFireStore } from "@database/clientCart";
 import { useRecentlySeen } from "@hooks/useRecentlySeen";
 import { RecentlySeen } from "@layout/EmptyCart/RecentlySeen";
 import { Budget } from "@layout/Budget";
-import { RecomendedItems } from "@layout/RecomendedItems";
+import { MostViwed } from "@layout/RecommendedItems/MostViwed";
+import { RecommendedItems } from "@layout/RecommendedItems";
+import { getProductLiked } from "@database/productLiked";
 
 interface CartProps {
   stringifyUser: string & User[];
@@ -86,9 +88,10 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
 
   const [user, setUser] = useState<DocumentData[] | User[]>(stringifyUser);
   const [products, setProducts] = useState<Product[]>(data);
-  const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(
-    product
-  );
+  const [productCart, setProductCart] = useState<DocumentData[] & Product[]>(product);
+
+
+  const checkedProducts = products && products.length === 0 ? data : products;
 
   const cookies = parseCookies();
   const guestId = cookies._guest;
@@ -123,11 +126,15 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
       user;
     };
     reloadUser();
+
+
+
   }, [isLoading, isFreigthLoading, isCepLoading, guestUser]);
 
   useEffect(() => {
     getProducts();
   }, [guestUser]);
+
 
   useEffect(() => {
     const getRecently = async () => {
@@ -136,8 +143,6 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
 
     getRecently();
   }, [isLoading]);
-
-  const checkedProducts = products && products.length === 0 ? data : products;
 
   return (
     <Container pageTitle="Carrinho | Pablo Studios 3D ">
@@ -188,9 +193,11 @@ export default function Cart({ product, stringifyUser, data }: CartProps) {
           )}
           <Section>
             {!isLoading && <Budget neverDesappear />}
-            <RecentlySeen recentlySeen={recentlySeen} />
             {user && (
-              <RecomendedItems preference={user} product={checkedProducts} />
+              <>
+                <RecommendedItems preference={user} product={checkedProducts} />
+                <MostViwed preference={user} product={checkedProducts} />
+              </>
             )}
             <OtherProducts
               productCart={productCart}

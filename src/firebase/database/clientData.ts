@@ -1,6 +1,7 @@
 import { Product } from "@models/Product";
 import db from "../config";
 import {
+  DocumentData,
   addDoc,
   collection,
   getDocs,
@@ -18,7 +19,7 @@ export const getUser = async () => {
   return users;
 };
 
-export const addUser = async (product?: Product) => {
+export const addUser = async (product?: DocumentData | Product, isLike?: boolean) => {
   const cookies = parseCookies();
   const guestId = cookies._guest ?? "";
 
@@ -60,6 +61,17 @@ export const addUser = async (product?: Product) => {
     if (brand && brands.includes(brand)) {
       updatedPrefs[brand] = (updatedPrefs[brand] || 0) + 1;
       user.preferences = updatedPrefs;
+    }
+  }
+
+  if (product && isLike) {
+    const { brand } = product;
+    const checkCurrentUser =
+      currentUser[0] !== undefined ? currentUser[0] : user;
+    const updatedPrefs = { ...checkCurrentUser.preferencesLiked };
+    if (brand && brands.includes(brand)) {
+      updatedPrefs[brand] = (updatedPrefs[brand] || 0) + 1;
+      user.preferencesLiked = updatedPrefs;
     }
   }
 

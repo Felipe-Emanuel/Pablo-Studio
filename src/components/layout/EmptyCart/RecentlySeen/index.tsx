@@ -1,4 +1,4 @@
-import { RecomendedItemsCard } from "@layout/RecomendedItems/RecomendedItemsCard";
+import { RecomendedItemsCard } from "@layout/RecommendedItems/RecomendedItemsCard";
 import { Product } from "@models/Product";
 import { SectionTitle } from "@util/texts/SectionTitle";
 import { EyeVector } from "@vectores/Vectores";

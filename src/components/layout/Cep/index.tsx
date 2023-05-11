@@ -59,9 +59,14 @@ export function Cep({ product, guestId, user }: CepProps) {
     });
 
    const userPreferences = currentUser[0]?.preferences || {};
+   const userpreferencesLiked = currentUser[0]?.preferencesLiked || {};
 
    const updatedPreferences = {
     ...userPreferences,
+  };
+
+   const updatedPreferencesLiked = {
+    ...userpreferencesLiked,
   };
 
     const user: User = {
@@ -70,7 +75,8 @@ export function Cep({ product, guestId, user }: CepProps) {
       cep: inputCepValue,
       city: resp?.localidade,
       uf: resp?.uf,
-      preferences: updatedPreferences
+      preferences: updatedPreferences,
+      preferencesLiked: updatedPreferencesLiked
     };
 
     return user;

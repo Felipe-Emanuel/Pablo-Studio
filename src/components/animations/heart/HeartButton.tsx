@@ -1,10 +1,10 @@
-import Heart from "./heart.json";
 import { useState, useEffect, useCallback } from "react";
 import { HeartFillVector, HeartVector } from "src/components/vectores/Vectores";
 import { DocumentData } from "firebase/firestore";
 import { Product } from "@models/Product";
 import { changeLikeState, getProductLiked } from "@database/productLiked";
 import { useCartContext } from "@hooks/useCartContext";
+import { addUser } from "@database/clientData";
 
 interface HeartButtonProps {
   className?: string;
@@ -37,6 +37,7 @@ export function HeartButton({ className, product, guestId }: HeartButtonProps) {
 
   const setHeart = async () => {
     await setProductsLiked();
+    await addUser(product, !showHeartFill);
 
     setIsActive((isActive) => !isActive);
   };

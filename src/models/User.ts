@@ -17,4 +17,5 @@ export interface User {
   city: string;
   uf: string;
   preferences: RecomendedTable
+  preferencesLiked: RecomendedTable
 }
