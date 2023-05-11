@@ -36,8 +36,6 @@ export function RecomendedItems({ preference, product }: RecomendedItemsProps) {
       return bBrandViews - aBrandViews;
     });
 
-  const userPreferedBrand = product && capitalizeName(String(product[0].brand));
-
   return (
     <>
       {preference[0] !== undefined && (
@@ -45,7 +43,7 @@ export function RecomendedItems({ preference, product }: RecomendedItemsProps) {
           <div className="pt-4">
             <SectionTitle
               icon={<CartVector />}
-              text={`Porque você curte ${userPreferedBrand}!`}
+              text={`Com base nos que você mais visualizou!`}
             />
           </div>
           {isLoading ? (

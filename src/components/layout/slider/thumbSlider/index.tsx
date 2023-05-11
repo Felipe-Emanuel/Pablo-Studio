@@ -1,26 +1,59 @@
 import Image from "next/image";
 import clsx from "clsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowVector } from "@vectores/Vectores";
 
 type CarouselProps = {
   images: string[];
+  id: number;
 };
 
-export function ThumbSlider({ images }: CarouselProps) {
-
+export function ThumbSlider({ images, id }: CarouselProps) {
   const [currentImage, setCurrentImage] = useState(0);
+  const [timer, setTimer] = useState(5);
+  const [animationClass, setAnimationClass] = useState('');
+
+  useEffect(() => {
+    setAnimationClass('')
+
+    setCurrentImage(0)
+    setTimer(5)
+  }, [id])
+
+  useEffect(() => {
+    const timeRef = setTimeout(() => {
+      setTimer((t) => t - 1);
+
+      if (timer === 0) {
+        setCurrentImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+        setTimer(5);
+      }
+
+    setAnimationClass('before:animate-overlay before:bg-dark/50')
+
+    }, 1000);
+
+    return () => clearTimeout(timeRef);
+  }, [currentImage, timer]);
 
   const handlePrevious = () => {
+    setTimer(5);
+
     setCurrentImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
+    setTimer(5);
+
     setCurrentImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
+  const overlay = `before:absolute before:inset-0 ${animationClass}`;
+
   const checkCurrentThumb = (index: number) =>
-    index === currentImage ? "border-secondary" : "border-transparent";
+    index === currentImage
+      ? `border-secondary ${overlay} cursor-default`
+      : "border-transparent";
 
   const classes = clsx("relative", "h-80", "w-full", "md:h-96", {
     "sm:w-[36rem]": true,
@@ -65,16 +98,24 @@ export function ThumbSlider({ images }: CarouselProps) {
           <div className="flex">
             {images.map((image, index) => (
               <button
+                disabled={index === currentImage}
                 key={index}
-                className={`${checkCurrentThumb(index)} border mx-2 rounded`}
-                onClick={() => setCurrentImage(index)}
+                className={`${checkCurrentThumb(
+                  index
+                )} relative border mx-2 rounded overflow-hidden disabled:pointer-events-none`}
+                onClick={() => {
+                  setCurrentImage(index);
+                  setTimer(5);
+                }}
               >
                 <Image
                   src={image}
                   width={100}
                   height={75}
                   alt={`thumbnail ${index}`}
-                  className="rounded p-0.5"
+                  className={`rounded p-0.5 transition-all ${
+                    index === currentImage ? "" : "hover:scale-105"
+                  }`}
                 />
               </button>
             ))}

@@ -26,7 +26,7 @@ export function SelectedCard({ id, product, products, numberOfViews}: SelectedCa
               className={`
                 relative -left-10 w-screen md:w-fit m-auto xl:h-full md:-left-0 h-fit sm:h-[30rem]`}
             >
-              <ThumbSlider images={product.images} />
+              <ThumbSlider id={id} images={product.images} />
             </div>
             <Title
               bold

@@ -51,6 +51,9 @@ module.exports = {
       shimmer: {
         '100%' : {transform: 'translateX(100%)'}
       },
+      overlay: {
+        '0%' : {transform: 'translateX(-100%)'}
+      },
       appear: {
         '0%' : {transform: 'translateY(-10%)'}
       },
@@ -68,6 +71,7 @@ module.exports = {
     animation: {
       wiggle: 'wiggle 300ms 2 linear',
       heartWiggle: 'heartWiggle 150ms 2 linear',
+      overlay: 'overlay 5s 1 linear',
     }
   },
 }
